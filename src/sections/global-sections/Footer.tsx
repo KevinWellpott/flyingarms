@@ -25,7 +25,7 @@ import {
 export default function Footer() {
   return (
     <Box
-      bg="rgba(15, 23, 42, 0.95)"
+      bg="transparent"
       borderTop="1px solid rgba(56, 189, 248, 0.2)"
       color="white"
       position="relative"
@@ -193,7 +193,7 @@ export default function Footer() {
           </Text>
           
           <HStack spacing={6}>
-            <Link href="/impressum">
+            <Link href="/../../rechtliches/impressum">
               <Text 
                 fontSize="sm" 
                 color="gray.500" 
@@ -204,7 +204,7 @@ export default function Footer() {
               </Text>
             </Link>
             
-            <Link href="/datenschutz">
+            <Link href="/../../rechtliches/datenschutz">
               <Text 
                 fontSize="sm" 
                 color="gray.500" 

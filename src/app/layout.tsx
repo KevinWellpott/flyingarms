@@ -19,7 +19,6 @@ export const metadata: Metadata = {
     'Flying Arms',
   ],
 }
-
 export default function RootLayout({
   children,
 }: {
@@ -27,7 +26,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de">
-      <body className={inter.className}>
+      <body 
+        className={inter.className}
+        style={{ 
+          backgroundColor: '#0a0a0a',
+          minHeight: '100vh',
+          // Subtiles Grid Pattern
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}
+      >
         <Providers>
           {children}
         </Providers>

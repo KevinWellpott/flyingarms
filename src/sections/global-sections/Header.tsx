@@ -27,7 +27,7 @@ export default function Header() {
       left={0}
       right={0}
       zIndex={1000}
-      bg="rgba(15, 23, 42, 0.95)"
+      bg="transparent"
       backdropFilter="blur(20px)"
       borderBottom="1px solid rgba(56, 189, 248, 0.2)"
       boxShadow="0 8px 32px rgba(0, 0, 0, 0.3)"
