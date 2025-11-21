@@ -6,6 +6,8 @@ import { Box, VStack, Container, HStack, Text, Button } from '@chakra-ui/react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { HeroSection } from '../../types/hero';
 import { getVideoEmbedUrl } from '../../lib/supabase';
+import CustomYouTubePlayer from '@/components/CustomYouTubePlayer';
+import { extractYouTubeId } from '@/lib/utils';
 
 const MotionBox = motion(Box);
 
@@ -119,6 +121,25 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
       );
     }
 
+    // Verwende Custom YouTube Player für YouTube Videos
+    if (videoType === 'youtube' || (!videoType && videoUrl && (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')))) {
+      const videoId = extractYouTubeId(videoUrl);
+      if (videoId) {
+        return (
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+            <CustomYouTubePlayer
+              videoId={videoId}
+              autoplay={true}
+              muted={true}
+              showControls={false}
+              colorGlow="#00C6FF"
+              className="w-full h-full"
+            />
+          </div>
+        );
+      }
+    }
+
     const embedUrl = getVideoEmbedUrl(videoUrl, videoType);
     
     if (videoType === 'direct') {
@@ -141,7 +162,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
       );
     }
 
-    // Embedded video (Vimeo/YouTube)
+    // Embedded video (Vimeo/andere)
     return (
       <iframe
         src={embedUrl}

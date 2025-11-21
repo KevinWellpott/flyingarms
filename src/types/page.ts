@@ -1,4 +1,17 @@
 // types/page.ts
+
+// Icon Name Types für Service Items
+export type IconName = 'video' | 'camera' | 'production' | 'pilot' | 'measurement' | 'mapping';
+
+// Service Item Interface
+export interface ServiceItem {
+  icon_name: IconName;
+  color: string; // CSS Color (z.B. "#00c6ff")
+  title: string;
+  description: string;
+  details?: string;
+}
+
 export interface PageSection {
   id: string;
   slug: string;

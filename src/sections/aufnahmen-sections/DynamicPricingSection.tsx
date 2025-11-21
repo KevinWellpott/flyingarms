@@ -6,7 +6,7 @@ import { Box, Container, VStack, Text, SimpleGrid, Button } from '@chakra-ui/rea
 import { motion } from 'framer-motion';
 import PricingCard from '../../components/mainpage-components/PricingSection/PricingCard';
 import TrustIndicators from '../../components/mainpage-components/PricingSection/TrustIndicator';
-import { PageSection, PricingTier } from '../../types/page';
+import { PageSection, PricingTier } from '../../types/page-section';
 
 const MotionBox = motion(Box);
 

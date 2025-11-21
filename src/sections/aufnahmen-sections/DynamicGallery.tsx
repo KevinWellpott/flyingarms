@@ -1,7 +1,7 @@
 // sections/aufnahmen-sections/DynamicGallery.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   Container, 
@@ -13,7 +13,7 @@ import {
   Badge,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { PageSection, GalleryImage } from '../../types/page';
+import { PageSection, GalleryImage } from '../../types/page-section';
 
 const MotionBox = motion(Box);
 
@@ -22,7 +22,63 @@ interface DynamicGalleryProps {
 }
 
 const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1); // ✅ Simple number
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      if (!data?.gallery_images || !Array.isArray(data.gallery_images)) {
+        setIsLoading(false);
+        return;
+      }
+
+      const urls: Record<string, string> = {};
+      
+      await Promise.all(
+        data.gallery_images.map(async (image) => {
+          if (!image.image_url) return;
+          
+          // Prüfe ob es bereits eine externe URL ist
+          if (image.image_url.startsWith('http://') || image.image_url.startsWith('https://')) {
+            urls[image.id] = image.image_url;
+            return;
+          }
+
+          // Bereinige den Pfad
+          let cleanPath = image.image_url;
+          while (cleanPath.startsWith('gallery-images/')) {
+            cleanPath = cleanPath.replace(/^gallery-images\//, '');
+          }
+
+          try {
+            const response = await fetch('/api/storage/signed-url', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                bucket: 'gallery-images',
+                path: cleanPath,
+              }),
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              if (result.success && result.url) {
+                urls[image.id] = result.url;
+              }
+            }
+          } catch (error) {
+            console.error('Error loading gallery image:', error);
+          }
+        })
+      );
+
+      setImageUrls(urls);
+      setIsLoading(false);
+    };
+
+    loadImages();
+  }, [data]);
 
   if (!data) return null;
 
@@ -117,11 +173,12 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
                       position="relative"
                     >
                       <Image
-                        src={image.image_url}
+                        src={imageUrls[image.id] || image.image_url || ''}
                         alt={image.title}
                         w="100%"
                         h="100%"
                         objectFit="cover"
+                        fallbackSrc="/placeholder-image.png"
                       />
                       <Box
                         position="absolute"

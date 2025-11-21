@@ -11,7 +11,10 @@ import {
   AspectRatio
 } from '@chakra-ui/react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { FiCheck, FiShield, FiVideo, FiPlay, FiCalendar, FiAward, FiUsers, FiTrendingUp } from 'react-icons/fi';
 import Button from '../../components/mainpage-components/HeroSection/buttoncta';
+import CustomYouTubePlayer from '../../components/CustomYouTubePlayer';
+import { getSiteSettings, extractYouTubeVideoId } from '@/lib/site-settings';
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -30,6 +33,9 @@ const DroneIcon = ({ size = "20px", color = "cyan.400" }) => (
 
 const HeroSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [youtubeVideoId, setYoutubeVideoId] = useState<string | null>(null);
   
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -39,40 +45,115 @@ const HeroSection: React.FC = () => {
     setIsVisible(true);
   }, []);
 
+  // Load YouTube URL - Non-blocking, doesn't delay hero section rendering
+  useEffect(() => {
+    // Don't block initial render - load in background
+    const loadYouTubeUrl = async () => {
+      try {
+        const settings = await getSiteSettings();
+        if (settings?.hero_youtube_url) {
+          const videoId = extractYouTubeVideoId(settings.hero_youtube_url);
+          if (videoId) {
+            setYoutubeVideoId(videoId);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading YouTube URL:', error);
+      }
+    };
+    
+    // Load after initial render to not block hero section
+    const timer = setTimeout(() => {
+      loadYouTubeUrl();
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const heroElement = document.querySelector('[data-hero-section]');
+    if (!heroElement) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = heroElement.getBoundingClientRect();
+      // Check if mouse is within the hero section bounds
+      const isInside = 
+        e.clientX >= rect.left && 
+        e.clientX <= rect.right && 
+        e.clientY >= rect.top && 
+        e.clientY <= rect.bottom;
+      
+      if (isInside) {
+        setIsHovering(true);
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        setMousePosition({ x, y });
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    const handleMouseEnter = () => setIsHovering(true);
+    const handleMouseLeave = () => setIsHovering(false);
+
+    // Use document-level mousemove to track mouse position
+    document.addEventListener('mousemove', handleMouseMove);
+    
+    // Use element-level events for more reliable hover detection
+    heroElement.addEventListener('mouseenter', handleMouseEnter);
+    heroElement.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      heroElement.removeEventListener('mouseenter', handleMouseEnter);
+      heroElement.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   return (
     <MotionBox
+      data-hero-section
       position="relative"
       minH={{ base: "100vh", md: "100vh" }}
       overflow="hidden"
       bg="transparent"
-      
-      
       style={{
         opacity: heroOpacity,
         y: heroY
       }}
     >
-      {/* Subtle background glow */}
-      <Box 
-        position="absolute" 
-        top="20%"
-        left="50%"
-        transform="translateX(-50%)"
-        w={{ base: "300px", md: "400px" }}
-        h={{ base: "300px", md: "400px" }}
-        bg="radial-gradient(circle, rgba(0,198,255,0.06) 0%, transparent 70%)"
-        filter="blur(100px)"
-        pointerEvents="none"
+      {/* Background Image */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={1}
+        backgroundImage="url('/Untitled design (89).png')"
+        backgroundSize="cover"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
       />
 
-      {/* Minimal grid */}
-      <Box 
-        position="absolute" 
-        inset={0} 
-        opacity={{ base: 0.01, md: 0.02 }}
-        backgroundImage="linear-gradient(rgba(0,198,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,198,255,0.3) 1px, transparent 1px)"
-        backgroundSize="100px 100px"
+      {/* Black Overlay - Always constant, never changes */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={2}
         pointerEvents="none"
+        bg="rgba(0,0,0,0.8)"
+      />
+
+      {/* Spotlight Effect Layer - Only visible when hovering */}
+      <Box
+        position="absolute"
+        inset={0}
+        zIndex={3}
+        pointerEvents="none"
+        opacity={isHovering ? 1 : 0}
+        transition="opacity 0.2s ease"
+        style={{
+          background: `radial-gradient(circle 400px at ${mousePosition.x}% ${mousePosition.y}%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.7) 80%, rgba(0,0,0,0.8) 100%)`,
+          transition: isHovering ? 'opacity 0.2s ease, background 0.15s ease-out' : 'opacity 0.2s ease',
+        }}
       />
 
       {/* Small floating drone - Desktop only */}
@@ -81,6 +162,7 @@ const HeroSection: React.FC = () => {
         top="18%"
         right="8%"
         display={{ base: "none", lg: "block" }}
+        zIndex={15}
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.5 }}
@@ -151,11 +233,11 @@ const HeroSection: React.FC = () => {
       </MotionBox>
 
       <Container 
-        maxW="container.lg"
-        px={{ base: 4, md: 6 }}
+        maxW="container.xl"
+        px={{ base: 4, md: 8 }}
         py={{ base: 0, md: 0 }}
         position="relative"
-        zIndex={10}
+        zIndex={20}
         height="100vh"
         display="flex"
         alignItems="center"
@@ -169,40 +251,6 @@ const HeroSection: React.FC = () => {
               textAlign="center"
               px={{ base: 4, md: 4 }}
             >
-              {/* Badge */}
-              <MotionBox
-                initial={{ opacity: 0, y: 20 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <HStack
-                  px={{ base: 4, md: 5 }}
-                  py={2}
-                  borderRadius="full"
-                  bg="rgba(0,198,255,0.08)"
-                  backdropFilter="blur(20px)"
-                  border="1px solid rgba(0,198,255,0.25)"
-                  spacing={2}
-                  boxShadow="0 4px 20px rgba(0,198,255,0.1)"
-                >
-                  <DroneIcon size="14px" color="rgba(0,198,255,0.9)" />
-                  <Text 
-                    fontSize={{ base: "xs", md: "sm" }}
-                    fontWeight="600"
-                    color="cyan.400"
-                  >
-                    Flying Arms Aviation
-                  </Text>
-                  <Box
-                    w="5px"
-                    h="5px"
-                    bg="green.400"
-                    borderRadius="full"
-                    boxShadow="0 0 6px rgba(0,255,0,0.6)"
-                  />
-                </HStack>
-              </MotionBox>
-
               {/* Headline */}
               <MotionBox
                 initial={{ opacity: 0, y: 30 }}
@@ -277,8 +325,12 @@ const HeroSection: React.FC = () => {
                     fontSize="xs"
                     fontWeight="700"
                     backdropFilter="blur(10px)"
+                    display="flex"
+                    alignItems="center"
+                    gap={1.5}
                   >
-                    ✓ EU-ZERTIFIZIERT
+                    <FiCheck size={14} />
+                    EU-ZERTIFIZIERT
                   </Badge>
                   <Badge
                     bg="rgba(255,255,255,0.03)"
@@ -290,8 +342,12 @@ const HeroSection: React.FC = () => {
                     fontSize="xs"
                     fontWeight="700"
                     backdropFilter="blur(10px)"
+                    display="flex"
+                    alignItems="center"
+                    gap={1.5}
                   >
-                    🛡️ 2M€ VERSICHERT
+                    <FiAward size={14} />
+                    10+ JAHRE ERFAHRUNG
                   </Badge>
                   <Badge
                     bg="rgba(0,198,255,0.08)"
@@ -303,8 +359,12 @@ const HeroSection: React.FC = () => {
                     fontSize="xs"
                     fontWeight="700"
                     backdropFilter="blur(10px)"
+                    display="flex"
+                    alignItems="center"
+                    gap={1.5}
                   >
-                    📹 4K/60FPS
+                    <FiVideo size={14} />
+                    4K/60FPS
                   </Badge>
                 </HStack>
               </MotionBox>
@@ -329,6 +389,10 @@ const HeroSection: React.FC = () => {
                     h={{ base: "48px", md: "52px" }}
                     fontSize={{ base: "sm", md: "md" }}
                     fontWeight="700"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={2}
                     _hover={{
                       bgGradient: "linear(to-r, cyan.300, cyan.500)",
                       transform: "translateY(-2px)",
@@ -338,7 +402,8 @@ const HeroSection: React.FC = () => {
                       transform: "translateY(0)"
                     }}
                   >
-                    🎥 Projekt starten
+                    <FiPlay size={18} />
+                    Projekt starten
                   </Button>
                   
                   <Button 
@@ -363,29 +428,72 @@ const HeroSection: React.FC = () => {
                 </VStack>
               </MotionBox>
 
+              {/* YouTube Player */}
+              {youtubeVideoId && (
+                <MotionBox
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isVisible ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  w="100%"
+                  maxW="100%"
+                  pt={4}
+                >
+                  <Box
+                    as="div"
+                    className="w-full"
+                  >
+                    <CustomYouTubePlayer
+                      videoId={youtubeVideoId}
+                      autoplay={false}
+                      muted={false}
+                      showControls={true}
+                      colorGlow="#00C6FF"
+                    />
+                  </Box>
+                </MotionBox>
+              )}
+
               {/* Stats */}
               <MotionBox
                 initial={{ opacity: 0 }}
                 animate={isVisible ? { opacity: 1 } : {}}
-                transition={{ duration: 0.6, delay: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
                 w="100%"
-                pt={{ base: 2, md: 4 }}
+                pt={{ base: 4, md: 6 }}
               >
                 <HStack
-                  spacing={{ base: 4, md: 6 }}
+                  spacing={{ base: 6, md: 8 }}
                   justify="center"
                   flexWrap="wrap"
+                  divider={
+                    <Box
+                      h="40px"
+                      w="1px"
+                      bg="rgba(255,255,255,0.1)"
+                    />
+                  }
                 >
                   {[
-                    { value: "500+", label: "Projekte" },
-                    { value: "50+", label: "Kunden" },
-                    { value: "98%", label: "Zufriedenheit" }
+                    { value: "500+", label: "Projekte", icon: FiVideo },
+                    { value: "50+", label: "Kunden", icon: FiUsers },
+                    { value: "98%", label: "Zufriedenheit", icon: FiTrendingUp }
                   ].map((stat, i) => (
-                    <VStack key={i} spacing={0.5}>
-                      <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="900" color="cyan.400">
+                    <VStack key={i} spacing={1.5} align="center">
+                      <Text 
+                        fontSize={{ base: "2xl", md: "3xl" }} 
+                        fontWeight="800" 
+                        color="cyan.400"
+                        lineHeight="1"
+                      >
                         {stat.value}
                       </Text>
-                      <Text fontSize="xs" color="whiteAlpha.500" textTransform="uppercase" letterSpacing="wider" fontWeight="600">
+                      <Text 
+                        fontSize="xs" 
+                        color="rgba(255,255,255,0.5)" 
+                        textTransform="uppercase" 
+                        letterSpacing="1.5px" 
+                        fontWeight="500"
+                      >
                         {stat.label}
                       </Text>
                     </VStack>
@@ -395,48 +503,14 @@ const HeroSection: React.FC = () => {
             </VStack>
           </Box>
 
-          {/* Desktop - Two Columns */}
-          <Box display={{ base: "none", lg: "grid" }} gridTemplateColumns="1.2fr 1fr" gap={{ base: 4, md: 6 }} alignItems="center">
-            {/* Left Column - Content */}
+          {/* Desktop - Two Columns: Links Text, Rechts YouTube Player */}
+          <Box display={{ base: "none", lg: "grid" }} gridTemplateColumns="1fr 1fr" gap={{ base: 8, md: 12 }} alignItems="center" w="100%" maxW="1400px" mx="auto">
+            {/* Left Column - Text Content */}
             <VStack 
               spacing={5}
               align="flex-start"
               textAlign="left"
             >
-              {/* Badge */}
-              <MotionBox
-                initial={{ opacity: 0, y: 20 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <HStack
-                  px={5}
-                  py={2}
-                  borderRadius="full"
-                  bg="rgba(0,198,255,0.08)"
-                  backdropFilter="blur(20px)"
-                  border="1px solid rgba(0,198,255,0.25)"
-                  spacing={2}
-                  boxShadow="0 4px 20px rgba(0,198,255,0.1)"
-                >
-                  <DroneIcon size="16px" color="rgba(0,198,255,0.9)" />
-                  <Text 
-                    fontSize="sm"
-                    fontWeight="600"
-                    color="cyan.400"
-                  >
-                    Flying Arms Aviation
-                  </Text>
-                  <Box
-                    w="6px"
-                    h="6px"
-                    bg="green.400"
-                    borderRadius="full"
-                    boxShadow="0 0 8px rgba(0,255,0,0.6)"
-                  />
-                </HStack>
-              </MotionBox>
-
               {/* Headline */}
               <MotionBox
                 initial={{ opacity: 0, y: 30 }}
@@ -503,8 +577,12 @@ const HeroSection: React.FC = () => {
                     fontSize="xs"
                     fontWeight="700"
                     backdropFilter="blur(10px)"
+                    display="flex"
+                    alignItems="center"
+                    gap={1.5}
                   >
-                    ✓ EU-ZERTIFIZIERT A2
+                    <FiCheck size={14} />
+                    EU-ZERTIFIZIERT A2
                   </Badge>
                   <Badge
                     bg="rgba(255,255,255,0.03)"
@@ -516,8 +594,12 @@ const HeroSection: React.FC = () => {
                     fontSize="xs"
                     fontWeight="700"
                     backdropFilter="blur(10px)"
+                    display="flex"
+                    alignItems="center"
+                    gap={1.5}
                   >
-                    🛡️ 2M€ VERSICHERT
+                    <FiAward size={14} />
+                    10+ JAHRE ERFAHRUNG
                   </Badge>
                   <Badge
                     bg="rgba(0,198,255,0.08)"
@@ -529,8 +611,12 @@ const HeroSection: React.FC = () => {
                     fontSize="xs"
                     fontWeight="700"
                     backdropFilter="blur(10px)"
+                    display="flex"
+                    alignItems="center"
+                    gap={1.5}
                   >
-                    📹 4K/60FPS
+                    <FiVideo size={14} />
+                    4K/60FPS
                   </Badge>
                 </HStack>
               </MotionBox>
@@ -555,6 +641,10 @@ const HeroSection: React.FC = () => {
                     fontSize="md"
                     fontWeight="700"
                     px={8}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={2}
                     _hover={{
                       bgGradient: "linear(to-r, cyan.300, cyan.500)",
                       transform: "translateY(-2px)",
@@ -564,7 +654,8 @@ const HeroSection: React.FC = () => {
                       transform: "translateY(0)"
                     }}
                   >
-                    🎥 Projekt starten
+                    <FiPlay size={18} />
+                    Projekt starten
                   </Button>
                   
                   <Button 
@@ -597,17 +688,37 @@ const HeroSection: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 pt={{ base: 6, md: 8 }}
               >
-                <HStack spacing={{ base: 4, md: 6 }}>
+                <HStack 
+                  spacing={{ base: 6, md: 8 }}
+                  divider={
+                    <Box
+                      h="40px"
+                      w="1px"
+                      bg="rgba(255,255,255,0.1)"
+                    />
+                  }
+                >
                   {[
-                    { value: "500+", label: "Projekte" },
-                    { value: "50+", label: "Kunden" },
-                    { value: "98%", label: "Zufriedenheit" }
+                    { value: "500+", label: "Projekte", icon: FiVideo },
+                    { value: "50+", label: "Kunden", icon: FiUsers },
+                    { value: "98%", label: "Zufriedenheit", icon: FiTrendingUp }
                   ].map((stat, i) => (
-                    <VStack key={i} spacing={1} align="flex-start">
-                      <Text fontSize={{ base: "xl", md: "3xl" }} fontWeight="900" color="cyan.400">
+                    <VStack key={i} spacing={1.5} align="flex-start">
+                      <Text 
+                        fontSize={{ base: "2xl", md: "3xl" }} 
+                        fontWeight="800" 
+                        color="cyan.400"
+                        lineHeight="1"
+                      >
                         {stat.value}
                       </Text>
-                      <Text fontSize="xs" color="whiteAlpha.500" textTransform="uppercase" letterSpacing="wider" fontWeight="600">
+                      <Text 
+                        fontSize="xs" 
+                        color="rgba(255,255,255,0.5)" 
+                        textTransform="uppercase" 
+                        letterSpacing="1.5px" 
+                        fontWeight="500"
+                      >
                         {stat.label}
                       </Text>
                     </VStack>
@@ -616,114 +727,45 @@ const HeroSection: React.FC = () => {
               </MotionBox>
             </VStack>
 
-            {/* Right Column - Video Container */}
-            <MotionBox
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={isVisible ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <Box
-                bg="rgba(0,0,0,0.5)"
-                backdropFilter="blur(20px)"
-                borderRadius="2xl"
-                border="2px solid rgba(0,198,255,0.15)"
-                overflow="hidden"
-                boxShadow="0 20px 60px rgba(0,198,255,0.12)"
+            {/* Right Column - YouTube Player */}
+            {youtubeVideoId && (
+              <MotionBox
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isVisible ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                w="100%"
                 position="relative"
+                zIndex={25}
               >
-                {/* Video container */}
-                <AspectRatio ratio={16 / 9}>
-                  <Box
-                    bg="rgba(0,0,0,0.6)"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                <VStack spacing={3} align="flex-start" w="100%" position="relative" zIndex={25}>
+                  {/* Überschrift über dem Player */}
+                  <Text
+                    fontSize="sm"
+                    fontWeight="500"
+                    color="rgba(255,255,255,0.5)"
+                    letterSpacing="0.5px"
+                    textTransform="uppercase"
+                    position="relative"
+                    zIndex={25}
                   >
-                    {/* Vimeo Embed - Replace with actual video ID */}
-                    <iframe
-                      src="https://player.vimeo.com/video/YOUR_VIDEO_ID?autoplay=1&loop=1&muted=1&background=1"
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        border: 0
-                      }}
-                      allow="autoplay; fullscreen; picture-in-picture"
-                      title="Drone Footage"
-                    />
-                    
-                    {/* Fallback placeholder */}
-                    <VStack spacing={3} color="whiteAlpha.600">
-                      <Box
-                        w="80px"
-                        h="80px"
-                        bg="rgba(0,198,255,0.1)"
-                        borderRadius="full"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        border="2px solid rgba(0,198,255,0.3)"
-                      >
-                        <DroneIcon size="40px" color="rgba(0,198,255,0.6)" />
-                      </Box>
-                      <Text fontSize="sm" fontWeight="600" color="cyan.400">
-                        Showreel Preview
-                      </Text>
-                      <Text fontSize="xs" color="whiteAlpha.500">
-                        Ersetze YOUR_VIDEO_ID mit deiner Vimeo ID
-                      </Text>
-                    </VStack>
-                  </Box>
-                </AspectRatio>
-
-                {/* Video overlay badge */}
-                <Box
-                  position="absolute"
-                  top={4}
-                  left={4}
-                  px={3}
-                  py={1.5}
-                  bg="rgba(0,0,0,0.8)"
-                  backdropFilter="blur(10px)"
-                  borderRadius="md"
-                  border="1px solid rgba(0,198,255,0.3)"
-                >
-                  <HStack spacing={2}>
-                    <Box w="6px" h="6px" bg="red.500" borderRadius="full" />
-                    <Text fontSize="xs" color="red.400" fontWeight="bold" fontFamily="'Courier New', monospace">
-                      LIVE
-                    </Text>
-                  </HStack>
-                </Box>
-
-                {/* Video quality badge */}
-                <Box
-                  position="absolute"
-                  top={4}
-                  right={4}
-                  px={3}
-                  py={1.5}
-                  bg="rgba(0,0,0,0.8)"
-                  backdropFilter="blur(10px)"
-                  borderRadius="md"
-                  border="1px solid rgba(0,198,255,0.3)"
-                >
-                  <Text fontSize="xs" color="cyan.400" fontWeight="bold" fontFamily="'Courier New', monospace">
-                    4K
+                    Unser neustes Projekt
                   </Text>
-                </Box>
-
-                {/* Subtle gradient overlay */}
-                <Box
-                  position="absolute"
-                  inset={0}
-                  bgGradient="linear(to-br, rgba(0,198,255,0.05), transparent)"
-                  pointerEvents="none"
-                />
-              </Box>
-            </MotionBox>
+                  
+                  {/* YouTube Player */}
+                  {youtubeVideoId && (
+                    <Box w="100%" h="100%">
+                      <CustomYouTubePlayer
+                        videoId={youtubeVideoId}
+                        autoplay={true}
+                        muted={true}
+                        showControls={true}
+                        colorGlow="#00C6FF"
+                      />
+                    </Box>
+                  )}
+                </VStack>
+              </MotionBox>
+            )}
           </Box>
         </Box>
 

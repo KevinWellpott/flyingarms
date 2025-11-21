@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, VStack, HStack, Text, SimpleGrid, Button } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { 
@@ -345,6 +345,17 @@ const ProcessNavigation: React.FC<{
 
 const ProcessSection = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const goNext = () => {
     if (activeStep < processSteps.length - 1) {
@@ -387,7 +398,7 @@ const ProcessSection = () => {
         left={0}
         zIndex={10}
         animate={{ 
-          x: [0, window?.innerWidth ? window.innerWidth + 100 : 1500],
+          x: [0, windowWidth > 0 ? windowWidth + 100 : 1500],
           rotate: [0, 360]
         }}
         transition={{
@@ -412,7 +423,7 @@ const ProcessSection = () => {
         right={0}
         zIndex={10}
         animate={{ 
-          x: [0, -(window?.innerWidth ? window.innerWidth + 100 : 1500)],
+          x: [0, -(windowWidth > 0 ? windowWidth + 100 : 1500)],
           rotate: [0, -360]
         }}
         transition={{
@@ -439,7 +450,7 @@ const ProcessSection = () => {
         left={0}
         zIndex={10}
         animate={{ 
-          x: [0, window?.innerWidth ? window.innerWidth + 100 : 1500],
+          x: [0, windowWidth > 0 ? windowWidth + 100 : 1500],
           y: [0, -40, 20, -20, 0],
           rotate: [0, 180, 360]
         }}
@@ -467,7 +478,7 @@ const ProcessSection = () => {
         right="-50px"
         zIndex={10}
         animate={{ 
-          x: [0, -(window?.innerWidth ? window.innerWidth + 150 : 1650)],
+          x: [0, -(windowWidth > 0 ? windowWidth + 150 : 1650)],
           y: [0, 400],
           rotate: [0, -180, -360]
         }}

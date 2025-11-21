@@ -72,7 +72,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
       subtitle: pageData.subtitle,
       description: pageData.description,
       hero_video_url: pageData.hero_video_url,
-      
+      hero_video_type: pageData.hero_video_url && (pageData.hero_video_url.includes('youtube.com') || pageData.hero_video_url.includes('youtu.be')) 
+        ? 'youtube' 
+        : pageData.hero_video_url 
+          ? 'direct' 
+          : 'none',
       hero_thumbnail: pageData.hero_thumbnail,
       meta_title: pageData.meta_title,
       meta_description: pageData.meta_description

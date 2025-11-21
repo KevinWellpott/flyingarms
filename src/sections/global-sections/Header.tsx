@@ -11,20 +11,19 @@ import {
   Collapse,
   VStack,
   HStack,
-  Icon,
-  Link as ChakraLink
+  Icon
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
-import { FaDrone } from 'react-icons/fa'
+import { GiHelicopter } from 'react-icons/gi'
 import Link from 'next/link'
 
 export default function Header() {
   const { isOpen, onToggle } = useDisclosure()
 
   const navItems = [
-    { label: 'Aufnahmen', href: '#aufnahmen' },
-    { label: 'Vermessungen', href: '#vermessungen' },
-    { label: 'Rezensionen', href: '#rezensionen' },
+    { label: 'Aufnahmen', href: '/aufnahmen' },
+    { label: 'Vermessungen', href: '/vermessungen' },
+    { label: 'Rezensionen', href: '/rezensionen' },
   ]
 
   return (
@@ -50,7 +49,7 @@ export default function Header() {
           <Link href="/">
             <HStack spacing={3}>
               <Icon 
-                as={FaDrone} 
+                as={GiHelicopter} 
                 color="cyan.400" 
                 w="32px" 
                 h="32px"
@@ -85,21 +84,22 @@ export default function Header() {
             display={{ base: 'none', lg: 'flex' }}
           >
             {navItems.map((item) => (
-              <ChakraLink
-                key={item.label}
-                href={item.href}
-                color="whiteAlpha.700"
-                fontSize="sm"
-                fontWeight="600"
-                fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
-                transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
-                _hover={{
-                  color: "cyan.300",
-                  textDecoration: "none"
-                }}
-              >
-                {item.label}
-              </ChakraLink>
+              <Link key={item.label} href={item.href}>
+                <Text
+                  color="whiteAlpha.700"
+                  fontSize="sm"
+                  fontWeight="600"
+                  fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
+                  transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
+                  _hover={{
+                    color: "cyan.300",
+                    textDecoration: "none"
+                  }}
+                  cursor="pointer"
+                >
+                  {item.label}
+                </Text>
+              </Link>
             ))}
             
             <Button
@@ -157,30 +157,36 @@ export default function Header() {
               
               {/* Mobile Navigation Links */}
               {navItems.map((item) => (
-                <ChakraLink
-                  key={item.label}
-                  href={item.href}
-                  color="whiteAlpha.800"
-                  fontSize="md" // ← Etwas größer für bessere Touchability
-                  fontWeight="600"
-                  fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
-                  w="100%"
-                  textAlign="center"
-                  py={4} // ← Mehr Touch-Area
-                  borderRadius="none" // ← Clean, keine Rundungen
-                  borderBottom="1px solid rgba(255,255,255,0.05)" // ← Subtile Trenner
-                  transition="all 0.3s ease"
-                  _hover={{
-                    color: "cyan.300",
-                    bg: "rgba(0,198,255,0.05)",
-                    textDecoration: "none"
-                  }}
-                  _last={{
-                    borderBottom: "none" // ← Letzter Item ohne Border
-                  }}
+                <Link 
+                  key={item.label} 
+                  href={item.href} 
+                  style={{ width: '100%' }}
+                  onClick={onToggle} // ← Menu schließt sich beim Klick
                 >
-                  {item.label}
-                </ChakraLink>
+                  <Text
+                    color="whiteAlpha.800"
+                    fontSize="md" // ← Etwas größer für bessere Touchability
+                    fontWeight="600"
+                    fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
+                    w="100%"
+                    textAlign="center"
+                    py={4} // ← Mehr Touch-Area
+                    borderRadius="none" // ← Clean, keine Rundungen
+                    borderBottom="1px solid rgba(255,255,255,0.05)" // ← Subtile Trenner
+                    transition="all 0.3s ease"
+                    _hover={{
+                      color: "cyan.300",
+                      bg: "rgba(0,198,255,0.05)",
+                      textDecoration: "none"
+                    }}
+                    _last={{
+                      borderBottom: "none" // ← Letzter Item ohne Border
+                    }}
+                    cursor="pointer"
+                  >
+                    {item.label}
+                  </Text>
+                </Link>
               ))}
               
               {/* Mobile CTA Button */}

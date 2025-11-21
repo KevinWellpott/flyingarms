@@ -1,14 +1,22 @@
 // lib/supabase.ts
 import { createClient } from '@supabase/supabase-js';
-import { PageSection } from '../types/page';
+import { PageSection } from '../types/page-section';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Service Role Key sollte nur serverseitig verwendet werden!
+const serviceRoleKey = process.env.NEW_SUPABASE_SERVICE_ROLE_KEY;
 
 console.log('Supabase URL:', supabaseUrl ? 'Set' : 'Missing');
 console.log('Supabase Key:', supabaseKey ? 'Set' : 'Missing');
+console.log('Service Role Key:', serviceRoleKey ? 'Set' : 'Missing');
 
-const supabase = createClient(supabaseUrl!, supabaseKey!);
+// Öffentlicher Client (mit RLS)
+export const supabase = createClient(supabaseUrl!, supabaseKey!);
+
+// Hinweis: Admin-Operationen werden über API-Routes (/api/references) durchgeführt,
+// die serverseitig den Service Role Key verwenden. Dies ist sicherer als den
+// Service Role Key im Client zu verwenden.
 
 export async function getPageBySlug(slug: string): Promise<PageSection | null> {
   console.log('🔍 Searching for slug:', slug);
@@ -33,8 +41,25 @@ export async function getPageBySlug(slug: string): Promise<PageSection | null> {
       return null;
     }
 
-    console.log('✅ Found data:', data.title);
-    return data;
+    // Parse JSON fields if they are strings
+    const parsedData: PageSection = {
+      ...data,
+      services: typeof data.services === 'string' 
+        ? JSON.parse(data.services) 
+        : (data.services || []),
+      pricing_tiers: typeof data.pricing_tiers === 'string'
+        ? JSON.parse(data.pricing_tiers)
+        : (data.pricing_tiers || []),
+      gallery_images: typeof data.gallery_images === 'string'
+        ? JSON.parse(data.gallery_images)
+        : (data.gallery_images || []),
+      featured_video: typeof data.featured_video === 'string'
+        ? JSON.parse(data.featured_video)
+        : data.featured_video,
+    };
+
+    console.log('✅ Found data:', parsedData.title);
+    return parsedData;
   } catch (error) {
     console.error('💥 Catch Error in getPageBySlug:', error);
     return null;

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, VStack, HStack, Text, Container } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FiAward, FiShield, FiVideo, FiCheck } from 'react-icons/fi';
 import TestimonialSlider from '../../components/mainpage-components/TestimonialSection/TestimonialSlider';
 import TestimonialCard from '../../components/mainpage-components/TestimonialSection/Testimonialcard';
 
@@ -207,14 +208,22 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
           </MotionBox>
 
           {showOrbit && (
-            <Box display="flex" justifyContent="center" w="100%" mb={{ base: 4, md: 6 }}>
+            <MotionBox 
+              display="flex" 
+              justifyContent="center" 
+              w="100%" 
+              mb={{ base: 6, md: 8 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
               <TestimonialSlider
                 clients={50}
                 projects={200}
                 satisfaction={98}
                 animateStats={true}
               />
-            </Box>
+            </MotionBox>
           )}
 
           <Box
@@ -222,8 +231,9 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
             w="100%"
             maxW="800px"
             mx="auto"
+            mb={{ base: 8, md: 12 }}
           >
-            <Box position="relative" minH={{ base: "320px", md: "280px" }}>
+            <Box position="relative" minH={{ base: "400px", md: "380px" }} pb={{ base: 16, md: 20 }}>
               <AnimatePresence initial={false} custom={direction} mode="wait">
                 <MotionBox
                   key={currentIndex}
@@ -263,7 +273,9 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
             <HStack
               spacing={2}
               justify="center"
-              mt={{ base: -12, md: -8 }}
+              mt={{ base: 12, md: 16 }}
+              position="relative"
+              zIndex={10}
             >
               {displayTestimonials.map((_, index) => (
                 <Box
@@ -294,64 +306,93 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
           >
             <HStack
               justify="center"
-              p={{ base: 4, md: 5 }}
-              bg="rgba(255,255,255,0.02)"
+              p={{ base: 5, md: 6 }}
+              bg="rgba(0,0,0,0.3)"
               backdropFilter="blur(20px)"
               borderRadius="xl"
-              border="1px solid rgba(255,255,255,0.1)"
+              border="1px solid rgba(0,198,255,0.2)"
               flexWrap="wrap"
-              spacing={{ base: 3, md: 4 }}
-              gap={3}
+              spacing={{ base: 4, md: 6 }}
+              gap={4}
+              boxShadow="0 8px 32px rgba(0,198,255,0.1)"
             >
-              <HStack spacing={2}>
-                <Text fontSize="xl">🏆</Text>
+              <HStack spacing={3}>
+                <Box
+                  p={2}
+                  borderRadius="lg"
+                  bg="rgba(251, 211, 77, 0.1)"
+                  border="1px solid rgba(251, 211, 77, 0.2)"
+                >
+                  <FiAward size={20} color="#FCD34D" />
+                </Box>
                 <VStack spacing={0} align="flex-start">
-                  <Text fontSize="xs" fontWeight="700" color="yellow.400">
+                  <Text fontSize="xs" fontWeight="700" color="#FCD34D">
                     Top Rated
                   </Text>
-                  <Text fontSize="xs" color="whiteAlpha.500">
+                  <Text fontSize="xs" color="rgba(255,255,255,0.6)">
                     5.0 Sterne
                   </Text>
                 </VStack>
               </HStack>
 
-              <Box h="30px" w="1px" bg="rgba(255,255,255,0.1)" display={{ base: "none", md: "block" }} />
+              <Box h="40px" w="1px" bg="rgba(0,198,255,0.2)" display={{ base: "none", md: "block" }} />
 
-              <HStack spacing={2}>
-                <Text fontSize="xl">✓</Text>
+              <HStack spacing={3}>
+                <Box
+                  p={2}
+                  borderRadius="lg"
+                  bg="rgba(34, 197, 94, 0.1)"
+                  border="1px solid rgba(34, 197, 94, 0.2)"
+                >
+                  <FiCheck size={20} color="#22C55E" />
+                </Box>
                 <VStack spacing={0} align="flex-start">
-                  <Text fontSize="xs" fontWeight="700" color="green.400">
+                  <Text fontSize="xs" fontWeight="700" color="#22C55E">
                     EU-Zertifiziert
                   </Text>
-                  <Text fontSize="xs" color="whiteAlpha.500">
+                  <Text fontSize="xs" color="rgba(255,255,255,0.6)">
                     A2 Lizenz
                   </Text>
                 </VStack>
               </HStack>
 
-              <Box h="30px" w="1px" bg="rgba(255,255,255,0.1)" display={{ base: "none", md: "block" }} />
+              <Box h="40px" w="1px" bg="rgba(0,198,255,0.2)" display={{ base: "none", md: "block" }} />
 
-              <HStack spacing={2}>
-                <Text fontSize="xl">🛡️</Text>
+              <HStack spacing={3}>
+                <Box
+                  p={2}
+                  borderRadius="lg"
+                  bg="rgba(0,198,255,0.1)"
+                  border="1px solid rgba(0,198,255,0.2)"
+                >
+                  <FiShield size={20} color="#00C6FF" />
+                </Box>
                 <VStack spacing={0} align="flex-start">
-                  <Text fontSize="xs" fontWeight="700" color="cyan.400">
+                  <Text fontSize="xs" fontWeight="700" color="#00C6FF">
                     Versichert
                   </Text>
-                  <Text fontSize="xs" color="whiteAlpha.500">
+                  <Text fontSize="xs" color="rgba(255,255,255,0.6)">
                     2M€ Haftung
                   </Text>
                 </VStack>
               </HStack>
 
-              <Box h="30px" w="1px" bg="rgba(255,255,255,0.1)" display={{ base: "none", md: "block" }} />
+              <Box h="40px" w="1px" bg="rgba(0,198,255,0.2)" display={{ base: "none", md: "block" }} />
 
-              <HStack spacing={2}>
-                <Text fontSize="xl">📹</Text>
+              <HStack spacing={3}>
+                <Box
+                  p={2}
+                  borderRadius="lg"
+                  bg="rgba(0,198,255,0.1)"
+                  border="1px solid rgba(0,198,255,0.2)"
+                >
+                  <FiVideo size={20} color="#00C6FF" />
+                </Box>
                 <VStack spacing={0} align="flex-start">
-                  <Text fontSize="xs" fontWeight="700" color="cyan.400">
+                  <Text fontSize="xs" fontWeight="700" color="#00C6FF">
                     4K Quality
                   </Text>
-                  <Text fontSize="xs" color="whiteAlpha.500">
+                  <Text fontSize="xs" color="rgba(255,255,255,0.6)">
                     60fps Video
                   </Text>
                 </VStack>

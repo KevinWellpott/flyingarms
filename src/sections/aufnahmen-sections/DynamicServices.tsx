@@ -11,42 +11,20 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { PageSection, ServiceItem, IconName } from '../../types/page';
+import { PageSection, ServiceItem, IconName } from '../../types/page-section';
 
 const MotionBox = motion(Box);
 
-// Icon Components
-const ServiceIcons: Record<IconName, React.FC> = {
-  video: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
-      <path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" />
-    </svg>
-  ),
-  camera: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
-      <path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" />
-    </svg>
-  ),
-  production: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
-      <path d="M18,4L20,8H17L15,4H9L7,8H4L6,4H18M2,10V12H22V10H2M4,22H8V20H20V14H4V22Z" />
-    </svg>
-  ),
-  pilot: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
-      <path d="M3,14L3.5,15.5H4.5C5.14,15.5 5.77,15.79 6.26,16.26C6.73,16.73 7,17.36 7,18V19.5L8.5,20H15.5L17,19.5V18C17,17.36 17.27,16.73 17.74,16.26C18.23,15.79 18.86,15.5 19.5,15.5H20.5L21,14L21.5,9L20,4H15V2L13,1L11,2V4H6L4.5,9L3,14Z" />
-    </svg>
-  ),
-  measurement: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
-      <path d="M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H13V15H15V13H21V11H15V9Z" />
-    </svg>
-  ),
-  mapping: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%">
-      <path d="M20.5,3L20.34,3.03L15,5.1L9,3L3.36,4.9C3.15,4.97 3,5.15 3,5.38V20.5A0.5,0.5 0 0,0 3.5,21L3.66,20.97L9,18.9L15,21L20.64,19.1C20.85,19.03 21,18.85 21,18.62V3.5A0.5,0.5 0 0,0 20.5,3M10,5.47L14,6.87V18.53L10,17.13V5.47M5,6.46L8,5.45V17.15L5,18.31V6.46M16,8.86L19,7.85V19.54L16,20.55V8.86Z" />
-    </svg>
-  )
+// Icon Components - React Icons
+import { FiVideo, FiCamera, FiFilm, FiUser, FiMaximize2, FiMap } from 'react-icons/fi';
+
+const ServiceIcons: Record<IconName, React.FC<{ className?: string }>> = {
+  video: ({ className }) => <FiVideo className={className} />,
+  camera: ({ className }) => <FiCamera className={className} />,
+  production: ({ className }) => <FiFilm className={className} />,
+  pilot: ({ className }) => <FiUser className={className} />,
+  measurement: ({ className }) => <FiMaximize2 className={className} />,
+  mapping: ({ className }) => <FiMap className={className} />,
 };
 
 interface DynamicServicesSectionProps {
@@ -355,13 +333,7 @@ const ServiceCard: React.FC<{
             _groupHover={{ transform: "scale(1.1)" }}
             transition="transform 0.3s ease"
           >
-            <Box
-              w={{ base: "30px", md: "35px" }}
-              h={{ base: "30px", md: "35px" }}
-              color={service.color}
-            >
-              <IconComponent />
-            </Box>
+            <IconComponent className="w-full h-full" style={{ color: service.color }} />
           </Box>
 
           {/* Content */}
