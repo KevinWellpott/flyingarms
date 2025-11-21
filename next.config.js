@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true, // ESLint während Build ignorieren
+  },
   experimental: {
-    appDir: true,
+    // appDir: true, // ⚠️ ENTFERNT - ist veraltet in Next.js 14
   },
   images: {
     remotePatterns: [

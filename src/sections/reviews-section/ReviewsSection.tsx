@@ -208,7 +208,8 @@ const FeaturedReviewCard: React.FC<{ review: Review }> = ({ review }) => {
             lineHeight="1.6"
             fontStyle="italic"
           >
-            "{review.review_text}"
+             &quot;{review.review_text}&quot;
+
           </Text>
 
           {/* Project Description */}
@@ -349,7 +350,8 @@ const NormalReviewCard: React.FC<{ review: Review }> = ({ review }) => {
             fontStyle="italic"
             flex="1"
           >
-            "{review.review_text}"
+              &quot;{review.review_text}&quot;
+
           </Text>
 
           {/* Project Description Short */}
