@@ -106,7 +106,7 @@ export async function getRelatedReferences(currentId: string, limit: number = 3)
   try {
     const { data, error } = await supabase
       .from('references')
-      .select('id, title, slug, logo_path, highlight_video_path, color_glow')
+      .select('id, title, slug, logo_path, highlight_video_path, color_glow, created_at, is_published')
       .eq('is_published', true)
       .neq('id', currentId)
       .order('order_index', { ascending: true, nullsFirst: false })
@@ -264,4 +264,3 @@ export function generateSlug(title: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
-
