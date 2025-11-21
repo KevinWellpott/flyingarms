@@ -65,7 +65,7 @@ export default function ProgressBar({ value, onChange, className = '', colorGlow
       }}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseEnter}
+      
     >
       {/* Background Track */}
       <div className="w-full h-full bg-white/20 rounded-full overflow-hidden">
