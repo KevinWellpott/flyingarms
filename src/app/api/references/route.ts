@@ -27,9 +27,9 @@ const supabaseAdmin = supabaseUrl && serviceRoleKey
   : null;
 
 // Teste ob Admin Client korrekt initialisiert wurde
-if (supabaseAdmin) {
+if (supabaseAdmin && serviceRoleKey) {
   console.log('✅ Supabase Admin Client initialized with Service Role Key');
-  console.log('Service Role Key starts with:', serviceRoleKey.substring(0, 20));
+  console.log('Service Role Key starts with:', serviceRoleKey.substring(0, 20)); // ✅ FIX: Jetzt sicher
 } else {
   console.error('❌ Failed to initialize Supabase Admin Client');
   console.error('URL:', supabaseUrl);
@@ -130,4 +130,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
