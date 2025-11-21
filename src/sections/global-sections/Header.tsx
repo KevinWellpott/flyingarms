@@ -23,7 +23,8 @@ export default function Header() {
   const navItems = [
     { label: 'Aufnahmen', href: '/aufnahmen' },
     { label: 'Vermessungen', href: '/vermessungen' },
-    { label: 'Rezensionen', href: '/rezensionen' },
+    { label: 'Referenzen', href: '/referenzen' },
+    { label: 'Playlist', href: '/playlist' },
   ]
 
   return (
@@ -102,25 +103,27 @@ export default function Header() {
               </Link>
             ))}
             
-            <Button
-              bg="linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"
-              color="white"
-              size="md"
-              h="48px"
-              px={8} // ← Etwas breiter
-              borderRadius="xl"
-              fontWeight="900"
-              fontSize="sm"
-              fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
-              boxShadow="0 4px 24px rgba(0,198,255,0.4)"
-              _hover={{
-                transform: "translateY(-2px)",
-                boxShadow: "0 6px 32px rgba(0,198,255,0.5)"
-              }}
-              transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
-            >
-              Jetzt Termin buchen
-            </Button>
+            <Link href="/kontakt">
+              <Button
+                bg="linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"
+                color="white"
+                size="md"
+                h="48px"
+                px={8} // ← Etwas breiter
+                borderRadius="xl"
+                fontWeight="900"
+                fontSize="sm"
+                fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
+                boxShadow="0 4px 24px rgba(0,198,255,0.4)"
+                _hover={{
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 6px 32px rgba(0,198,255,0.5)"
+                }}
+                transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
+              >
+                Jetzt Termin buchen
+              </Button>
+            </Link>
           </HStack>
 
           {/* Mobile Menu Button - CLEAN & SIMPLE */}
@@ -191,26 +194,28 @@ export default function Header() {
               
               {/* Mobile CTA Button */}
               <Box w="100%" pt={6}>
-                <Button
-                  bg="linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"
-                  color="white"
-                  size="lg"
-                  w="100%"
-                  h="56px"
-                  borderRadius="xl"
-                  fontWeight="900"
-                  fontSize="sm"
-                  fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
-                  boxShadow="0 4px 24px rgba(0,198,255,0.4)"
-                  _hover={{
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 6px 32px rgba(0,198,255,0.5)"
-                  }}
-                  transition="all 0.3s ease"
-                  onClick={onToggle} // ← Menu schließt sich automatisch
-                >
-                  Jetzt Termin buchen
-                </Button>
+                <Link href="/kontakt" style={{ width: '100%' }}>
+                  <Button
+                    bg="linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"
+                    color="white"
+                    size="lg"
+                    w="100%"
+                    h="56px"
+                    borderRadius="xl"
+                    fontWeight="900"
+                    fontSize="sm"
+                    fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
+                    boxShadow="0 4px 24px rgba(0,198,255,0.4)"
+                    _hover={{
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 6px 32px rgba(0,198,255,0.5)"
+                    }}
+                    transition="all 0.3s ease"
+                    onClick={onToggle} // ← Menu schließt sich automatisch
+                  >
+                    Jetzt Termin buchen
+                  </Button>
+                </Link>
               </Box>
             </VStack>
           </Container>

@@ -49,7 +49,7 @@ export default function Footer() {
             
             <HStack spacing={4}>
               <ChakraLink
-                href="https://instagram.com"
+                href="https://www.instagram.com/explore/locations/1452106708422342/flying-arms/?hl=de"
                 isExternal
                 p={2}
                 borderRadius="md"
@@ -64,7 +64,7 @@ export default function Footer() {
               </ChakraLink>
               
               <ChakraLink
-                href="https://facebook.com"
+                href="https://www.facebook.com/FlyingArmsBraunschweig/"
                 isExternal
                 p={2}
                 borderRadius="md"
@@ -78,20 +78,7 @@ export default function Footer() {
                 <Icon as={FaFacebook} w={4} h={4} />
               </ChakraLink>
               
-              <ChakraLink
-                href="https://linkedin.com"
-                isExternal
-                p={2}
-                borderRadius="md"
-                bg="rgba(255, 255, 255, 0.1)"
-                _hover={{
-                  bg: 'rgba(56, 189, 248, 0.2)',
-                  transform: 'translateY(-2px)',
-                }}
-                transition="all 0.3s ease"
-              >
-                <Icon as={FaLinkedin} w={4} h={4} />
-              </ChakraLink>
+
             </HStack>
           </VStack>
 
@@ -102,21 +89,22 @@ export default function Footer() {
             </Text>
             <VStack spacing={3} align="start">
               {[
-                'Full HD/4K Aufnahmen',
-                'Luftbildvermessung',
-                'Videoproduktion',
-                'Drohnenführerschein',
-                'Kenntnisnachweis',
-              ].map((service) => (
-                <Text
-                  key={service}
-                  fontSize="sm"
-                  color="gray.400"
-                  _hover={{ color: 'brand.400', cursor: 'pointer' }}
-                  transition="color 0.3s ease"
-                >
-                  {service}
-                </Text>
+                { label: 'Aufnahmen', href: '/aufnahmen' },
+              
+                { label: 'Vermessungen', href: '/vermessungen' },
+                { label: 'Videoschnitt', href: '/videoschnitt' },
+           
+              ].map((link) => (
+                <Link key={link.href} href={link.href}>
+                  <Text
+                    fontSize="sm"
+                    color="gray.400"
+                    _hover={{ color: 'brand.400' }}
+                    transition="color 0.3s ease"
+                  >
+                    {link.label}
+                  </Text>
+                </Link>
               ))}
             </VStack>
           </VStack>
@@ -129,10 +117,10 @@ export default function Footer() {
             <VStack spacing={3} align="start">
               {[
                 { label: 'Home', href: '/' },
-                { label: 'Services', href: '/services' },
-                { label: 'Über uns', href: '/about' },
-                { label: 'Kontakt', href: '/contact' },
-                { label: 'Blog', href: '/blog' },
+              
+                { label: 'Über uns', href: '/ueberuns' },
+                { label: 'Kontakt', href: '/kontakt' },
+           
               ].map((link) => (
                 <Link key={link.href} href={link.href}>
                   <Text

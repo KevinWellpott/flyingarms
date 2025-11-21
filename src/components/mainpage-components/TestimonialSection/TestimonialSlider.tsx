@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, VStack, HStack, Text, useBreakpointValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { FiStar, FiUsers, FiTrendingUp } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -21,20 +23,25 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   satisfaction = 98,
   animateStats = true
 }) => {
+  const router = useRouter();
   const [rotation, setRotation] = useState(0);
   const [stats, setStats] = useState({ clients: 0, projects: 0, satisfaction: 0 });
   
-  const orbitRadius = useBreakpointValue({ base: 140, md: 200 }) || 140;
+  const orbitRadius = useBreakpointValue({ base: 160, md: 220 }) || 160;
+
+  const handleCenterClick = () => {
+    router.push('/rezensionen');
+  };
 
   const logos = [
-    { name: "VW", angle: 0, size: "lg" },
-    { name: "BMW", angle: 45, size: "md" },
-    { name: "SIE", angle: 90, size: "lg" },
-    { name: "DB", angle: 135, size: "sm" },
-    { name: "CON", angle: 180, size: "md" },
-    { name: "SAL", angle: 225, size: "sm" },
-    { name: "WD", angle: 270, size: "lg" },
-    { name: "EP", angle: 315, size: "md" }
+    { logoPath: "/logos/1.svg", altText: "Volkswagen", angle: 0, size: "lg" },
+    { logoPath: "/logos/2.svg", altText: "BMW", angle: 45, size: "md" },
+    { logoPath: "/logos/3.svg", altText: "Siemens", angle: 90, size: "lg" },
+    { logoPath: "/logos/4.svg", altText: "Deutsche Bahn", angle: 135, size: "sm" },
+    { logoPath: "/logos/5.svg", altText: "Continental", angle: 180, size: "md" },
+    { logoPath: "/logos/6.svg", altText: "SAL", angle: 225, size: "sm" },
+    { logoPath: "/logos/7.svg", altText: "WD", angle: 270, size: "lg" },
+    { logoPath: "/logos/8.svg", altText: "EP", angle: 315, size: "md" }
   ];
 
   useEffect(() => {
@@ -76,34 +83,33 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   return (
     <Box
       position="relative"
-      w={{ base: "400px", md: "550px" }}
-      h={{ base: "400px", md: "550px" }}
+      w={{ base: "500px", md: "650px" }}
+      h={{ base: "500px", md: "650px" }}
+      mx="auto"
       display="flex"
       alignItems="center"
       justifyContent="center"
-      mx="auto"
-      style={{
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}
     >
-      {/* Rotating Logos in Center */}
+      {/* Background Decorative circles - EXACT same positioning as center */}
+     
+
+      {/* Rotating Logos */}
       {logos.map((logo, index) => {
         const angle = (logo.angle + rotation) * (Math.PI / 180);
         const x = Math.cos(angle) * orbitRadius;
         const y = Math.sin(angle) * orbitRadius;
 
         const sizes = {
-          sm: { w: { base: "35px", md: "45px" }, h: { base: "35px", md: "45px" }, fontSize: "xs" },
-          md: { w: { base: "45px", md: "60px" }, h: { base: "45px", md: "60px" }, fontSize: "sm" },
-          lg: { w: { base: "55px", md: "75px" }, h: { base: "55px", md: "75px" }, fontSize: "md" }
+          sm: { w: { base: "70px", md: "90px" }, h: { base: "70px", md: "90px" }, logoSize: { base: "40px", md: "55px" } },
+          md: { w: { base: "85px", md: "110px" }, h: { base: "85px", md: "110px" }, logoSize: { base: "50px", md: "70px" } },
+          lg: { w: { base: "100px", md: "130px" }, h: { base: "100px", md: "130px" }, logoSize: { base: "60px", md: "85px" } }
         };
 
         const size = sizes[logo.size as keyof typeof sizes];
 
         return (
           <MotionBox
-            key={logo.name}
+            key={logo.altText}
             position="absolute"
             top="50%"
             left="50%"
@@ -112,10 +118,10 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
             style={{
               x,
               y,
-              marginLeft: `-${orbitRadius === 140 ? 22.5 : 30}px`,
-              marginTop: `-${orbitRadius === 140 ? 22.5 : 30}px`
+              marginLeft: `-${orbitRadius === 160 ? 35 : 40}px`,
+              marginTop: `-${orbitRadius === 160 ? 35 : 40}px`
             }}
-            borderRadius="full"
+            borderRadius="50%"
             bg="rgba(255,255,255,0.05)"
             backdropFilter="blur(10px)"
             border="2px solid rgba(0,198,255,0.3)"
@@ -126,40 +132,53 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
             whileHover={{ scale: 1.3 }}
             transition={{ type: "spring", stiffness: 300 }}
             zIndex={5}
+            overflow="hidden"
           >
-            <Text
-              fontSize={size.fontSize}
-              fontWeight="900"
-              color="cyan.300"
+            <Box
+              w={size.logoSize}
+              h={size.logoSize}
+              position="relative"
             >
-              {logo.name}
-            </Text>
+              <Image
+                src={logo.logoPath}
+                alt={logo.altText}
+                fill
+                style={{ 
+                  objectFit: 'contain',
+                  filter: 'brightness(1.2) contrast(1.1)'
+                }}
+              />
+            </Box>
           </MotionBox>
         );
       })}
 
-      {/* Stats Circle - Centered around the rotating logos */}
+      {/* Center Stats Circle - EXACT same positioning as decorative circles */}
       <MotionBox
         position="absolute"
         top="50%"
         left="50%"
-        transform="translate(-50%, -50%)"
         w={{ base: "200px", md: "260px" }}
         h={{ base: "200px", md: "260px" }}
-        borderRadius="full"
+        borderRadius="50%"
         bg="rgba(0,0,0,0.5)"
         backdropFilter="blur(30px)"
         border="2px solid rgba(0,198,255,0.4)"
         boxShadow="0 0 80px rgba(0,198,255,0.4), inset 0 0 40px rgba(0,198,255,0.1)"
+        transform="translate(-50%, -50%)"
         zIndex={10}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1, type: "spring" }}
+        cursor="pointer"
+        onClick={handleCenterClick}
+        _hover={{
+          borderColor: "rgba(0,198,255,0.6)",
+          boxShadow: "0 0 100px rgba(0,198,255,0.6), inset 0 0 60px rgba(0,198,255,0.15)",
+          transform: "translate(-50%, -50%) scale(1.02)",
+        }}
         style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          transition: 'all 0.3s ease',
         }}
       >
         <VStack
@@ -176,7 +195,7 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
             left="0"
             right="0"
             bottom="0"
-            borderRadius="full"
+            borderRadius="50%"
             border="2px solid transparent"
             borderTopColor="cyan.400"
             borderRightColor="cyan.400"
@@ -232,30 +251,6 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
           </Text>
         </VStack>
       </MotionBox>
-
-      {/* Decorative circles */}
-      <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        w={{ base: "340px", md: "480px" }}
-        h={{ base: "340px", md: "480px" }}
-        borderRadius="full"
-        border="1px solid rgba(0,198,255,0.15)"
-        zIndex={1}
-      />
-      <Box
-        position="absolute"
-        top="50%"
-        left="50%"
-        transform="translate(-50%, -50%)"
-        w={{ base: "360px", md: "510px" }}
-        h={{ base: "360px", md: "510px" }}
-        borderRadius="full"
-        border="1px dashed rgba(0,198,255,0.1)"
-        zIndex={1}
-      />
     </Box>
   );
 };

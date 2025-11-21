@@ -15,6 +15,7 @@ import { FiCheck, FiShield, FiVideo, FiPlay, FiCalendar, FiAward, FiUsers, FiTre
 import Button from '../../components/mainpage-components/HeroSection/buttoncta';
 import CustomYouTubePlayer from '../../components/CustomYouTubePlayer';
 import { getSiteSettings, extractYouTubeVideoId } from '@/lib/site-settings';
+import Link from 'next/link';
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -36,7 +37,7 @@ const HeroSection: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [isHovering, setIsHovering] = useState(false);
   const [youtubeVideoId, setYoutubeVideoId] = useState<string | null>(null);
-  
+
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
   const heroY = useTransform(scrollY, [0, 400], [0, -100]);
@@ -61,12 +62,12 @@ const HeroSection: React.FC = () => {
         console.error('Error loading YouTube URL:', error);
       }
     };
-    
+
     // Load after initial render to not block hero section
     const timer = setTimeout(() => {
       loadYouTubeUrl();
     }, 100);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -77,12 +78,12 @@ const HeroSection: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => {
       const rect = heroElement.getBoundingClientRect();
       // Check if mouse is within the hero section bounds
-      const isInside = 
-        e.clientX >= rect.left && 
-        e.clientX <= rect.right && 
-        e.clientY >= rect.top && 
+      const isInside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
         e.clientY <= rect.bottom;
-      
+
       if (isInside) {
         setIsHovering(true);
         const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -98,7 +99,7 @@ const HeroSection: React.FC = () => {
 
     // Use document-level mousemove to track mouse position
     document.addEventListener('mousemove', handleMouseMove);
-    
+
     // Use element-level events for more reliable hover detection
     heroElement.addEventListener('mouseenter', handleMouseEnter);
     heroElement.addEventListener('mouseleave', handleMouseLeave);
@@ -191,7 +192,7 @@ const HeroSection: React.FC = () => {
             boxShadow="0 8px 32px rgba(0,198,255,0.2)"
           >
             <DroneIcon size="28px" color="rgba(0,198,255,0.8)" />
-            
+
             {/* Simple propeller indicators */}
             {[
               { top: "5px", left: "5px" },
@@ -232,7 +233,7 @@ const HeroSection: React.FC = () => {
         </MotionBox>
       </MotionBox>
 
-      <Container 
+      <Container
         maxW="container.xl"
         px={{ base: 4, md: 8 }}
         py={{ base: 0, md: 0 }}
@@ -245,7 +246,7 @@ const HeroSection: React.FC = () => {
         <Box width="100%">
           {/* Mobile/Tablet - Single Column */}
           <Box display={{ base: "block", lg: "none" }}>
-            <VStack 
+            <VStack
               spacing={{ base: 3, md: 5 }}
               align="center"
               textAlign="center"
@@ -267,23 +268,23 @@ const HeroSection: React.FC = () => {
                   >
                     Professionelle
                   </Text>
-                  <Text 
+                  <Text
                     fontSize={{ base: "3xl", md: "5xl" }}
                     fontWeight="900"
                     lineHeight="1"
                     bgGradient="linear(to-r, cyan.300, cyan.500)"
                     bgClip="text"
                   >
-                    Luftaufnahmen
+                    Drohnenarbeit
                   </Text>
-                  <Text 
+                  <Text
                     fontSize={{ base: "lg", md: "xl" }}
                     fontWeight="700"
                     lineHeight="1.2"
                     color="whiteAlpha.800"
                     mt={2}
                   >
-                    in 4K Qualität
+                    seit über 10 Jahren.
                   </Text>
                 </VStack>
               </MotionBox>
@@ -378,7 +379,7 @@ const HeroSection: React.FC = () => {
                 maxW={{ base: "100%", md: "400px" }}
               >
                 <VStack spacing={3} w="100%">
-                  <Button 
+                  <Button
                     variant="primary"
                     onClick={() => console.log('Zum Termin')}
                     bgGradient="linear(to-r, cyan.400, cyan.600)"
@@ -405,8 +406,8 @@ const HeroSection: React.FC = () => {
                     <FiPlay size={18} />
                     Projekt starten
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                     variant="secondary"
                     onClick={() => console.log('Portfolio')}
                     bg="rgba(255,255,255,0.03)"
@@ -475,23 +476,23 @@ const HeroSection: React.FC = () => {
                 >
                   {[
                     { value: "500+", label: "Projekte", icon: FiVideo },
-                    { value: "50+", label: "Kunden", icon: FiUsers },
+                    { value: "10", label: "Jahre aktiv", icon: FiUsers },
                     { value: "98%", label: "Zufriedenheit", icon: FiTrendingUp }
                   ].map((stat, i) => (
                     <VStack key={i} spacing={1.5} align="center">
-                      <Text 
-                        fontSize={{ base: "2xl", md: "3xl" }} 
-                        fontWeight="800" 
+                      <Text
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        fontWeight="800"
                         color="cyan.400"
                         lineHeight="1"
                       >
                         {stat.value}
                       </Text>
-                      <Text 
-                        fontSize="xs" 
-                        color="rgba(255,255,255,0.5)" 
-                        textTransform="uppercase" 
-                        letterSpacing="1.5px" 
+                      <Text
+                        fontSize="xs"
+                        color="rgba(255,255,255,0.5)"
+                        textTransform="uppercase"
+                        letterSpacing="1.5px"
                         fontWeight="500"
                       >
                         {stat.label}
@@ -506,7 +507,7 @@ const HeroSection: React.FC = () => {
           {/* Desktop - Two Columns: Links Text, Rechts YouTube Player */}
           <Box display={{ base: "none", lg: "grid" }} gridTemplateColumns="1fr 1fr" gap={{ base: 8, md: 12 }} alignItems="center" w="100%" maxW="1400px" mx="auto">
             {/* Left Column - Text Content */}
-            <VStack 
+            <VStack
               spacing={5}
               align="flex-start"
               textAlign="left"
@@ -526,24 +527,23 @@ const HeroSection: React.FC = () => {
                   >
                     Professionelle
                   </Text>
-                  <Text 
+                  <Text
                     fontSize="7xl"
                     fontWeight="900"
                     lineHeight="0.95"
                     bgGradient="linear(to-r, cyan.300, cyan.500)"
                     bgClip="text"
                   >
-                    Luftaufnahmen
+                    Drohnenarbeit
                   </Text>
-                  <Text 
+                  <Text
                     fontSize={{ base: "lg", md: "xl" }}
                     fontWeight="700"
                     lineHeight="1.2"
                     color="whiteAlpha.800"
                     mt={2}
                   >
-                    in 4K Qualität
-                  </Text>
+                    seit über 10 Jahren.                  </Text>
                 </VStack>
               </MotionBox>
 
@@ -629,7 +629,8 @@ const HeroSection: React.FC = () => {
                 pt={3}
               >
                 <HStack spacing={4}>
-                  <Button 
+                  <Link href="/kontakt"> 
+                  <Button
                     variant="primary"
                     onClick={() => console.log('Zum Termin')}
                     bgGradient="linear(to-r, cyan.400, cyan.600)"
@@ -645,6 +646,7 @@ const HeroSection: React.FC = () => {
                     alignItems="center"
                     justifyContent="center"
                     gap={2}
+               
                     _hover={{
                       bgGradient: "linear(to-r, cyan.300, cyan.500)",
                       transform: "translateY(-2px)",
@@ -657,8 +659,9 @@ const HeroSection: React.FC = () => {
                     <FiPlay size={18} />
                     Projekt starten
                   </Button>
-                  
-                  <Button 
+                  </Link>
+
+                  <Button
                     variant="secondary"
                     onClick={() => console.log('Portfolio')}
                     bg="rgba(255,255,255,0.03)"
@@ -688,7 +691,7 @@ const HeroSection: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 pt={{ base: 6, md: 8 }}
               >
-                <HStack 
+                <HStack
                   spacing={{ base: 6, md: 8 }}
                   divider={
                     <Box
@@ -704,19 +707,19 @@ const HeroSection: React.FC = () => {
                     { value: "98%", label: "Zufriedenheit", icon: FiTrendingUp }
                   ].map((stat, i) => (
                     <VStack key={i} spacing={1.5} align="flex-start">
-                      <Text 
-                        fontSize={{ base: "2xl", md: "3xl" }} 
-                        fontWeight="800" 
+                      <Text
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        fontWeight="800"
                         color="cyan.400"
                         lineHeight="1"
                       >
                         {stat.value}
                       </Text>
-                      <Text 
-                        fontSize="xs" 
-                        color="rgba(255,255,255,0.5)" 
-                        textTransform="uppercase" 
-                        letterSpacing="1.5px" 
+                      <Text
+                        fontSize="xs"
+                        color="rgba(255,255,255,0.5)"
+                        textTransform="uppercase"
+                        letterSpacing="1.5px"
                         fontWeight="500"
                       >
                         {stat.label}
@@ -750,7 +753,7 @@ const HeroSection: React.FC = () => {
                   >
                     Unser neustes Projekt
                   </Text>
-                  
+
                   {/* YouTube Player */}
                   {youtubeVideoId && (
                     <Box w="100%" h="100%">
