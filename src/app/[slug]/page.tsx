@@ -60,9 +60,16 @@ export default async function ServicePage({ params }: ServicePageProps) {
       title: pageData.title,
       subtitle: pageData.subtitle,
       hasVideo: !!pageData.hero_video_url,
-      
       timestamp: new Date().toISOString()
     });
+
+    // 🔧 FIX: Explizite Type Definition für hero_video_type
+    const getVideoType = (videoUrl: string | undefined): "vimeo" | "youtube" | "direct" | "none" => {
+      if (!videoUrl) return 'none';
+      if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) return 'youtube';
+      if (videoUrl.includes('vimeo.com')) return 'vimeo';
+      return 'direct';
+    };
 
     // Hero Data - ALLE Felder
     const heroData = {
@@ -72,11 +79,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
       subtitle: pageData.subtitle,
       description: pageData.description,
       hero_video_url: pageData.hero_video_url,
-      hero_video_type: pageData.hero_video_url && (pageData.hero_video_url.includes('youtube.com') || pageData.hero_video_url.includes('youtu.be')) 
-        ? 'youtube' 
-        : pageData.hero_video_url 
-          ? 'direct' 
-          : 'none',
+      hero_video_type: getVideoType(pageData.hero_video_url), // ✅ Jetzt korrekt getypt
       hero_thumbnail: pageData.hero_thumbnail,
       meta_title: pageData.meta_title,
       meta_description: pageData.meta_description
