@@ -18,13 +18,13 @@ const MotionBox = motion(Box);
 // Icon Components - React Icons
 import { FiVideo, FiCamera, FiFilm, FiUser, FiMaximize2, FiMap } from 'react-icons/fi';
 
-const ServiceIcons: Record<IconName, React.FC<{ className?: string }>> = {
-  video: ({ className }) => <FiVideo className={className} />,
-  camera: ({ className }) => <FiCamera className={className} />,
-  production: ({ className }) => <FiFilm className={className} />,
-  pilot: ({ className }) => <FiUser className={className} />,
-  measurement: ({ className }) => <FiMaximize2 className={className} />,
-  mapping: ({ className }) => <FiMap className={className} />,
+const ServiceIcons: Record<IconName, React.FC<{ className?: string; style?: React.CSSProperties }>> = {
+  video: ({ className, style }) => <FiVideo className={className} style={style} />,
+  camera: ({ className, style }) => <FiCamera className={className} style={style} />,
+  production: ({ className, style }) => <FiFilm className={className} style={style} />,
+  pilot: ({ className, style }) => <FiUser className={className} style={style} />,
+  measurement: ({ className, style }) => <FiMaximize2 className={className} style={style} />,
+  mapping: ({ className, style }) => <FiMap className={className} style={style} />,
 };
 
 interface DynamicServicesSectionProps {
