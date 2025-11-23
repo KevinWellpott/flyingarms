@@ -268,7 +268,7 @@ const ServiceCard: React.FC<{
   isVisible: boolean;
   isMobile?: boolean;
 }> = ({ service, index, isVisible, isMobile = false }) => {
-  const IconComponent = ServiceIcons[service.icon_name] || ServiceIcons.video;
+  const IconComponent: React.FC<{ className?: string; style?: React.CSSProperties }> = ServiceIcons[service.icon_name] || ServiceIcons.video;
   
   return (
     <MotionBox
