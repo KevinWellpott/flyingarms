@@ -18,7 +18,7 @@ export async function getChannelPlaylists(): Promise<YouTubePlaylist[]> {
 
   try {
     do {
-      const res = await youtube.playlists.list({
+      const res: Awaited<ReturnType<typeof youtube.playlists.list>> = await youtube.playlists.list({
         part: ['snippet', 'contentDetails'],
         channelId: CHANNEL_ID,
         maxResults: 50,
@@ -45,7 +45,7 @@ export async function getPlaylistItems(playlistId: string): Promise<YouTubePlayl
 
   try {
     do {
-      const res = await youtube.playlistItems.list({
+      const res: Awaited<ReturnType<typeof youtube.playlistItems.list>> = await youtube.playlistItems.list({
         part: ['snippet'],
         playlistId: playlistId,
         maxResults: 50,
