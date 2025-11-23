@@ -17,8 +17,9 @@ export async function getChannelPlaylists(): Promise<YouTubePlaylist[]> {
   let nextPageToken: string | undefined | null = undefined;
 
   try {
+    let res;
     do {
-      const res: Awaited<ReturnType<typeof youtube.playlists.list>> = await youtube.playlists.list({
+      res = await youtube.playlists.list({
         part: ['snippet', 'contentDetails'],
         channelId: CHANNEL_ID,
         maxResults: 50,
@@ -44,8 +45,9 @@ export async function getPlaylistItems(playlistId: string): Promise<YouTubePlayl
   let nextPageToken: string | undefined | null = undefined;
 
   try {
+    let res;
     do {
-      const res: Awaited<ReturnType<typeof youtube.playlistItems.list>> = await youtube.playlistItems.list({
+      res = await youtube.playlistItems.list({
         part: ['snippet'],
         playlistId: playlistId,
         maxResults: 50,
