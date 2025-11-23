@@ -15,9 +15,9 @@ export async function getChannelPlaylists(): Promise<YouTubePlaylist[]> {
   do {
     const params = new URLSearchParams({
       part: 'snippet,contentDetails',
-      channelId: CHANNEL_ID,
+      channelId: CHANNEL_ID as string,
       maxResults: '50',
-      key: API_KEY,
+      key: API_KEY as string,
     });
 
     if (nextPageToken) {
@@ -48,7 +48,7 @@ export async function getPlaylistItems(playlistId: string): Promise<YouTubePlayl
       part: 'snippet',
       playlistId: playlistId,
       maxResults: '50',
-      key: API_KEY,
+      key: API_KEY as string,
     });
 
     if (nextPageToken) {
