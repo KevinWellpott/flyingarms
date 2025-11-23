@@ -1,72 +1,40 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
 import { FiPlay } from 'react-icons/fi';
-import CustomYouTubePlayer from './CustomYouTubePlayer';
 
-interface LazyYouTubePlayerProps {
-  videoId: string;
-  thumbnailUrl: string;
-  title: string;
-  className?: string;
-  colorGlow?: string;
-}
+export default function LazyYouTubePlayer({ videoId, title }: { videoId: string; title: string }) {
+  const [isPlaying, setIsPlaying] = useState(false);
 
-export default function LazyYouTubePlayer({
-  videoId,
-  thumbnailUrl,
-  title,
-  className = '',
-  colorGlow = '#76E4F7',
-}: LazyYouTubePlayerProps) {
-  const [isActivated, setIsActivated] = useState(false);
-
-  if (!isActivated) {
+  if (!isPlaying) {
     return (
       <div
-        className={`relative w-full aspect-video rounded-2xl overflow-hidden cursor-pointer group ${className}`}
-        onClick={() => setIsActivated(true)}
-        style={{
-          borderColor: `${colorGlow}30`,
-          boxShadow: `0 10px 40px ${colorGlow}10`,
-        }}
+        className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center cursor-pointer relative group overflow-hidden border border-white/10"
+        onClick={() => setIsPlaying(true)}
       >
-        <Image
-          src={thumbnailUrl}
-          alt={`Thumbnail for ${title}`}
-          layout="fill"
-          objectFit="cover"
-          className="transition-transform duration-300 group-hover:scale-105"
+        <img
+          src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
+          alt={title}
+          className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="glass p-4 md:p-6 rounded-full border transition-all duration-300 group-hover:scale-110"
-            style={{
-              borderColor: `${colorGlow}50`,
-              boxShadow: `0 0 20px ${colorGlow}40`,
-            }}
-          >
-            <FiPlay className="w-8 h-8 md:w-12 md:h-12 text-white" style={{ color: colorGlow }} />
+        <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+          <div className="w-20 h-20 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-brand/80 transition-colors duration-300 scale-100 group-hover:scale-110 border border-white/20">
+            <FiPlay className="w-10 h-10 text-white ml-1" />
           </div>
-        </div>
-        <div className="absolute bottom-0 left-0 p-4">
-          <h3 className="text-white font-bold text-lg drop-shadow-lg">{title}</h3>
         </div>
       </div>
     );
   }
 
   return (
-    <CustomYouTubePlayer
-      videoId={videoId}
-      className={className}
-      autoplay={true}
-      muted={false}
-      showControls={true}
-      colorGlow={colorGlow}
-    />
+    <div className="aspect-video">
+      <iframe
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+        title={title}
+        className="w-full h-full rounded-lg"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
   );
 }

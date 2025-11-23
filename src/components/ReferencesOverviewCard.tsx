@@ -129,18 +129,18 @@ export default function ReferencesOverviewCard({ reference, reviews = [] }: Refe
       className="w-full h-full cursor-pointer group flex"
     >
       <div
-        className="rounded-2xl backdrop-blur-xl p-6 md:p-8 lg:p-12 transition-all duration-300 hover:scale-[1.02] flex flex-col h-full w-full"
+        className="rounded-2xl backdrop-blur-xl p-4 md:p-6 lg:p-8 transition-all duration-300 hover:scale-[1.02] flex flex-col h-full w-full"
         style={{
           background: 'rgba(0, 0, 0, 0.4)',
           border: `2px solid rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`,
           boxShadow: `0 0 30px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`,
         }}
       >
-        <div className="flex flex-col h-full space-y-8">
+        <div className="flex flex-col h-full space-y-4 md:space-y-6">
           {/* Header: Titel + Logo */}
-          <div className="flex items-start justify-between gap-4 flex-shrink-0">
+          <div className="flex items-start justify-between gap-3 md:gap-4 flex-shrink-0">
             <h2
-              className="text-2xl md:text-3xl lg:text-4xl font-black text-white flex-1 line-clamp-2"
+              className="text-xl md:text-2xl lg:text-3xl font-black text-white flex-1 line-clamp-2"
               style={{
                 background: `linear-gradient(to right, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1), rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.7))`,
                 WebkitBackgroundClip: 'text',
@@ -151,7 +151,7 @@ export default function ReferencesOverviewCard({ reference, reviews = [] }: Refe
               {reference.title}
             </h2>
             {logoUrl && !isLoading && (
-              <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0">
+              <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
                 <Image
                   src={logoUrl}
                   alt={`${reference.title} Logo`}
@@ -178,7 +178,7 @@ export default function ReferencesOverviewCard({ reference, reviews = [] }: Refe
           )}
 
           {/* Review oder Beschreibung */}
-          <div className="flex flex-col flex-1 space-y-4 min-h-0">
+          <div className="flex flex-col flex-1 space-y-3 md:space-y-4 min-h-0">
             {hasReview && review ? (
               <>
                 {/* Customer Info */}

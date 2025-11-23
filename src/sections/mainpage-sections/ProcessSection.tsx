@@ -16,6 +16,7 @@ import {
   FiNavigation,
   FiNavigation2
 } from 'react-icons/fi';
+import Link from 'next/link';
 
 const MotionBox = motion(Box);
 
@@ -229,6 +230,41 @@ const ProcessStepCard: React.FC<{
               </Text>
             </HStack>
           ))}
+          {step.number === 5 && (
+            <VStack spacing={3} align="stretch" pt={3} mt={2} borderTop="1px solid rgba(0,198,255,0.2)">
+              <Text
+                fontSize="sm"
+                fontWeight="700"
+                color="cyan.300"
+                textAlign="center"
+              >
+                Bereit für Ihr Projekt?
+              </Text>
+              <Link href="/kontakt" style={{ width: '100%' }}>
+                <Button
+                  w="100%"
+                  h="44px"
+                  bg="linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"
+                  color="white"
+                  fontWeight="900"
+                  fontSize="sm"
+                  borderRadius="lg"
+                  rightIcon={<Box as={FiArrowRight} />}
+                  fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
+                  boxShadow="0 4px 16px rgba(0,198,255,0.3)"
+                  _hover={{
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 6px 24px rgba(0,198,255,0.4)"
+                  }}
+                  _active={{
+                    transform: "translateY(0)"
+                  }}
+                >
+                  Jetzt Termin buchen
+                </Button>
+              </Link>
+            </VStack>
+          )}
         </VStack>
       )}
     </VStack>
@@ -264,19 +300,33 @@ const ProcessProgressBar: React.FC<{
 
       <Box 
         w="100%" 
-        h="6px" 
+        h="8px" 
         bg="rgba(255,255,255,0.1)" 
         borderRadius="full"
         overflow="hidden"
+        position="relative"
       >
         <MotionBox
           h="100%"
-          bg="linear-gradient(to-r, cyan.400, cyan.600)"
+          bg="cyan.600"
           borderRadius="full"
-          boxShadow="0 0 20px rgba(0,198,255,0.6)"
+          boxShadow="0 0 30px rgba(0,198,255,0.8), 0 0 60px rgba(0,198,255,0.4)"
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.5 }}
-        />
+          position="relative"
+        >
+          {/* Glowing effect */}
+          <Box
+            position="absolute"
+            top="0"
+            right="0"
+            w="20px"
+            h="100%"
+            bg="linear-gradient(to-r, transparent, rgba(255,255,255,0.6))"
+            borderRadius="full"
+            filter="blur(4px)"
+          />
+        </MotionBox>
       </Box>
     </VStack>
   );
@@ -290,15 +340,15 @@ const ProcessNavigation: React.FC<{
   onPrev: () => void;
 }> = ({ activeStep, totalSteps, onNext, onPrev }) => {
   return (
-    <Box w="100%" maxW="600px">
-      <HStack spacing={3} w="100%">
+    <Box w="100%" maxW="600px" mx="auto">
+      <HStack spacing={3} w="100%" justify="center">
         <Button
           onClick={onPrev}
           isDisabled={activeStep === 0}
           size="lg"
-          h="56px"
+          h="48px"
           w="50%"
-          bg={activeStep === 0 ? "rgba(255,255,255,0.05)" : "rgba(0,198,255,0.1)"}
+          bg={activeStep === 0 ? "rgba(255,255,255,0.05)" : "rgba(6, 191, 241, 0.1)"}
           color={activeStep === 0 ? "whiteAlpha.400" : "cyan.300"}
           border="1px solid"
           borderColor={activeStep === 0 ? "rgba(255,255,255,0.1)" : "rgba(0,198,255,0.3)"}
@@ -320,7 +370,7 @@ const ProcessNavigation: React.FC<{
           onClick={onNext}
           isDisabled={activeStep === totalSteps - 1}
           size="lg"
-          h="56px"
+          h="48px"
           w="50%"
           bg={activeStep === totalSteps - 1 ? "rgba(255,255,255,0.05)" : "linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"}
           color="white"
@@ -372,7 +422,8 @@ const ProcessSection = () => {
   return (
     <Box
       width="100%"
-      py={{ base: 16, md: 20 }}
+      py={{ base: 12, md: 16 }}
+      pb={{ base: 20, md: 24 }}
       position="relative"
       overflow="hidden"
       bg="transparent"
@@ -505,7 +556,7 @@ const ProcessSection = () => {
         position="relative" 
         zIndex={2}
       >
-        <VStack spacing={{ base: 8, md: 12 }}>
+        <VStack spacing={{ base: 6, md: 8 }}>
           
           {/* Header */}
           <MotionBox
@@ -582,88 +633,58 @@ const ProcessSection = () => {
             </SimpleGrid>
           </Box>
 
-          {/* Mobile: Single Card */}
+          {/* Mobile: Single Card with Navigation */}
           <Box display={{ base: "block", lg: "none" }} w="100%" px={4}>
-            <Box position="relative" minH="400px" w="100%">
-              {processSteps.map((step, index) => (
-                <MotionBox
-                  key={index}
-                  position="absolute"
-                  w="100%"
-                  top="0"
-                  left="0"
-                  animate={{
-                    opacity: index === activeStep ? 1 : 0,
-                    pointerEvents: index === activeStep ? 'auto' : 'none'
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ProcessStepCard
-                    step={step}
-                    index={index}
-                    isActive={index === activeStep}
-                    isCompleted={index < activeStep}
+            <VStack spacing={4} align="stretch">
+              <Box position="relative" w="100%" minH="0">
+                {processSteps.map((step, index) => (
+                  <MotionBox
+                    key={index}
+                    position={index === activeStep ? "relative" : "absolute"}
+                    w="100%"
+                    top={index === activeStep ? "auto" : "0"}
+                    left={index === activeStep ? "auto" : "0"}
+                    animate={{
+                      opacity: index === activeStep ? 1 : 0,
+                      pointerEvents: index === activeStep ? 'auto' : 'none'
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ProcessStepCard
+                      step={step}
+                      index={index}
+                      isActive={index === activeStep}
+                      isCompleted={index < activeStep}
+                    />
+                  </MotionBox>
+                ))}
+              </Box>
+
+              {/* Navigation - Only show when not on last step */}
+              {activeStep < processSteps.length - 1 && (
+                <Box w="100%" pt={2} display="flex" justifyContent="center">
+                  <ProcessNavigation
+                    activeStep={activeStep}
+                    totalSteps={processSteps.length}
+                    onNext={goNext}
+                    onPrev={goPrev}
                   />
-                </MotionBox>
-              ))}
-            </Box>
+                </Box>
+              )}
+            </VStack>
           </Box>
 
-          {/* Navigation */}
-          <ProcessNavigation
-            activeStep={activeStep}
-            totalSteps={processSteps.length}
-            onNext={goNext}
-            onPrev={goPrev}
-          />
-
-          {/* CTA */}
-          <MotionBox
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            w="100%"
-            maxW="700px"
-          >
-            <Box
-              p={{ base: 6, md: 8 }}
-              bg="rgba(0,198,255,0.05)"
-              backdropFilter="blur(30px)"
-              borderRadius="2xl"
-              border="1px solid rgba(0,198,255,0.2)"
-              boxShadow="0 8px 32px rgba(0,198,255,0.15)"
-            >
-              <VStack spacing={4}>
-                <Text
-                  fontSize={{ base: 'lg', md: 'xl' }}
-                  fontWeight="900"
-                  color="white"
-                  fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
-                >
-                  Bereit für Ihr Projekt?
-                </Text>
-
-                <Button
-                  w="100%"
-                  h="56px"
-                  bg="linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)"
-                  color="white"
-                  fontWeight="900"
-                  fontSize="sm"
-                  borderRadius="xl"
-                  rightIcon={<Box as={FiArrowRight} />}
-                  fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
-                  _hover={{
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 8px 24px rgba(0,198,255,0.4)"
-                  }}
-                >
-                  Jetzt Termin buchen
-                </Button>
-              </VStack>
+          {/* Desktop Navigation - Only show when not on last step */}
+          {activeStep < processSteps.length - 1 && (
+            <Box display={{ base: "none", lg: "flex" }} w="100%" pt={2} justifyContent="center">
+              <ProcessNavigation
+                activeStep={activeStep}
+                totalSteps={processSteps.length}
+                onNext={goNext}
+                onPrev={goPrev}
+              />
             </Box>
-          </MotionBox>
+          )}
         </VStack>
       </Container>
     </Box>

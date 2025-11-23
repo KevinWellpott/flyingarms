@@ -24,7 +24,7 @@ export default function Header() {
     { label: 'Aufnahmen', href: '/aufnahmen' },
     { label: 'Vermessungen', href: '/vermessungen' },
     { label: 'Referenzen', href: '/referenzen' },
-    { label: 'Playlist', href: '/playlist' },
+    { label: 'Playlists', href: '/playlists' },
   ]
 
   return (

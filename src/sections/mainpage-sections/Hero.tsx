@@ -8,10 +8,12 @@ import {
   Text,
   Container,
   Badge,
-  AspectRatio
+  AspectRatio,
+  Icon
 } from '@chakra-ui/react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { FiCheck, FiShield, FiVideo, FiPlay, FiCalendar, FiAward, FiUsers, FiTrendingUp } from 'react-icons/fi';
+import { FiCheck, FiShield, FiVideo, FiPlay, FiCalendar, FiAward, FiUsers, FiTrendingUp, FiChevronDown } from 'react-icons/fi';
+import { GiHelicopter } from 'react-icons/gi';
 import Button from '../../components/mainpage-components/HeroSection/buttoncta';
 import CustomYouTubePlayer from '../../components/CustomYouTubePlayer';
 import { getSiteSettings, extractYouTubeVideoId } from '@/lib/site-settings';
@@ -241,7 +243,8 @@ const HeroSection: React.FC = () => {
         zIndex={20}
         height="100vh"
         display="flex"
-        alignItems="center"
+        alignItems={{ base: "flex-start", lg: "center" }}
+        pt={{ base: "100px", md: "110px", lg: 0 }}
       >
         <Box width="100%">
           {/* Mobile/Tablet - Single Column */}
@@ -428,31 +431,6 @@ const HeroSection: React.FC = () => {
                   </Button>
                 </VStack>
               </MotionBox>
-
-              {/* YouTube Player */}
-              {youtubeVideoId && (
-                <MotionBox
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                  w="100%"
-                  maxW="100%"
-                  pt={4}
-                >
-                  <Box
-                    as="div"
-                    className="w-full"
-                  >
-                    <CustomYouTubePlayer
-                      videoId={youtubeVideoId}
-                      autoplay={false}
-                      muted={false}
-                      showControls={true}
-                      colorGlow="#00C6FF"
-                    />
-                  </Box>
-                </MotionBox>
-              )}
 
               {/* Stats */}
               <MotionBox
@@ -730,7 +708,7 @@ const HeroSection: React.FC = () => {
               </MotionBox>
             </VStack>
 
-            {/* Right Column - YouTube Player */}
+            {/* Right Column - YouTube Player - Desktop only */}
             {youtubeVideoId && (
               <MotionBox
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -739,6 +717,7 @@ const HeroSection: React.FC = () => {
                 w="100%"
                 position="relative"
                 zIndex={25}
+                display={{ base: "none", lg: "block" }}
               >
                 <VStack spacing={3} align="flex-start" w="100%" position="relative" zIndex={25}>
                   {/* Überschrift über dem Player */}
@@ -756,14 +735,18 @@ const HeroSection: React.FC = () => {
 
                   {/* YouTube Player */}
                   {youtubeVideoId && (
-                    <Box w="100%" h="100%">
-                      <CustomYouTubePlayer
-                        videoId={youtubeVideoId}
-                        autoplay={true}
-                        muted={true}
-                        showControls={true}
-                        colorGlow="#00C6FF"
-                      />
+                    <Box w="100%" minH="400px" position="relative">
+                      <AspectRatio ratio={16 / 9} w="100%">
+                        <Box w="100%" h="100%">
+                          <CustomYouTubePlayer
+                            videoId={youtubeVideoId}
+                            autoplay={true}
+                            muted={true}
+                            showControls={true}
+                            colorGlow="#00C6FF"
+                          />
+                        </Box>
+                      </AspectRatio>
                     </Box>
                   )}
                 </VStack>
@@ -786,11 +769,25 @@ const HeroSection: React.FC = () => {
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <VStack spacing={2}>
-              <Text fontSize="xs" color="cyan.400" fontWeight="600">
-                Explore
+            <VStack spacing={2} align="center">
+              <Icon 
+                as={GiHelicopter} 
+                color="cyan.400" 
+                w={6} 
+                h={6}
+                filter="drop-shadow(0 0 10px rgba(0,198,255,0.6))"
+              />
+              <Text fontSize="xs" color="gray.400" fontWeight="500">
+                Fliegen Sie mit uns los.
               </Text>
-              <Box w="1px" h={{ base: "20px", md: "28px" }} bg="cyan.400" opacity={0.4} />
+              <Icon 
+                as={FiChevronDown} 
+                color="cyan.400" 
+                w={5} 
+                h={5}
+                opacity={0.6}
+                filter="drop-shadow(0 0 8px rgba(0,198,255,0.4))"
+              />
             </VStack>
           </MotionBox>
         </MotionBox>

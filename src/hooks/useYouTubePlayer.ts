@@ -95,60 +95,78 @@ export function useYouTubePlayer(
       return true;
     };
 
-    // Prüfe sofort
+      // Prüfe sofort - wenn keine Größe, setze eine minimale Größe
     if (!checkSize()) {
-      console.warn('YouTube container has no size, waiting...');
+      console.warn('YouTube container has no size, setting minimum size...');
       
-      // Verwende ResizeObserver falls verfügbar
-      if (window.ResizeObserver) {
-        let observerTimeout: NodeJS.Timeout;
-        const observer = new ResizeObserver((entries) => {
-          for (const entry of entries) {
-            const width = entry.contentRect.width;
-            const height = entry.contentRect.height;
+      // Setze eine minimale Größe für den Container
+      container.style.minWidth = '320px';
+      container.style.minHeight = '180px';
+      container.style.width = '100%';
+      container.style.height = '100%';
+      
+      // Prüfe nochmal nach kurzer Verzögerung
+      setTimeout(() => {
+        if (!checkSize()) {
+          console.warn('Container still has no size, using ResizeObserver...');
+          
+          // Verwende ResizeObserver falls verfügbar
+          if (window.ResizeObserver) {
+            let observerTimeout: NodeJS.Timeout;
+            const observer = new ResizeObserver((entries) => {
+              for (const entry of entries) {
+                const width = entry.contentRect.width;
+                const height = entry.contentRect.height;
+                
+                if (width > 0 && height > 0) {
+                  observer.disconnect();
+                  if (observerTimeout) clearTimeout(observerTimeout);
+                  console.log('Container has size now, initializing player:', { width, height });
+                  setTimeout(() => initializePlayer(), 100);
+                  return;
+                }
+              }
+            });
             
-            if (width > 0 && height > 0) {
+            observer.observe(container);
+            
+            // Timeout als Fallback
+            observerTimeout = setTimeout(() => {
               observer.disconnect();
-              if (observerTimeout) clearTimeout(observerTimeout);
-              console.log('Container has size now, initializing player:', { width, height });
-              setTimeout(() => initializePlayer(), 100);
-              return;
-            }
-          }
-        });
-        
-        observer.observe(container);
-        
-        // Timeout als Fallback
-        observerTimeout = setTimeout(() => {
-          observer.disconnect();
-          if (!checkSize()) {
-            setIsLoading(false);
-            setError('YouTube Container hat keine Größe nach 5 Sekunden');
+              if (!checkSize()) {
+                setIsLoading(false);
+                setError('YouTube Container hat keine Größe nach 5 Sekunden');
+              } else {
+                console.log('Container has size after timeout, initializing player');
+                initializePlayer();
+              }
+            }, 5000);
+            
+            return;
           } else {
-            console.log('Container has size after timeout, initializing player');
-            initializePlayer();
+            // Fallback: Mehrere Versuche mit zunehmenden Delays
+            let attempts = 0;
+            const maxAttempts = 10;
+            const checkInterval = setInterval(() => {
+              attempts++;
+              if (checkSize()) {
+                clearInterval(checkInterval);
+                setTimeout(() => initializePlayer(), 100);
+              } else if (attempts >= maxAttempts) {
+                clearInterval(checkInterval);
+                setIsLoading(false);
+                setError('YouTube Container hat keine Größe');
+              }
+            }, 500);
+            return;
           }
-        }, 5000);
-        
-        return;
-      } else {
-        // Fallback: Mehrere Versuche mit zunehmenden Delays
-        let attempts = 0;
-        const maxAttempts = 10;
-        const checkInterval = setInterval(() => {
-          attempts++;
-          if (checkSize()) {
-            clearInterval(checkInterval);
-            setTimeout(() => initializePlayer(), 100);
-          } else if (attempts >= maxAttempts) {
-            clearInterval(checkInterval);
-            setIsLoading(false);
-            setError('YouTube Container hat keine Größe');
-          }
-        }, 500);
-        return;
-      }
+        } else {
+          // Container hat jetzt Größe, initialisiere
+          setTimeout(() => initializePlayer(), 100);
+          return;
+        }
+      }, 200);
+      return;
     }
 
     const rect = container.getBoundingClientRect();
@@ -170,10 +188,14 @@ export function useYouTubePlayer(
         containerId
       });
 
+      // Stelle sicher, dass wir mindestens eine minimale Größe haben
+      const playerWidth = Math.max(rect.width || 640, 320);
+      const playerHeight = Math.max(rect.height || 360, 180);
+
       playerRef.current = new window.YT.Player(containerId, {
         videoId,
-        width: rect.width || '100%',
-        height: rect.height || '100%',
+        width: playerWidth,
+        height: playerHeight,
         playerVars: {
           autoplay: options.autoplay ? 1 : 0,
           mute: options.muted ? 1 : 0,
@@ -182,7 +204,10 @@ export function useYouTubePlayer(
           modestbranding: 1,
           playsinline: 1,
           enablejsapi: 1,
-          loop: 0, // Loop deaktivieren für bessere Kompatibilität
+          loop: 0,
+          iv_load_policy: 3,
+          fs: 0,
+          cc_load_policy: 0,
           origin: typeof window !== 'undefined' ? window.location.origin : '',
         },
         events: {
@@ -224,6 +249,29 @@ export function useYouTubePlayer(
                 // Kurze Verzögerung um sicherzustellen, dass der Player vollständig bereit ist
                 setTimeout(() => {
                   console.log('Attempting to play video...');
+                  
+                  // Stelle sicher, dass der Container eine Größe hat
+                  const container = document.getElementById(containerId);
+                  if (container) {
+                    const rect = container.getBoundingClientRect();
+                    if (rect.width === 0 || rect.height === 0) {
+                      console.warn('Container has no size, waiting...');
+                      // Warte bis Container Größe hat
+                      const checkSize = setInterval(() => {
+                        const newRect = container.getBoundingClientRect();
+                        if (newRect.width > 0 && newRect.height > 0) {
+                          clearInterval(checkSize);
+                          event.target.playVideo();
+                          setIsPlaying(true);
+                        }
+                      }, 100);
+                      
+                      // Timeout nach 3 Sekunden
+                      setTimeout(() => clearInterval(checkSize), 3000);
+                      return;
+                    }
+                  }
+                  
                   event.target.playVideo();
                   setIsPlaying(true);
                   
@@ -242,24 +290,29 @@ export function useYouTubePlayer(
                     
                     if (state === window.YT.PlayerState.PLAYING) {
                       setIsPlaying(true);
-                      // Prüfe nochmal ob IFrame sichtbar ist
-                      const checkIframe = document.getElementById(containerId)?.querySelector('iframe');
-                      if (checkIframe) {
-                        const styles = window.getComputedStyle(checkIframe);
-                        console.log('IFrame visibility check:', {
-                          display: styles.display,
-                          visibility: styles.visibility,
-                          opacity: styles.opacity,
-                          width: checkIframe.offsetWidth,
-                          height: checkIframe.offsetHeight,
-                          zIndex: styles.zIndex,
-                        });
-                      }
+                    } else if (state === window.YT.PlayerState.BUFFERING) {
+                      // Wenn BUFFERING, warte etwas länger und prüfe nochmal
+                      console.log('Video is buffering, waiting...');
+                      setTimeout(() => {
+                        const newState = event.target.getPlayerState();
+                        if (newState === window.YT.PlayerState.PLAYING) {
+                          setIsPlaying(true);
+                        } else if (newState === window.YT.PlayerState.BUFFERING) {
+                          // Versuche nochmal zu spielen
+                          console.log('Still buffering, retrying play...');
+                          event.target.playVideo();
+                        }
+                      }, 1000);
                     } else {
                       console.warn('Video did not start playing, state:', state);
+                      // Retry nach 1 Sekunde
+                      setTimeout(() => {
+                        console.log('Retrying play after state check...');
+                        event.target.playVideo();
+                      }, 1000);
                     }
-                  }, 500);
-                }, 500);
+                  }, 1000);
+                }, 1000);
               } catch (e) {
                 console.error('Error starting video:', e);
                 // Fallback: Versuche es nochmal nach einer weiteren Verzögerung
@@ -294,13 +347,40 @@ export function useYouTubePlayer(
           },
           onStateChange: (event: any) => {
             const state = event.data;
+            console.log('YouTube Player state changed:', state);
+            
             if (state === window.YT.PlayerState.PLAYING) {
               setIsPlaying(true);
             } else if (state === window.YT.PlayerState.PAUSED) {
               setIsPlaying(false);
             } else if (state === window.YT.PlayerState.ENDED) {
-              // Bei Loop wird das Video automatisch neu gestartet
-              setIsPlaying(true);
+              setIsPlaying(false);
+            } else if (state === window.YT.PlayerState.BUFFERING) {
+              // Wenn BUFFERING und autoplay aktiviert ist, warte kurz und prüfe nochmal
+              if (options.autoplay && !isPlaying) {
+                setTimeout(() => {
+                  const currentState = event.target.getPlayerState();
+                  if (currentState === window.YT.PlayerState.BUFFERING) {
+                    // Versuche nochmal zu spielen wenn immer noch buffering
+                    try {
+                      event.target.playVideo();
+                    } catch (e) {
+                      console.error('Error retrying play from BUFFERING state:', e);
+                    }
+                  }
+                }, 2000);
+              }
+            } else if (state === window.YT.PlayerState.CUED) {
+              // Wenn CUED und autoplay aktiviert, versuche zu spielen
+              if (options.autoplay && !isPlaying) {
+                setTimeout(() => {
+                  try {
+                    event.target.playVideo();
+                  } catch (e) {
+                    console.error('Error playing from CUED state:', e);
+                  }
+                }, 500);
+              }
             }
           },
           onError: (event: any) => {

@@ -1,8 +1,16 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, VStack, Text, SimpleGrid } from '@chakra-ui/react';
+import { Box, Container, VStack, Text, SimpleGrid, Icon } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { 
+  FiVideo, 
+  FiImage, 
+  FiFilm, 
+  FiHome, 
+  FiHeart, 
+  FiSearch 
+} from 'react-icons/fi';
 import ServiceCard from '../../components/mainpage-components/ServiceSection/Servicecard';
 import ServiceCardSlider from '../../components/mainpage-components/ServiceSection/Servicecardslider';
 import ServiceCTA from '../../components/mainpage-components/ServiceSection/Servicecta';
@@ -11,7 +19,7 @@ const MotionBox = motion(Box);
 
 const services = [
   {
-    icon: "📹",
+    icon: FiVideo,
     title: "Luftvideo",
     description: "Professionelle Drohnenvideos in höchster Qualität",
     features: [
@@ -23,7 +31,7 @@ const services = [
     badge: "Beliebt"
   },
   {
-    icon: "📸",
+    icon: FiImage,
     title: "Luftbilder",
     description: "Hochauflösende Fotos aus der Vogelperspektive",
     features: [
@@ -34,7 +42,7 @@ const services = [
     ]
   },
   {
-    icon: "🎬",
+    icon: FiFilm,
     title: "Videoproduktion",
     description: "Komplette Videoproduktionen für jeden Zweck",
     features: [
@@ -45,7 +53,7 @@ const services = [
     ]
   },
   {
-    icon: "🏢",
+    icon: FiHome,
     title: "Immobilien",
     description: "Perfekte Präsentation für Ihre Objekte",
     features: [
@@ -56,7 +64,7 @@ const services = [
     ]
   },
   {
-    icon: "💍",
+    icon: FiHeart,
     title: "Hochzeiten",
     description: "Unvergessliche Momente aus einzigartiger Perspektive",
     features: [
@@ -67,7 +75,7 @@ const services = [
     ]
   },
   {
-    icon: "🔍",
+    icon: FiSearch,
     title: "Inspektion",
     description: "Technische Kontrollen aus der Luft",
     features: [
@@ -198,7 +206,11 @@ const ServicesSection = () => {
 
           {/* Desktop Grid */}
           <Box display={{ base: "none", md: "block" }} w="100%">
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} w="100%">
+            <SimpleGrid 
+              columns={{ base: 1, md: 2, lg: 3 }} 
+              spacing={6} 
+              w="100%"
+            >
               {services.map((service, index) => (
                 <MotionBox
                   key={service.title}
@@ -206,6 +218,9 @@ const ServicesSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                  h="100%"
+                  w="100%"
+                  display="flex"
                 >
                   <ServiceCard {...service} />
                 </MotionBox>

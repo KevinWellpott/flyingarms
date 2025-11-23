@@ -3,6 +3,9 @@
 import React from 'react';
 import { Box, Container, VStack, Text, SimpleGrid, Button } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { IconType } from 'react-icons';
+import { FiSmartphone, FiFilm, FiVideo } from 'react-icons/fi';
+import Link from 'next/link';
 
 // Imports nach deiner Struktur
 import PricingCard from '../../components/mainpage-components/PricingSection/PricingCard';
@@ -13,18 +16,19 @@ const MotionBox = motion(Box);
 interface PricingTier {
   name: string;
   tagline: string;
-  icon: string;
+  icon: IconType;
   badge?: string;
   features: string[];
   highlight?: boolean;
   cta: string;
+  ctaLink: string;
 }
 
 const pricingTiers: PricingTier[] = [
   {
     name: "Full-HD",
     tagline: "Perfekt für Social Media",
-    icon: "📱",
+    icon: FiSmartphone,
     features: [
       "1920x1080 Full-HD Auflösung",
       "30fps Aufnahmen",
@@ -33,13 +37,14 @@ const pricingTiers: PricingTier[] = [
       "3-5 Werktage Lieferzeit",
       "Online-Optimiert"
     ],
-    cta: "Angebot anfordern"
+    cta: "Angebot anfordern",
+    ctaLink: "/kontakt"
   },
   {
     name: "4K Ultra-HD",
     tagline: "Für professionelle Projekte",
-    icon: "🎬",
-    badge: "Beliebt",
+    icon: FiFilm,
+    badge: "Unsere Empfehlung",
     highlight: true,
     features: [
       "4K Ultra-HD (3840x2160)",
@@ -50,12 +55,13 @@ const pricingTiers: PricingTier[] = [
       "Rohmaterial inklusive",
       "Revision inklusive"
     ],
-    cta: "Jetzt starten"
+    cta: "Jetzt Projekt starten",
+    ctaLink: "/kontakt"
   },
   {
     name: "6K Cinema",
     tagline: "Maximale Qualität",
-    icon: "🎥",
+    icon: FiVideo,
     features: [
       "6K Cinema Quality (6000x3376)",
       "10-bit RAW & ProRes",
@@ -66,7 +72,8 @@ const pricingTiers: PricingTier[] = [
       "Unbegrenzte Revisionen",
       "Dedizierter Projektmanager"
     ],
-    cta: "Premium anfragen"
+    cta: "Premium Projekt anfragen",
+    ctaLink: "/kontakt"
   }
 ];
 
@@ -189,42 +196,6 @@ const PricingSection = () => {
 
           {/* Trust Indicators */}
           <TrustIndicators />
-
-          {/* Bottom CTA */}
-          <MotionBox
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            textAlign="center"
-          >
-            <VStack spacing={3}> {/* VStack spacing mittel */}
-              <Text 
-                fontSize="sm" // Button/Body Text
-                color="whiteAlpha.600" 
-                maxW="600px"
-              >
-                Nicht sicher welches Paket? Wir beraten Sie gerne kostenlos und finden die perfekte Lösung für Ihr Projekt.
-              </Text>
-              
-              <Button
-                size="lg"
-                variant="ghost"
-                color="cyan.300"
-                border="1px solid rgba(0,198,255,0.3)" // Standard Border
-                borderRadius="xl" // Cards
-                fontSize="sm" // Button/Body Text
-                fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" // System Font
-                _hover={{
-                  bg: "rgba(0,198,255,0.1)",
-                  borderColor: "cyan.400"
-                }}
-                transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)" // Smooth Transitions
-              >
-                Kostenlose Beratung anfragen →
-              </Button>
-            </VStack>
-          </MotionBox>
         </VStack>
       </Container>
     </Box>

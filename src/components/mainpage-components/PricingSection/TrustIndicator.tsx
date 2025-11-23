@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { Box, VStack, HStack, Text, SimpleGrid } from '@chakra-ui/react';
+import { Box, VStack, HStack, Text, SimpleGrid, Icon } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { FiCheck, FiShield, FiAward, FiZap } from 'react-icons/fi';
 
 const MotionBox = motion(Box);
 
 const TrustIndicators: React.FC = () => {
   return (
     <MotionBox
-   
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -26,7 +26,7 @@ const TrustIndicators: React.FC = () => {
       >
         <VStack spacing={5}> {/* VStack spacing groß */}
           <HStack spacing={2} justify="center">
-            <Text fontSize="2xl">✓</Text>
+            <Icon as={FiCheck} w={6} h={6} color="cyan.400" />
             <Text
               fontSize={{ base: 'md', md: 'lg' }} // Heading medium
               fontWeight="800"
@@ -44,7 +44,7 @@ const TrustIndicators: React.FC = () => {
             w="100%"
           >
             <VStack spacing={2}> {/* VStack spacing klein */}
-              <Text fontSize="2xl">🛡️</Text>
+              <Icon as={FiShield} w={8} h={8} color="cyan.400" />
               <Text 
                 fontSize="sm" // Button/Body Text
                 fontWeight="700" 
@@ -63,7 +63,7 @@ const TrustIndicators: React.FC = () => {
             </VStack>
 
             <VStack spacing={2}> {/* VStack spacing klein */}
-              <Text fontSize="2xl">🎓</Text>
+              <Icon as={FiAward} w={8} h={8} color="cyan.400" />
               <Text 
                 fontSize="sm" // Button/Body Text
                 fontWeight="700" 
@@ -82,7 +82,7 @@ const TrustIndicators: React.FC = () => {
             </VStack>
 
             <VStack spacing={2}> {/* VStack spacing klein */}
-              <Text fontSize="2xl">⚡</Text>
+              <Icon as={FiZap} w={8} h={8} color="cyan.400" />
               <Text 
                 fontSize="sm" // Button/Body Text
                 fontWeight="700" 

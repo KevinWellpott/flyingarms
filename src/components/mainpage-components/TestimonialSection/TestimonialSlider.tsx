@@ -111,8 +111,8 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
           <MotionBox
             key={logo.altText}
             position="absolute"
-            top="50%"
-            left="50%"
+            top="47.5%"
+            left="47.5%"
             w={size.w}
             h={size.h}
             style={{
@@ -143,6 +143,7 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
                 src={logo.logoPath}
                 alt={logo.altText}
                 fill
+                unoptimized
                 style={{ 
                   objectFit: 'contain',
                   filter: 'brightness(1.2) contrast(1.1)'
@@ -156,8 +157,7 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
       {/* Center Stats Circle - EXACT same positioning as decorative circles */}
       <MotionBox
         position="absolute"
-        top="50%"
-        left="50%"
+       
         w={{ base: "200px", md: "260px" }}
         h={{ base: "200px", md: "260px" }}
         borderRadius="50%"

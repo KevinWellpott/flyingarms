@@ -15,7 +15,7 @@ export default function ReferencesOverviewSection({ references, reviews }: Refer
   const [showInfo, setShowInfo] = useState(true);
 
   return (
-    <section className="w-full py-12 md:py-20 lg:py-32">
+    <section className="w-full py-12 md:pt-32 md:pb-20 lg:py-32">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="space-y-16 md:space-y-20">
           {/* Header */}
@@ -70,7 +70,7 @@ export default function ReferencesOverviewSection({ references, reviews }: Refer
           </div>
 
           {/* Referenzen Cards - 2 Spalten Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-stretch">
             {references.map((reference) => (
               <ReferencesOverviewCard
                 key={reference.id}

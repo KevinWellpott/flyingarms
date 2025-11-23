@@ -4,11 +4,25 @@
 import React from 'react';
 import { Box, Container, VStack, Text, SimpleGrid, Button } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { IconType } from 'react-icons';
+import { FiSmartphone, FiFilm, FiVideo, FiCamera, FiAward, FiZap } from 'react-icons/fi';
 import PricingCard from '../../components/mainpage-components/PricingSection/PricingCard';
 import TrustIndicators from '../../components/mainpage-components/PricingSection/TrustIndicator';
 import { PageSection, PricingTier } from '../../types/page-section';
 
 const MotionBox = motion(Box);
+
+// Icon Mapping: String zu IconType
+const iconMap: Record<string, IconType> = {
+  'smartphone': FiSmartphone,
+  'film': FiFilm,
+  'video': FiVideo,
+  'camera': FiCamera,
+  'award': FiAward,
+  'zap': FiZap,
+  // Fallback
+  'default': FiVideo,
+};
 
 interface DynamicPricingSectionProps {
   data?: PageSection;
@@ -24,9 +38,15 @@ const DynamicPricingSection: React.FC<DynamicPricingSectionProps> = ({ data }) =
     pricing_tiers = []
   } = data;
 
-  // Pricing Tiers sortieren
+  // Pricing Tiers sortieren und transformieren
   const sortedTiers = Array.isArray(pricing_tiers) ? 
-    [...pricing_tiers].sort((a, b) => a.order - b.order) : [];
+    [...pricing_tiers]
+      .sort((a, b) => a.order - b.order)
+      .map((tier) => ({
+        ...tier,
+        icon: iconMap[tier.icon?.toLowerCase()] || iconMap['default'],
+        ctaLink: (tier as any).ctaLink || '/kontakt', // Fallback zu /kontakt wenn ctaLink fehlt
+      })) : [];
 
   return (
     <Box

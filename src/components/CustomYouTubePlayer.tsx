@@ -186,6 +186,12 @@ export default function CustomYouTubePlayer({
       <div 
         id={`youtube-player-${videoId}`} 
         className="absolute inset-0 w-full h-full"
+        style={{
+          minWidth: '100%',
+          minHeight: '100%',
+          width: '100%',
+          height: '100%',
+        }}
       />
 
       {/* Loading State */}
