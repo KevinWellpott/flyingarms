@@ -222,7 +222,7 @@ const UeberUnsPage = () => {
                     boxShadow: "0 15px 50px rgba(0,198,255,0.2)",
                     transform: "translateY(-5px)"
                   }}
-                  transition="all 0.3s ease"
+                  sx={{ transition: "all 0.3s ease" }}
                 >
                   <VStack spacing={4}>
                     <Box
@@ -283,7 +283,7 @@ const UeberUnsPage = () => {
                     boxShadow: "0 15px 50px rgba(0,198,255,0.2)",
                     transform: "translateY(-5px)"
                   }}
-                  transition="all 0.3s ease"
+                  sx={{ transition: "all 0.3s ease" }}
                 >
                   <VStack spacing={4}>
                     <Avatar
