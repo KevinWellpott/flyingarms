@@ -1,13 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Box, VStack, HStack, Text, Badge } from '@chakra-ui/react';
+import { Box, VStack, HStack, Text, Badge, Icon } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { IconType } from 'react-icons';
 
 const MotionBox = motion(Box);
 
 interface ServiceCardProps {
-  icon: string;
+  icon: IconType;
   title: string;
   description: string;
   features: string[];
@@ -22,7 +23,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   badge
 }) => {
   return (
-    <MotionBox whileHover={{ y: -5 }}>
+    <MotionBox whileHover={{ y: -5 }} h="100%" w="100%">
       <Box
         bg="rgba(255,255,255,0.03)"
         backdropFilter="blur(30px)"
@@ -32,6 +33,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         boxShadow="0 10px 30px rgba(0,198,255,0.1)"
         position="relative"
         h="100%"
+        w="100%"
+        display="flex"
+        flexDirection="column"
         transition="all 0.3s"
         _hover={{
           borderColor: "rgba(0,198,255,0.4)",
@@ -56,9 +60,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           </Badge>
         )}
 
-        <VStack align="flex-start" spacing={3}>
+        <VStack align="flex-start" spacing={3} h="100%" flex={1}>
           <Box
-            fontSize={{ base: "3xl", md: "4xl" }}
             w={{ base: "50px", md: "60px" }}
             h={{ base: "50px", md: "60px" }}
             bg="rgba(0,198,255,0.1)"
@@ -67,14 +70,21 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             alignItems="center"
             justifyContent="center"
             border="1px solid rgba(0,198,255,0.2)"
+            flexShrink={0}
           >
-            {icon}
+            <Icon
+              as={icon}
+              w={{ base: "24px", md: "28px" }}
+              h={{ base: "24px", md: "28px" }}
+              color="cyan.400"
+            />
           </Box>
 
           <Text
             fontSize={{ base: "lg", md: "xl" }}
             fontWeight="700"
             color="white"
+            flexShrink={0}
           >
             {title}
           </Text>
@@ -83,11 +93,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             fontSize={{ base: "sm", md: "md" }}
             color="whiteAlpha.700"
             lineHeight="1.6"
+            flexShrink={0}
           >
             {description}
           </Text>
 
-          <VStack align="flex-start" spacing={1.5} w="100%" pt={2}>
+          <VStack align="flex-start" spacing={1.5} w="100%" pt={2} flex={1} justify="flex-start">
             {features.map((feature, i) => (
               <HStack key={i} spacing={2}>
                 <Box
@@ -95,6 +106,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   h="4px"
                   bg="cyan.400"
                   borderRadius="full"
+                  flexShrink={0}
                 />
                 <Text fontSize="xs" color="whiteAlpha.600">
                   {feature}

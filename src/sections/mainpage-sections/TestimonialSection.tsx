@@ -105,6 +105,30 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
     }
   }, [autoPlay, displayTestimonials.length]);
 
+  // Load Review Widget Script
+  useEffect(() => {
+    const scriptId = 'reviewconnect-widget-script';
+    
+    // Check if script already exists
+    if (document.getElementById(scriptId)) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = 'https://app.reviewconnect.me/embed/fCN7J5lVg3k4ZdRazSbT3dJhMD6JMMlt/widget.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup: Remove script on unmount
+      const existingScript = document.getElementById(scriptId);
+      if (existingScript) {
+        document.body.removeChild(existingScript);
+      }
+    };
+  }, []);
+
   const currentTestimonial = displayTestimonials[currentIndex];
 
   const slideVariants = {
@@ -203,15 +227,17 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
               maxW="600px"
               mx="auto"
             >
-              Von Fortune 500 Unternehmen bis zu unvergesslichen Hochzeiten
+              Von Jägermeister bis hin zu NewYorker wir haben für alle Branchen und Anforderungen die passende Lösung.
             </Text>
           </MotionBox>
 
           {showOrbit && (
             <MotionBox 
               display="flex" 
-              justifyContent="center" 
-              w="100%" 
+              justifyContent="center"
+              alignItems="center"
+              w="100%"
+              mx="auto"
               mb={{ base: 6, md: 8 }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -226,75 +252,23 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
             </MotionBox>
           )}
 
-          <Box
-            position="relative"
+          {/* Review Widget */}
+          <MotionBox
             w="100%"
             maxW="800px"
             mx="auto"
             mb={{ base: 8, md: 12 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <Box position="relative" minH={{ base: "400px", md: "380px" }} pb={{ base: 16, md: 20 }}>
-              <AnimatePresence initial={false} custom={direction} mode="wait">
-                <MotionBox
-                  key={currentIndex}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{
-                    x: { type: "spring", stiffness: 300, damping: 30 },
-                    opacity: { duration: 0.2 },
-                    scale: { duration: 0.3 }
-                  }}
-                  drag="x"
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.2}
-                  onDragEnd={handleDragEnd}
-                  position="absolute"
-                  w="100%"
-                  style={{ cursor: 'grab' }}
-                  whileTap={{ cursor: 'grabbing' }}
-                >
-                  <TestimonialCard
-                    client={currentTestimonial.client}
-                    role={currentTestimonial.role}
-                    company={currentTestimonial.company}
-                    quote={currentTestimonial.quote}
-                    avatar={currentTestimonial.avatar}
-                    rating={currentTestimonial.rating}
-                    category={currentTestimonial.category}
-                    projectType={currentTestimonial.projectType}
-                  />
-                </MotionBox>
-              </AnimatePresence>
-            </Box>
-
-            <HStack
-              spacing={2}
-              justify="center"
-              mt={{ base: 12, md: 16 }}
-              position="relative"
-              zIndex={10}
-            >
-              {displayTestimonials.map((_, index) => (
-                <Box
-                  key={index}
-                  w={index === currentIndex ? "32px" : "8px"}
-                  h="8px"
-                  borderRadius="full"
-                  bg={index === currentIndex ? "cyan.400" : "rgba(255,255,255,0.2)"}
-                  cursor="pointer"
-                  onClick={() => {
-                    setDirection(index > currentIndex ? 1 : -1);
-                    setCurrentIndex(index);
-                  }}
-                  transition="all 0.3s"
-                  _hover={{ bg: "cyan.300" }}
-                />
-              ))}
-            </HStack>
-          </Box>
+            <Box
+              id="reviews-widget-862"
+              w="100%"
+              minH={{ base: "400px", md: "500px" }}
+            />
+          </MotionBox>
 
           <MotionBox
             mt={{ base: 8, md: 10 }}
@@ -327,7 +301,7 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
                 </Box>
                 <VStack spacing={0} align="flex-start">
                   <Text fontSize="xs" fontWeight="700" color="#FCD34D">
-                    Top Rated
+                    durch. Bewertung
                   </Text>
                   <Text fontSize="xs" color="rgba(255,255,255,0.6)">
                     5.0 Sterne
@@ -397,8 +371,8 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
                   </Text>
                 </VStack>
               </HStack>
-            </HStack>
-          </MotionBox>
+              </HStack>
+            </MotionBox>
         </VStack>
       </Container>
     </Box>

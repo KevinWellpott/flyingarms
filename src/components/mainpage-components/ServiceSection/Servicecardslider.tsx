@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Box, VStack, HStack, Text, Badge } from '@chakra-ui/react';
+import { Box, VStack, HStack, Text, Badge, Icon } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { IconType } from 'react-icons';
 
 const MotionBox = motion(Box);
 
 interface Service {
-  icon: string;
+  icon: IconType;
   title: string;
   description: string;
   features: string[];
@@ -113,7 +114,6 @@ const ServiceCardSlider: React.FC<ServiceCardSliderProps> = ({ services }) => {
 
               <VStack align="flex-start" spacing={3}>
                 <Box
-                  fontSize="3xl"
                   w="50px"
                   h="50px"
                   bg="rgba(0,198,255,0.1)"
@@ -123,7 +123,12 @@ const ServiceCardSlider: React.FC<ServiceCardSliderProps> = ({ services }) => {
                   justifyContent="center"
                   border="1px solid rgba(0,198,255,0.2)"
                 >
-                  {currentService.icon}
+                  <Icon
+                    as={currentService.icon}
+                    w="24px"
+                    h="24px"
+                    color="cyan.400"
+                  />
                 </Box>
 
                 <Text fontSize="lg" fontWeight="700" color="white">

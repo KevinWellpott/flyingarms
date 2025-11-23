@@ -34,6 +34,18 @@ export interface YouTubePlaylistItem {
   snippet: YouTubePlaylistItemSnippet;
 }
 
+export interface YouTubePlaylistItemsResponse {
+  kind: string;
+  etag: string;
+  nextPageToken?: string;
+  prevPageToken?: string;
+  pageInfo: {
+    totalResults: number;
+    resultsPerPage: number;
+  };
+  items: YouTubePlaylistItem[];
+}
+
 export interface YouTubePlaylistSnippet {
     publishedAt: string;
     channelId: string;
@@ -61,6 +73,17 @@ export interface YouTubePlaylist {
     contentDetails: {
         itemCount: number;
     };
+}
+
+export interface YouTubePlaylistsResponse {
+  kind: string;
+  etag: string;
+  nextPageToken?: string;
+  pageInfo: {
+    totalResults: number;
+    resultsPerPage: number;
+  };
+  items: YouTubePlaylist[];
 }
 
 export interface PlaylistData {

@@ -2,6 +2,8 @@ import { getCachedPlaylistVideos, getCachedPlaylists } from '@/lib/cache';
 import VideosGrid from '@/components/VideosGrid';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
+import { FiArrowLeft } from 'react-icons/fi';
 
 export const revalidate = 86400; // Revalidate every 24 hours
 
@@ -31,6 +33,14 @@ export default async function PlaylistDetailPage({ params }: Props) {
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-16">
+      <div className="mb-8">
+        <Link href="/playlists" legacyBehavior>
+          <a className="inline-flex items-center gap-2 text-gray-400 hover:text-brand transition-colors duration-300 group">
+            <FiArrowLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" />
+            <span>Alle Playlists</span>
+          </a>
+        </Link>
+      </div>
       <header className="mb-12 md:mb-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div className="md:col-span-1">

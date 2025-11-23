@@ -322,18 +322,21 @@ const ServiceCard: React.FC<{
         <VStack spacing={4} align="center" position="relative" zIndex={2} h="100%">
           {/* Icon */}
           <Box
-            w={{ base: "60px", md: "70px" }}
-            h={{ base: "60px", md: "70px" }}
-            bg={`${service.color}20`}
-            borderRadius="xl"
-            border={`1px solid ${service.color}`}
             display="flex"
             alignItems="center"
             justifyContent="center"
             _groupHover={{ transform: "scale(1.1)" }}
             transition="transform 0.3s ease"
+            w={{ base: "50px", md: "60px" }}
+            h={{ base: "50px", md: "60px" }}
           >
-            <IconComponent className="w-full h-full" style={{ color: service.color }} />
+            <IconComponent 
+              style={{ 
+                color: service.color,
+                width: '100%',
+                height: '100%'
+              }} 
+            />
           </Box>
 
           {/* Content */}
