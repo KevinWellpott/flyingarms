@@ -12,7 +12,11 @@ console.log('Supabase Key:', supabaseKey ? 'Set' : 'Missing');
 console.log('Service Role Key:', serviceRoleKey ? 'Set' : 'Missing');
 
 // Öffentlicher Client (mit RLS)
-export const supabase = createClient(supabaseUrl!, supabaseKey!);
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are required');
+}
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Hinweis: Admin-Operationen werden über API-Routes (/api/references) durchgeführt,
 // die serverseitig den Service Role Key verwenden. Dies ist sicherer als den

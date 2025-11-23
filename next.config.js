@@ -3,9 +3,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // ESLint während Build ignorieren
   },
-  experimental: {
-    // appDir: true, // ⚠️ ENTFERNT - ist veraltet in Next.js 14
-  },
   images: {
     remotePatterns: [
       {

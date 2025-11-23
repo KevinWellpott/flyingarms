@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_noStore as noStore } from 'next/cache';
 import { getReferenceBySlug, getRelatedReferences } from '@/lib/references';
@@ -20,32 +19,42 @@ interface PageProps {
   };
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const reference = await getReferenceBySlug(params.slug);
-
-  if (!reference) {
-    return {
-      title: 'Referenz nicht gefunden',
-    };
-  }
-
-  return {
-    title: reference.title,
-    description: reference.subtitle || reference.description_text || '',
-  };
-}
+// generateMetadata temporär deaktiviert für Vercel-Deployment
+// export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+//   try {
+//     const reference = await getReferenceBySlug(params.slug);
+//     if (!reference) {
+//       return {
+//         title: 'Referenz nicht gefunden | Flying Arms',
+//         description: 'Die angeforderte Referenz wurde nicht gefunden.',
+//       };
+//     }
+//     return {
+//       title: reference.title || 'Referenz | Flying Arms',
+//       description: reference.subtitle || reference.description_text || 'Flying Arms - Professionelle Drohnenservices',
+//     };
+//   } catch (error) {
+//     console.error('❌ Error generating metadata:', error);
+//     return {
+//       title: 'Referenz | Flying Arms',
+//       description: 'Flying Arms - Professionelle Drohnenservices',
+//     };
+//   }
+// }
 
 export default async function ReferenceDetailPage({ params }: PageProps) {
-  // Deaktiviere Caching für diese Anfrage
-  noStore();
-  const reference = await getReferenceBySlug(params.slug);
+  try {
+    // Deaktiviere Caching für diese Anfrage
+    noStore();
+    const reference = await getReferenceBySlug(params.slug);
 
-  if (!reference) {
-    notFound();
-  }
+    if (!reference) {
+      console.log('❌ Reference not found for slug:', params.slug);
+      notFound();
+    }
 
-  const relatedReferences = await getRelatedReferences(reference.id, 3);
-  const reviews = await getReviewsByReferenceId(reference.id);
+    const relatedReferences = await getRelatedReferences(reference.id, 3);
+    const reviews = await getReviewsByReferenceId(reference.id);
 
   return (
     <main className="min-h-screen">
@@ -74,5 +83,9 @@ export default async function ReferenceDetailPage({ params }: PageProps) {
       )}
     </main>
   );
+  } catch (error) {
+    console.error('❌ Error loading reference page:', error);
+    notFound();
+  }
 }
 

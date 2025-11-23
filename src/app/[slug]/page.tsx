@@ -1,5 +1,4 @@
 // app/[slug]/page.tsx
-import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Header from '../../sections/global-sections/Header';
 import Footer from '../../sections/global-sections/Footer';
@@ -21,29 +20,28 @@ interface ServicePageProps {
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
-  try {
-    const pageData = await getPageBySlug(params.slug);
-
-    if (!pageData) {
-      return {
-        title: 'Seite nicht gefunden | Flying Arms',
-        description: 'Die angeforderte Seite wurde nicht gefunden.',
-      };
-    }
-
-    return {
-      title: pageData.meta_title || `${pageData.title} | Flying Arms`,
-      description: pageData.meta_description || pageData.description_left || 'Flying Arms - Professionelle Drohnenservices',
-    };
-  } catch (error) {
-    console.error('❌ Error generating metadata:', error);
-    return {
-      title: 'Flying Arms',
-      description: 'Professionelle Drohnenservices',
-    };
-  }
-}
+// generateMetadata temporär deaktiviert für Vercel-Deployment
+// export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
+//   try {
+//     const pageData = await getPageBySlug(params.slug);
+//     if (!pageData) {
+//       return {
+//         title: 'Seite nicht gefunden | Flying Arms',
+//         description: 'Die angeforderte Seite wurde nicht gefunden.',
+//       };
+//     }
+//     return {
+//       title: pageData.meta_title || `${pageData.title} | Flying Arms`,
+//       description: pageData.meta_description || pageData.description_left || 'Flying Arms - Professionelle Drohnenservices',
+//     };
+//   } catch (error) {
+//     console.error('❌ Error generating metadata:', error);
+//     return {
+//       title: 'Flying Arms',
+//       description: 'Professionelle Drohnenservices',
+//     };
+//   }
+// }
 
 export default async function ServicePage({ params }: ServicePageProps) {
   try {
