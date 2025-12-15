@@ -23,10 +23,10 @@ const services = [
     title: "Luftvideo",
     description: "Professionelle Drohnenvideos in höchster Qualität",
     features: [
-      "4K/6K Ultra-HD",
-      "10bit RAW",
-      "60fps Aufnahmen",
-      "Kinoreife Qualität"
+      "Musik",
+      "Film",
+      "Baubranche",
+      
     ],
     badge: "Beliebt"
   },
@@ -35,10 +35,10 @@ const services = [
     title: "Luftbilder",
     description: "Hochauflösende Fotos aus der Vogelperspektive",
     features: [
-      "Bis 48MP Auflösung",
-      "Panorama & 360°",
-      "Gigapixel Bilder",
-      "RAW-Format"
+      "Immobilien",
+      "Tourismus",
+      "Architektur",
+      "Infrastruktur"
     ]
   },
   {
@@ -54,7 +54,7 @@ const services = [
   },
   {
     icon: FiHome,
-    title: "Immobilien",
+    title: "Video",
     description: "Perfekte Präsentation für Ihre Objekte",
     features: [
       "Innen & Außen",
@@ -65,7 +65,7 @@ const services = [
   },
   {
     icon: FiHeart,
-    title: "Hochzeiten",
+    title: "Foto",
     description: "Unvergessliche Momente aus einzigartiger Perspektive",
     features: [
       "Luftaufnahmen",
@@ -190,7 +190,7 @@ const ServicesSection = () => {
             >
               Professionelle{" "}
               <Text as="span" bgGradient="linear(to-r, cyan.300, cyan.500)" bgClip="text">
-                Drohnenservices
+              Produktionen
               </Text>
             </Text>
 
@@ -200,7 +200,8 @@ const ServicesSection = () => {
               maxW="600px"
               mx="auto"
             >
-              Von Luftaufnahmen bis Videoproduktion – Ihr Partner für außergewöhnliche Perspektiven
+             Ob aus der der Luft oder am Boden
+             Ihr Partner für außergewöhnliche Perspektiven 
             </Text>
           </MotionBox>
 

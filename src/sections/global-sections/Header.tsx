@@ -21,7 +21,7 @@ export default function Header() {
   const { isOpen, onToggle } = useDisclosure()
 
   const navItems = [
-    { label: 'Aufnahmen', href: '/aufnahmen' },
+    { label: 'Luftaufnahmen', href: '/aufnahmen' },
     { label: 'Vermessungen', href: '/vermessungen' },
     { label: 'Referenzen', href: '/referenzen' },
     { label: 'Playlists', href: '/playlists' },
@@ -49,13 +49,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/">
             <HStack spacing={3}>
-              <Icon 
-                as={GiHelicopter} 
-                color="cyan.400" 
-                w="32px" 
-                h="32px"
-                filter="drop-shadow(0 0 10px rgba(0,198,255,0.6))"
-              />
+          
               <VStack spacing={0} align="start">
                 <Text
                   fontSize={{ base: 'md', md: 'lg' }}

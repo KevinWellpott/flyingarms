@@ -17,6 +17,7 @@ import {
   FaInstagram, 
   FaFacebook, 
   FaLinkedin, 
+  FaYoutube,
   FaPhone, 
   FaEnvelope, 
   FaMapMarkerAlt,
@@ -38,21 +39,15 @@ export default function Footer() {
           {/* Company Info */}
           <VStack spacing={6} align="start">
             <HStack spacing={2}>
-              <Icon 
-                as={GiHelicopter} 
-                color="cyan.400" 
-                w={6} 
-                h={6}
-                filter="drop-shadow(0 0 10px rgba(0,198,255,0.6))"
-              />
+             
               <Text fontSize="xl" fontWeight="bold" color="white">
-                Flying-Arms
+                FlyingArms
               </Text>
             </HStack>
             
             <Text fontSize="sm" color="gray.400" lineHeight="tall">
-              Professionelle Drohnenservices für Produktaufnahmen, 
-              Vermessungen und Schulungen. Die schärfste Sicht von oben.
+            Professionelle Video und Foto Produktion.
+            Die schärfste Sicht von oben
             </Text>
             
             <VStack spacing={3} align="start" w="100%">
@@ -78,6 +73,32 @@ export default function Footer() {
                 >
                   <Icon 
                     as={FaInstagram} 
+                    w={6} 
+                    h={6} 
+                    color="cyan.400"
+                    filter="drop-shadow(0 0 10px rgba(0,198,255,0.8))"
+                  />
+                </ChakraLink>
+
+
+                <ChakraLink
+                  href="https://www.youtube.com/@flyingarmsvideoproduktioni3730"
+                  isExternal
+                  p={4}
+                  borderRadius="xl"
+                  bg="rgba(255, 255, 255, 0.15)"
+                  border="1px solid rgba(0, 198, 255, 0.3)"
+                  boxShadow="0 4px 20px rgba(0, 198, 255, 0.2)"
+                  _hover={{
+                    bg: 'rgba(0, 198, 255, 0.25)',
+                    borderColor: 'rgba(0, 198, 255, 0.5)',
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 8px 30px rgba(0, 198, 255, 0.4)',
+                  }}
+                  transition="all 0.3s ease"
+                >
+                  <Icon 
+                    as={FaYoutube} 
                     w={6} 
                     h={6} 
                     color="cyan.400"
@@ -164,7 +185,7 @@ export default function Footer() {
               <HStack spacing={3}>
                 <Icon as={FaEnvelope} color="cyan.400" w={4} h={4} />
                 <Text fontSize="sm" color="gray.400">
-                  info@flying-arms.de
+                  info@flyingarms.de
                 </Text>
               </HStack>
               
@@ -176,10 +197,7 @@ export default function Footer() {
                   </Text>
                 </HStack>
                 <VStack spacing={1} align="start" pl={7}>
-                  <HStack spacing={4} justify="space-between" w="100%">
-                    <Text fontSize="xs" color="gray.400">Sonntag</Text>
-                    <Text fontSize="xs" color="gray.500">Geschlossen</Text>
-                  </HStack>
+                 
                   <HStack spacing={4} justify="space-between" w="100%">
                     <Text fontSize="xs" color="gray.400">Montag</Text>
                     <Text fontSize="xs" color="gray.400">12:00–20:00</Text>
@@ -202,6 +220,10 @@ export default function Footer() {
                   </HStack>
                   <HStack spacing={4} justify="space-between" w="100%">
                     <Text fontSize="xs" color="gray.400">Samstag</Text>
+                    <Text fontSize="xs" color="gray.500">Geschlossen</Text>
+                  </HStack>
+                  <HStack spacing={4} justify="space-between" w="100%">
+                    <Text fontSize="xs" color="gray.400">Sonntag</Text>
                     <Text fontSize="xs" color="gray.500">Geschlossen</Text>
                   </HStack>
                 </VStack>

@@ -278,7 +278,7 @@ const HeroSection: React.FC = () => {
                     bgGradient="linear(to-r, cyan.300, cyan.500)"
                     bgClip="text"
                   >
-                    Drohnenarbeit
+                    Videoproduktion
                   </Text>
                   <Text
                     fontSize={{ base: "lg", md: "xl" }}
@@ -512,7 +512,7 @@ const HeroSection: React.FC = () => {
                     bgGradient="linear(to-r, cyan.300, cyan.500)"
                     bgClip="text"
                   >
-                    Drohnenarbeit
+                    Videoproduktion
                   </Text>
                   <Text
                     fontSize={{ base: "lg", md: "xl" }}
@@ -535,7 +535,7 @@ const HeroSection: React.FC = () => {
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                Von Industrieanlagen bis Traumhochzeiten – EU-zertifizierte Drohnenoperationen für Ihr Projekt.
+                Von Industrieanlagen bis Traumhochzeiten – Ihr Projekt  bei uns in besten Händen.
               </MotionText>
 
               {/* Trust badges */}
@@ -682,7 +682,7 @@ const HeroSection: React.FC = () => {
                   {[
                     { value: "500+", label: "Projekte", icon: FiVideo },
                     { value: "50+", label: "Kunden", icon: FiUsers },
-                    { value: "98%", label: "Zufriedenheit", icon: FiTrendingUp }
+                    { value: "100%", label: "Zufriedenheit", icon: FiTrendingUp }
                   ].map((stat, i) => (
                     <VStack key={i} spacing={1.5} align="flex-start">
                       <Text

@@ -184,10 +184,10 @@ const ContactSection: React.FC = () => {
                     _focus={{ borderColor: "cyan.400" }}
                   >
                     <option value="Luftaufnahmen" style={{ background: '#000', color: '#fff' }}>
-                      Luftaufnahmen
+                     Foto
                     </option>
                     <option value="Vermessungen" style={{ background: '#000', color: '#fff' }}>
-                      Vermessungen
+                      Video
                     </option>
                   </Select>
                 </FormControl>

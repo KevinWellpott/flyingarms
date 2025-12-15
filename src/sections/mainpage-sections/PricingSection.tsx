@@ -32,9 +32,9 @@ const pricingTiers: PricingTier[] = [
     features: [
       "1920x1080 Full-HD Auflösung",
       "30fps Aufnahmen",
-      "Bis zu 30 Min. Flugzeit",
+      
       "Grundlegende Schnitt & Bearbeitung",
-      "3-5 Werktage Lieferzeit",
+      "48h Express Lieferung",
       "Online-Optimiert"
     ],
     cta: "Angebot anfordern",
@@ -47,13 +47,13 @@ const pricingTiers: PricingTier[] = [
     badge: "Unsere Empfehlung",
     highlight: true,
     features: [
-      "4K Ultra-HD (3840x2160)",
+      "10-bit RAW & Pro Res",
       "60fps Aufnahmen",
-      "Bis zu 60 Min. Flugzeit",
+      
       "Professioneller Schnitt & Color Grading",
       "2-4 Werktage Lieferzeit",
-      "Rohmaterial inklusive",
-      "Revision inklusive"
+      
+      "Eine Revision inklusive"
     ],
     cta: "Jetzt Projekt starten",
     ctaLink: "/kontakt"
@@ -63,13 +63,13 @@ const pricingTiers: PricingTier[] = [
     tagline: "Maximale Qualität",
     icon: FiVideo,
     features: [
-      "6K Cinema Quality (6000x3376)",
-      "10-bit RAW & ProRes",
-      "60/120fps High Frame Rate",
-      "Unbegrenzte Flugzeit",
+      "6K Cinema Quality (6144x3456)",
+      "12-bit RAW & ProRes",
+      "50fps Frame Rate",
+     
       "Premium Schnitt & VFX",
-      "Express-Lieferung 24-48h",
-      "Unbegrenzte Revisionen",
+      "3-5 Tage Lieferzeit",
+      "Eine Revision Inklusive",
       "Dedizierter Projektmanager"
     ],
     cta: "Premium Projekt anfragen",

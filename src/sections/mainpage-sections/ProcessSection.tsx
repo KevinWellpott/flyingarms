@@ -46,11 +46,11 @@ const processSteps: ProcessStep[] = [
   {
     number: 2,
     title: "Planung",
-    description: "Detaillierte Vorbereitung Ihres Flugs",
+    description: "Detaillierte Vorbereitung Ihres Projektes",
     icon: FiMap,
     duration: "1-3 Tage",
     details: [
-      "Flugplanung & Genehmigungen",
+      "Planung",
       "Wetterbedingungen analysieren",
       "Equipment-Check",
       "Shot-List erstellen"
@@ -61,12 +61,12 @@ const processSteps: ProcessStep[] = [
     title: "Produktion",
     description: "Professionelle Aufnahmen vor Ort",
     icon: FiVideo,
-    duration: "2-6 Std",
+    duration: "4-8 Std",
     details: [
-      "Sicherheits-Briefing",
-      "Mehrere Takes & Perspektiven",
-      "Live-Preview für Sie",
-      "Backup-Sicherung"
+      "Lieferung",
+      "Finales Material",
+      "Rohmaterial ( Optional )",
+     
     ]
   },
   {
@@ -567,17 +567,7 @@ const ProcessSection = () => {
             textAlign="center"
             w="100%"
           >
-            <Text
-              fontSize="xs"
-              fontWeight="700"
-              letterSpacing="4px"
-              textTransform="uppercase"
-              bgGradient="linear(to-r, cyan.300, cyan.500)"
-              bgClip="text"
-              mb={{ base: 4, md: 6 }}
-            >
-              Drohnen Luftaufnahmen
-            </Text>
+ 
 
             <Text
               fontSize={{ base: "2xl", md: "4xl" }}
@@ -587,9 +577,9 @@ const ProcessSection = () => {
               mb={{ base: 4, md: 6 }}
               fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
             >
-              Professionell{" "}
+              Professionelle{" "}
               <Text as="span" bgGradient="linear(to-r, cyan.300, cyan.500)" bgClip="text">
-                abheben
+                Produktion
               </Text>
             </Text>
 
@@ -600,7 +590,7 @@ const ProcessSection = () => {
               mx="auto"
               lineHeight="1.7"
             >
-              5 einfache Schritte zu professionellen Luftaufnahmen
+             5 einfache Schritte zur Realisierung Ihres Projektes
             </Text>
           </MotionBox>
 
