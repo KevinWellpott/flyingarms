@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useCookies } from '../contexts/CookieContext';
+import { useCookies } from '@/contexts/CookieContext';
 
 // Hook für Google Analytics Tracking
 export const useGoogleAnalytics = () => {
@@ -52,8 +52,8 @@ export const useFacebookPixel = () => {
     const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
     if (!FB_PIXEL_ID) return;
 
-    // Facebook Pixel Code
-    !(function(f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
+    // Facebook Pixel Code - Fixed TypeScript error
+    (function(f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
       if (f.fbq) return;
       n = f.fbq = function() {
         n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
