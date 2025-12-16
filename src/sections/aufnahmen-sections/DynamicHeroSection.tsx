@@ -300,13 +300,14 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
               </HStack>
             </MotionBox>
 
-            {/* Titel with Gradient */}
+            {/* H1 Titel with Gradient */}
             <MotionBox
               initial={{ opacity: 0, y: 30 }}
               animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <Text
+                as="h1"
                 fontSize={{ base: "3xl", md: "4xl" }}
                 fontWeight="700"
                 bgGradient="linear(to-r, white, cyan.100)"
@@ -578,13 +579,14 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
                 </HStack>
               </MotionBox>
 
-              {/* Titel with Gradient */}
+              {/* H1 Titel with Gradient */}
               <MotionBox
                 initial={{ opacity: 0, y: 30 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 <Text
+                  as="h1"
                   fontSize={{ base: "4xl", lg: "5xl" }}
                   fontWeight="700"
                   bgGradient="linear(to-r, white, cyan.100)"

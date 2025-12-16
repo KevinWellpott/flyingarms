@@ -92,6 +92,7 @@ const ContactSection: React.FC = () => {
               KONTAKT
             </Text>
             <Text
+              as="h1"
               fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
               fontWeight="900"
               color="white"

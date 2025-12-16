@@ -80,6 +80,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ reviews }) => {
               KUNDENSTIMMEN
             </Text>
             <Text
+              as="h2"
               fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
               fontWeight="900"
               color="white"

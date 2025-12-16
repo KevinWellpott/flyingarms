@@ -106,45 +106,7 @@ const DynamicVideoGallery: React.FC<DynamicVideoGalleryProps> = ({ data }) => {
               {sectionDescription}
             </Text>
 
-            {/* Video Specs */}
-            <HStack spacing={3} justify="center" flexWrap="wrap">
-              <Badge
-                bg="rgba(0,198,255,0.08)"
-                color="cyan.300"
-                border="1px solid rgba(0,198,255,0.2)"
-                borderRadius="md"
-                px={3}
-                py={1.5}
-                fontSize="xs"
-                fontWeight="700"
-              >
-                📹 6K Ultra-HD
-              </Badge>
-              <Badge
-                bg="rgba(255,255,255,0.03)"
-                color="whiteAlpha.700"
-                border="1px solid rgba(255,255,255,0.1)"
-                borderRadius="md"
-                px={3}
-                py={1.5}
-                fontSize="xs"
-                fontWeight="700"
-              >
-                ⚡ 60FPS
-              </Badge>
-              <Badge
-                bg="rgba(0,198,255,0.08)"
-                color="cyan.300"
-                border="1px solid rgba(0,198,255,0.2)"
-                borderRadius="md"
-                px={3}
-                py={1.5}
-                fontSize="xs"
-                fontWeight="700"
-              >
-                ⏱️ {featuredVideo.duration || '02:34'}
-              </Badge>
-            </HStack>
+           
           </MotionBox>
 
           {/* Video Player - 16:9 Aspect Ratio */}

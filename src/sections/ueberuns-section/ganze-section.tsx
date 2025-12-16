@@ -84,6 +84,7 @@ const UeberUnsPage = () => {
                 />
               </HStack>
               <Text
+                as="h1"
                 fontSize={{ base: "4xl", md: "5xl", lg: "6xl" }}
                 fontWeight="900"
                 bgGradient="linear(to-br, cyan.300, cyan.500)"
@@ -134,6 +135,7 @@ const UeberUnsPage = () => {
               <GridItem>
                 <VStack align="start" spacing={6}>
                   <Text
+                    as="h2"
                     fontSize={{ base: "2xl", md: "3xl" }}
                     fontWeight="700"
                     color="cyan.300"
@@ -163,6 +165,7 @@ const UeberUnsPage = () => {
               <GridItem>
                 <VStack align="start" spacing={6}>
                   <Text
+                    as="h3"
                     fontSize={{ base: "2xl", md: "3xl" }}
                     fontWeight="700"
                     color="cyan.300"
@@ -194,6 +197,7 @@ const UeberUnsPage = () => {
           {/* Values Section */}
           <VStack spacing={12} align="stretch">
             <Text
+              as="h2"
               fontSize={{ base: "3xl", md: "4xl" }}
               fontWeight="800"
               textAlign="center"
@@ -234,6 +238,7 @@ const UeberUnsPage = () => {
                       <Icon as={value.icon} w="32px" h="32px" color="cyan.400" />
                     </Box>
                     <Text
+                      as="h3"
                       fontSize="xl"
                       fontWeight="700"
                       color="cyan.300"
@@ -255,6 +260,7 @@ const UeberUnsPage = () => {
           {/* Team Section */}
           <VStack spacing={12} align="stretch">
             <Text
+              as="h2"
               fontSize={{ base: "3xl", md: "4xl" }}
               fontWeight="800"
               textAlign="center"
@@ -296,6 +302,7 @@ const UeberUnsPage = () => {
                     />
                     <VStack spacing={1}>
                       <Text
+                        as="h3"
                         fontSize="xl"
                         fontWeight="700"
                         color="white"
@@ -351,6 +358,7 @@ const UeberUnsPage = () => {
 
             <VStack spacing={6}>
               <Text
+                as="h2"
                 fontSize={{ base: "2xl", md: "3xl" }}
                 fontWeight="700"
                 color="cyan.300"

@@ -255,7 +255,7 @@ const HeroSection: React.FC = () => {
               textAlign="center"
               px={{ base: 4, md: 4 }}
             >
-              {/* Headline */}
+              {/* H1 Headline - Mobile */}
               <MotionBox
                 initial={{ opacity: 0, y: 30 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -264,6 +264,7 @@ const HeroSection: React.FC = () => {
               >
                 <VStack spacing={0.5}>
                   <Text
+                    as="h1"
                     fontSize={{ base: "3xl", md: "5xl" }}
                     fontWeight="900"
                     lineHeight="1"
@@ -490,7 +491,7 @@ const HeroSection: React.FC = () => {
               align="flex-start"
               textAlign="left"
             >
-              {/* Headline */}
+              {/* H1 Headline - Desktop */}
               <MotionBox
                 initial={{ opacity: 0, y: 30 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -498,6 +499,7 @@ const HeroSection: React.FC = () => {
               >
                 <VStack spacing={1} align="flex-start">
                   <Text
+                    as="h1"
                     fontSize="7xl"
                     fontWeight="900"
                     lineHeight="0.95"
@@ -769,26 +771,7 @@ const HeroSection: React.FC = () => {
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <VStack spacing={2} align="center">
-              <Icon 
-                as={GiHelicopter} 
-                color="cyan.400" 
-                w={6} 
-                h={6}
-                filter="drop-shadow(0 0 10px rgba(0,198,255,0.6))"
-              />
-              <Text fontSize="xs" color="gray.400" fontWeight="500">
-                Fliegen Sie mit uns los.
-              </Text>
-              <Icon 
-                as={FiChevronDown} 
-                color="cyan.400" 
-                w={5} 
-                h={5}
-                opacity={0.6}
-                filter="drop-shadow(0 0 8px rgba(0,198,255,0.4))"
-              />
-            </VStack>
+          
           </MotionBox>
         </MotionBox>
       </Container>
