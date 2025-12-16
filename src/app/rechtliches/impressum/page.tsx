@@ -16,14 +16,14 @@ const Impressum = () => {
       bg="transparent"
       position="relative"
     >
-      <Container 
+      <Container
         maxW="container.lg" // Container Breite
         px={{ base: 4, md: 6 }} // Container Padding
-        position="relative" 
+        position="relative"
         zIndex={2}
       >
         <VStack spacing={{ base: 3, md: 5 }} align="stretch"> {/* VStack spacing */}
-          
+
           {/* Header */}
           <MotionBox
             initial={{ opacity: 0, y: -30 }}
@@ -73,7 +73,7 @@ const Impressum = () => {
               border="1px solid rgba(255,255,255,0.1)" // Standard Border
             >
               <VStack spacing={5} align="stretch"> {/* VStack spacing groß */}
-                
+
                 <Box>
                   <Text
                     fontSize={{ base: 'md', md: 'lg' }} // Heading medium
@@ -84,16 +84,18 @@ const Impressum = () => {
                   >
                     Angaben gemäß § 5 TMG
                   </Text>
-                  <Text 
+                  <Text
                     fontSize="sm" // Button/Body Text
-                    color="whiteAlpha.700" 
+                    color="whiteAlpha.700"
                     lineHeight="1.7"
                   >
                     {/* HIER DEINE DATEN EINTRAGEN */}
-                    [Dein Name]<br />
-                    [Deine Straße + Hausnummer]<br />
-                    [PLZ] [Stadt]<br />
-                    [Land]
+
+                    Klaus Dannöhl<br />
+                    FlyingArms<br />
+                    Kreuzstraße 65a <br />
+                    38118 Braunschweig<br />
+                    Deutschland
                   </Text>
                 </Box>
 
@@ -107,58 +109,20 @@ const Impressum = () => {
                   >
                     Kontakt
                   </Text>
-                  <Text 
+                  <Text
                     fontSize="sm" // Button/Body Text
-                    color="whiteAlpha.700" 
+                    color="whiteAlpha.700"
                     lineHeight="1.7"
                   >
                     {/* HIER DEINE KONTAKTDATEN */}
-                    Telefon: [Deine Telefonnummer]<br />
-                    E-Mail: [Deine E-Mail]
+                    Telefon: 0170/5880276<br />
+                    E-Mail: info@flyingarms.de
                   </Text>
                 </Box>
 
-                <Box>
-                  <Text
-                    fontSize={{ base: 'md', md: 'lg' }} // Heading medium
-                    fontWeight="900"
-                    color="cyan.300"
-                    mb={3}
-                    fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" // System Font
-                  >
-                    Umsatzsteuer-ID
-                  </Text>
-                  <Text 
-                    fontSize="sm" // Button/Body Text
-                    color="whiteAlpha.700" 
-                    lineHeight="1.7"
-                  >
-                    {/* WENN DU EINE HAST */}
-                    Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-                    [Deine USt-IdNr.]
-                  </Text>
-                </Box>
+                
 
-                <Box>
-                  <Text
-                    fontSize={{ base: 'md', md: 'lg' }} // Heading medium
-                    fontWeight="900"
-                    color="cyan.300"
-                    mb={3}
-                    fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" // System Font
-                  >
-                    Verantwortlich für den Inhalt
-                  </Text>
-                  <Text 
-                    fontSize="sm" // Button/Body Text
-                    color="whiteAlpha.700" 
-                    lineHeight="1.7"
-                  >
-                    Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
-                    [Dein Name]<br />
-                    [Deine Adresse]
-                  </Text>
-                </Box>
+        
 
               </VStack>
             </Box>

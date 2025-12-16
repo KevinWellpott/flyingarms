@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Providers } from '@/sections/global-sections/ChakraProviders'
 import './globals.css'
+import { CookieProvider } from '@/contexts/CookieContext';
+import CookieManager from '@/components/CookieManager';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
     'Flying Arms',
   ],
 }
+
 export default function RootLayout({
   children,
 }: {
@@ -40,9 +43,13 @@ export default function RootLayout({
           backgroundSize: '50px 50px'
         }}
       >
-        <Providers>
-          {children}
-        </Providers>
+        <CookieProvider>
+          <Providers>
+            {children}
+          </Providers>
+          {/* Cookie System - Muss außerhalb der Providers sein für korrektes Z-Index */}
+          <CookieManager />
+        </CookieProvider>
       </body>
     </html>
   )
