@@ -40,15 +40,15 @@ export default function ReferenceDetailHeader({ colorGlow = '#76E4F7' }: Referen
         boxShadow: `0 8px 32px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.15)`,
       }}
     >
-      <div className="container mx-auto px-4 md:px-8 py-3 md:py-4">
+      <div className="container mx-auto px-4 md:px-8 py-2 md:py-3">
         <div className="flex items-center justify-between">
           {/* Links: Zurück zur Übersicht */}
           <Link
             href="/referenzen"
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-300"
+            className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors duration-300"
           >
-            <FiArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-semibold font-sans hidden sm:inline">
+            <FiArrowLeft className="w-4 h-4" />
+            <span className="text-xs font-semibold font-sans hidden sm:inline">
               Zurück zur Übersicht
             </span>
           </Link>
@@ -56,26 +56,26 @@ export default function ReferenceDetailHeader({ colorGlow = '#76E4F7' }: Referen
           {/* Mitte: Logo */}
           <Link
             href="/referenzen"
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2 group"
           >
             <GiHelicopter
-              className="w-8 h-8 transition-all duration-300"
+              className="w-6 h-6 transition-all duration-300"
               style={{
                 color: colorGlow,
-                filter: `drop-shadow(0 0 10px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.6))`,
+                filter: `drop-shadow(0 0 8px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.6))`,
               }}
             />
             <div className="flex flex-col items-start">
               <span
-                className="text-lg font-black text-white font-sans transition-all duration-300"
+                className="text-base font-black text-white font-sans transition-all duration-300"
                 style={{
-                  textShadow: `0 0 20px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`,
+                  textShadow: `0 0 15px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`,
                 }}
               >
                 Flying-Arms
               </span>
               <span
-                className="text-xs font-semibold uppercase tracking-wider transition-all duration-300"
+                className="text-[10px] font-semibold uppercase tracking-wider transition-all duration-300"
                 style={{
                   color: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`,
                 }}
@@ -87,16 +87,16 @@ export default function ReferenceDetailHeader({ colorGlow = '#76E4F7' }: Referen
 
           {/* Rechts: CTA Button mit colorGlow */}
           <button
-            className="px-6 md:px-8 h-12 rounded-xl font-black text-sm text-black font-sans transition-all duration-300 hover:transform hover:-translate-y-0.5"
+            className="px-4 md:px-6 h-9 md:h-10 rounded-lg font-black text-xs text-black font-sans transition-all duration-300 hover:transform hover:-translate-y-0.5"
             style={{
               background: `linear-gradient(135deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1) 0%, rgba(${darkerRgb.r}, ${darkerRgb.g}, ${darkerRgb.b}, 1) 100%)`,
-              boxShadow: `0 4px 24px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`,
+              boxShadow: `0 3px 18px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = `0 6px 32px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`;
+              e.currentTarget.style.boxShadow = `0 4px 24px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = `0 4px 24px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`;
+              e.currentTarget.style.boxShadow = `0 3px 18px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`;
             }}
           >
             Jetzt Termin buchen

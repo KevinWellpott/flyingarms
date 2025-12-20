@@ -350,10 +350,10 @@ export default function HeroSection({ reference }: HeroSectionProps) {
                     boxShadow: `0 0 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.2)`,
                   }}
                 >
-                  <div className=" grid grid-cols-[1fr_auto_1fr] gap-6 md:gap-8 items-stretch">
+                  <div className="flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] gap-6 md:gap-8">
                     {/* Links: Herausforderungen */}
                     {reference.challenges && Array.isArray(reference.challenges) && reference.challenges.length > 0 && (
-                      <div className="text-left">
+                      <div className="text-left w-full">
                         <h3 className="text-lg md:text-xl font-semibold text-white mb-3">
                           Herausforderungen
                         </h3>
@@ -374,21 +374,33 @@ export default function HeroSection({ reference }: HeroSectionProps) {
                       </div>
                     )}
 
-                    {/* Vertikaler Trenner */}
+                    {/* Horizontaler Trenner auf Mobile, Vertikaler auf Desktop */}
                     {reference.challenges && Array.isArray(reference.challenges) && reference.challenges.length > 0 && reference.description_text && (
-                      <div 
-                        className="w-px self-stretch"
-                        style={{ 
-                          backgroundColor: glowColor, 
-                          opacity: 0.6,
-                          boxShadow: `0 0 10px ${glowColor}, 0 0 20px ${glowColor}40`,
-                        }}
-                      ></div>
+                      <>
+                        {/* Horizontaler Trenner für Mobile */}
+                        <div 
+                          className="h-px w-full md:hidden"
+                          style={{ 
+                            backgroundColor: glowColor, 
+                            opacity: 0.6,
+                            boxShadow: `0 0 10px ${glowColor}, 0 0 20px ${glowColor}40`,
+                          }}
+                        ></div>
+                        {/* Vertikaler Trenner für Desktop */}
+                        <div 
+                          className="hidden md:block w-px self-stretch"
+                          style={{ 
+                            backgroundColor: glowColor, 
+                            opacity: 0.6,
+                            boxShadow: `0 0 10px ${glowColor}, 0 0 20px ${glowColor}40`,
+                          }}
+                        ></div>
+                      </>
                     )}
 
                     {/* Rechts: Description */}
                     {reference.description_text && (
-                      <div className="text-left">
+                      <div className="text-left w-full">
                         <h3 className="text-lg md:text-xl font-semibold text-white mb-3">
                           Beschreibung
                         </h3>

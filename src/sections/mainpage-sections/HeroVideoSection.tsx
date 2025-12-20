@@ -6,6 +6,7 @@ import {
   Container,
   VStack,
   Text,
+  AspectRatio,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import CustomYouTubePlayer from '../../components/CustomYouTubePlayer';
@@ -82,23 +83,21 @@ const HeroVideoSection: React.FC = () => {
           </MotionText>
 
           {/* YouTube Player */}
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            w="100%"
-            maxW="100%"
-          >
-            <Box as="div" className="w-full">
-              <CustomYouTubePlayer
-                videoId={youtubeVideoId}
-                autoplay={false}
-                muted={false}
-                showControls={true}
-                colorGlow="#00C6FF"
-              />
+          {youtubeVideoId && (
+            <Box w="100%" minH="250px" position="relative">
+              <AspectRatio ratio={16 / 9} w="100%">
+                <Box w="100%" h="100%">
+                  <CustomYouTubePlayer
+                    videoId={youtubeVideoId}
+                    autoplay={false}
+                    muted={false}
+                    showControls={true}
+                    colorGlow="#00C6FF"
+                  />
+                </Box>
+              </AspectRatio>
             </Box>
-          </MotionBox>
+          )}
         </VStack>
       </Container>
     </Box>

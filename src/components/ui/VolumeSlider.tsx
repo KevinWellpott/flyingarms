@@ -14,15 +14,31 @@ export default function VolumeSlider({ value, onChange, className = '', colorGlo
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMove = useCallback(
+    (clientX: number) => {
       if (!sliderRef.current || !isDragging) return;
       const rect = sliderRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
+      const x = clientX - rect.left;
       const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
       onChange(percentage);
     },
     [isDragging, onChange]
+  );
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      handleMove(e.clientX);
+    },
+    [handleMove]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX);
+      }
+    },
+    [handleMove]
   );
 
   const handleClick = useCallback(
@@ -39,7 +55,7 @@ export default function VolumeSlider({ value, onChange, className = '', colorGlo
   return (
     <div
       ref={sliderRef}
-      className={`relative h-1 cursor-pointer group ${className}`}
+      className={`relative h-1 cursor-pointer group touch-none ${className}`}
       onMouseDown={(e) => {
         setIsDragging(true);
         handleMouseMove(e);
@@ -47,6 +63,15 @@ export default function VolumeSlider({ value, onChange, className = '', colorGlo
       onMouseMove={handleMouseMove}
       onMouseUp={() => setIsDragging(false)}
       onMouseLeave={() => setIsDragging(false)}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        setIsDragging(true);
+        if (e.touches.length > 0) {
+          handleMove(e.touches[0].clientX);
+        }
+      }}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={() => setIsDragging(false)}
       onClick={handleClick}
     >
       {/* Background Track */}

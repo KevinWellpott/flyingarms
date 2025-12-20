@@ -48,6 +48,11 @@ export default function CustomYouTubePlayer({
     muted,
   });
 
+  // Debug: Log playerReady changes
+  useEffect(() => {
+    console.log(`[CustomYouTubePlayer ${videoId}] playerReady changed to:`, playerReady, 'isLoading:', isLoading);
+  }, [playerReady, isLoading, videoId]);
+
   // Auto-hide controls beim Autoplay
   useEffect(() => {
     if (!showControls) return;
@@ -185,7 +190,7 @@ export default function CustomYouTubePlayer({
       {/* YouTube IFrame Container */}
       <div 
         id={`youtube-player-${videoId}`} 
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full z-10"
         style={{
           minWidth: '100%',
           minHeight: '100%',
@@ -194,32 +199,25 @@ export default function CustomYouTubePlayer({
         }}
       />
 
-      {/* Loading State */}
-      <AnimatePresence>
-        {isLoading && !error && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-30"
-          >
-            <div className="text-center">
-              <motion.div
-                className="w-16 h-16 border-4 rounded-full mx-auto mb-4"
-                style={{
-                  borderColor: `${colorGlow}30`,
-                  borderTopColor: colorGlow,
-                }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              />
-              <p className="text-sm font-semibold" style={{ color: colorGlow }}>
-                Video wird geladen...
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Loading State - Hide when player is ready */}
+      {!playerReady && !error ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-30" style={{ pointerEvents: 'none' }}>
+          <div className="text-center">
+            <motion.div
+              className="w-12 h-12 sm:w-16 sm:h-16 border-4 rounded-full mx-auto mb-4"
+              style={{
+                borderColor: `${colorGlow}30`,
+                borderTopColor: colorGlow,
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+            />
+            <p className="text-xs sm:text-sm font-semibold" style={{ color: colorGlow }}>
+              Video wird geladen...
+            </p>
+          </div>
+        </div>
+      ) : null}
 
       {/* Error State */}
       {error && (
@@ -242,60 +240,71 @@ export default function CustomYouTubePlayer({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent z-20"
+              className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 bg-gradient-to-t from-black/90 via-black/70 to-transparent z-20"
+              onTouchStart={(e) => e.stopPropagation()}
             >
               {/* Progress Bar */}
-              <div className="mb-4">
+              <div className="mb-2 sm:mb-4">
                 <ProgressBar
                   value={progress}
                   onChange={(value) => seekTo((value / 100) * duration)}
-                  className="h-1.5 hover:h-2 transition-all"
+                  className="h-1 sm:h-1.5 hover:h-2 transition-all"
                   colorGlow={colorGlow}
                 />
               </div>
 
               {/* Controls Row */}
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center justify-between gap-2 sm:gap-4">
                 {/* Left Controls */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
                   {/* Play/Pause Button */}
                   <button
                     onClick={() => (isPlaying ? pause() : play())}
-                    className="glass p-3 rounded-xl hover:bg-brand/20 transition-all duration-200 hover:scale-105 active:scale-95 border"
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      isPlaying ? pause() : play();
+                    }}
+                    className="glass p-2 sm:p-3 rounded-lg sm:rounded-xl hover:bg-brand/20 transition-all duration-200 hover:scale-105 active:scale-95 border touch-manipulation"
                     style={{
                       borderColor: `${colorGlow}30`,
                     }}
                     aria-label={isPlaying ? 'Pause' : 'Play'}
                   >
                     {isPlaying ? (
-                      <FiPause className="w-6 h-6" style={{ color: colorGlow }} />
+                      <FiPause className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" style={{ color: colorGlow }} />
                     ) : (
-                      <FiPlay className="w-6 h-6" style={{ color: colorGlow }} />
+                      <FiPlay className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" style={{ color: colorGlow }} />
                     )}
                   </button>
 
                   {/* Time Display */}
-                  <div className="text-white text-sm font-mono font-semibold min-w-[100px]">
+                  <div className="text-white text-xs sm:text-sm font-mono font-semibold min-w-[70px] sm:min-w-[90px] md:min-w-[100px] whitespace-nowrap">
                     {formatTime(currentTime)} / {formatTime(duration)}
                   </div>
                 </div>
 
                 {/* Right Controls */}
-                <div className="flex items-center gap-3">
-                  {/* Volume Control */}
-                  <div className="flex items-center gap-2 min-w-[120px]">
+                <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+                  {/* Volume Control - Hidden on mobile, visible on tablet+ */}
+                  <div className="hidden sm:flex items-center gap-2 min-w-[100px] md:min-w-[120px]">
                     <button
                       onClick={toggleMute}
-                      className="glass p-2 rounded-lg hover:bg-brand/20 transition-all border"
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleMute();
+                      }}
+                      className="glass p-1.5 sm:p-2 rounded-lg hover:bg-brand/20 transition-all border touch-manipulation"
                       style={{
                         borderColor: `${colorGlow}30`,
                       }}
                       aria-label={isMuted ? 'Stumm ausschalten' : 'Stumm schalten'}
                     >
                       {isMuted || volume === 0 ? (
-                        <FiVolumeX className="w-5 h-5" style={{ color: colorGlow }} />
+                        <FiVolumeX className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: colorGlow }} />
                       ) : (
-                        <FiVolume2 className="w-5 h-5" style={{ color: colorGlow }} />
+                        <FiVolume2 className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: colorGlow }} />
                       )}
                     </button>
                     <VolumeSlider
@@ -309,19 +318,45 @@ export default function CustomYouTubePlayer({
                     />
                   </div>
 
+                  {/* Mobile Volume Toggle - Only mute button on mobile */}
+                  <button
+                    onClick={toggleMute}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleMute();
+                    }}
+                    className="sm:hidden glass p-2 rounded-lg hover:bg-brand/20 transition-all border touch-manipulation"
+                    style={{
+                      borderColor: `${colorGlow}30`,
+                    }}
+                    aria-label={isMuted ? 'Stumm ausschalten' : 'Stumm schalten'}
+                  >
+                    {isMuted || volume === 0 ? (
+                      <FiVolumeX className="w-4 h-4" style={{ color: colorGlow }} />
+                    ) : (
+                      <FiVolume2 className="w-4 h-4" style={{ color: colorGlow }} />
+                    )}
+                  </button>
+
                   {/* Fullscreen Toggle */}
                   <button
                     onClick={toggleFullscreen}
-                    className="glass p-3 rounded-xl hover:bg-brand/20 transition-all duration-200 hover:scale-105 active:scale-95 border"
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleFullscreen();
+                    }}
+                    className="glass p-2 sm:p-3 rounded-lg sm:rounded-xl hover:bg-brand/20 transition-all duration-200 hover:scale-105 active:scale-95 border touch-manipulation"
                     style={{
                       borderColor: `${colorGlow}30`,
                     }}
                     aria-label={isFullscreen ? 'Vollbild beenden' : 'Vollbild'}
                   >
                     {isFullscreen ? (
-                      <FiMinimize className="w-5 h-5" style={{ color: colorGlow }} />
+                      <FiMinimize className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: colorGlow }} />
                     ) : (
-                      <FiMaximize className="w-5 h-5" style={{ color: colorGlow }} />
+                      <FiMaximize className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: colorGlow }} />
                     )}
                   </button>
                 </div>

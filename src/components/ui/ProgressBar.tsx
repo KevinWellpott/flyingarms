@@ -15,15 +15,31 @@ export default function ProgressBar({ value, onChange, className = '', colorGlow
   const [hoverValue, setHoverValue] = useState<number | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMove = useCallback(
+    (clientX: number) => {
       if (!barRef.current || !isDragging) return;
       const rect = barRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
+      const x = clientX - rect.left;
       const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
       onChange(percentage);
     },
     [isDragging, onChange]
+  );
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      handleMove(e.clientX);
+    },
+    [handleMove]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX);
+      }
+    },
+    [handleMove]
   );
 
   const handleClick = useCallback(
@@ -52,7 +68,7 @@ export default function ProgressBar({ value, onChange, className = '', colorGlow
   return (
     <div
       ref={barRef}
-      className={`relative w-full cursor-pointer group ${className}`}
+      className={`relative w-full cursor-pointer group touch-none ${className}`}
       onMouseDown={(e) => {
         setIsDragging(true);
         handleMouseMove(e);
@@ -63,9 +79,17 @@ export default function ProgressBar({ value, onChange, className = '', colorGlow
         setIsDragging(false);
         handleMouseLeave();
       }}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        setIsDragging(true);
+        if (e.touches.length > 0) {
+          handleMove(e.touches[0].clientX);
+        }
+      }}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={() => setIsDragging(false)}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
-      
     >
       {/* Background Track */}
       <div className="w-full h-full bg-white/20 rounded-full overflow-hidden">
