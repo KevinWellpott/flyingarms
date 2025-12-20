@@ -53,6 +53,7 @@ export function useYouTubePlayer(
       return;
     }
 
+    // Use unique ID that includes a random suffix to avoid conflicts between Desktop and Mobile instances
     const containerId = `youtube-player-${videoId}`;
     const container = document.getElementById(containerId);
     if (!container) {
@@ -67,105 +68,6 @@ export function useYouTubePlayer(
           setError('YouTube Container nicht gefunden');
         }
       }, 500);
-      return;
-    }
-
-    // Stelle sicher, dass der Container sichtbar ist und Größe hat
-    const checkSize = () => {
-      const rect = container.getBoundingClientRect();
-      const styles = window.getComputedStyle(container);
-      const width = parseFloat(styles.width) || rect.width;
-      const height = parseFloat(styles.height) || rect.height;
-      
-      console.log('YouTube container dimensions:', {
-        width: width,
-        height: height,
-        rectWidth: rect.width,
-        rectHeight: rect.height,
-        computedWidth: styles.width,
-        computedHeight: styles.height,
-        containerId,
-        videoId
-      });
-
-      // Prüfe sowohl rect als auch computed styles
-      if ((rect.width === 0 || rect.height === 0) && (width === 0 || height === 0)) {
-        return false;
-      }
-      return true;
-    };
-
-      // Prüfe sofort - wenn keine Größe, setze eine minimale Größe
-    if (!checkSize()) {
-      console.warn('YouTube container has no size, setting minimum size...');
-      
-      // Setze eine minimale Größe für den Container
-      container.style.minWidth = '320px';
-      container.style.minHeight = '180px';
-      container.style.width = '100%';
-      container.style.height = '100%';
-      
-      // Prüfe nochmal nach kurzer Verzögerung
-      setTimeout(() => {
-        if (!checkSize()) {
-          console.warn('Container still has no size, using ResizeObserver...');
-          
-          // Verwende ResizeObserver falls verfügbar
-          if (window.ResizeObserver) {
-            let observerTimeout: NodeJS.Timeout;
-            const observer = new ResizeObserver((entries) => {
-              for (const entry of entries) {
-                const width = entry.contentRect.width;
-                const height = entry.contentRect.height;
-                
-                if (width > 0 && height > 0) {
-                  observer.disconnect();
-                  if (observerTimeout) clearTimeout(observerTimeout);
-                  console.log('Container has size now, initializing player:', { width, height });
-                  setTimeout(() => initializePlayer(), 100);
-                  return;
-                }
-              }
-            });
-            
-            observer.observe(container);
-            
-            // Timeout als Fallback
-            observerTimeout = setTimeout(() => {
-              observer.disconnect();
-              if (!checkSize()) {
-                setIsLoading(false);
-                setError('YouTube Container hat keine Größe nach 5 Sekunden');
-              } else {
-                console.log('Container has size after timeout, initializing player');
-                initializePlayer();
-              }
-            }, 5000);
-            
-            return;
-          } else {
-            // Fallback: Mehrere Versuche mit zunehmenden Delays
-            let attempts = 0;
-            const maxAttempts = 10;
-            const checkInterval = setInterval(() => {
-              attempts++;
-              if (checkSize()) {
-                clearInterval(checkInterval);
-                setTimeout(() => initializePlayer(), 100);
-              } else if (attempts >= maxAttempts) {
-                clearInterval(checkInterval);
-                setIsLoading(false);
-                setError('YouTube Container hat keine Größe');
-              }
-            }, 500);
-            return;
-          }
-        } else {
-          // Container hat jetzt Größe, initialisiere
-          setTimeout(() => initializePlayer(), 100);
-          return;
-        }
-      }, 200);
       return;
     }
 
@@ -230,8 +132,10 @@ export function useYouTubePlayer(
               } : null
             });
             
+            // Setze playerReady zuerst, damit das Loading-Overlay sofort verschwindet
             setPlayerReady(true);
             setIsLoading(false);
+            console.log('Player ready state set to true for videoId:', videoId);
             setDuration(event.target.getDuration());
             setVolume(event.target.getVolume());
             setIsMuted(event.target.isMuted());
@@ -249,29 +153,6 @@ export function useYouTubePlayer(
                 // Kurze Verzögerung um sicherzustellen, dass der Player vollständig bereit ist
                 setTimeout(() => {
                   console.log('Attempting to play video...');
-                  
-                  // Stelle sicher, dass der Container eine Größe hat
-                  const container = document.getElementById(containerId);
-                  if (container) {
-                    const rect = container.getBoundingClientRect();
-                    if (rect.width === 0 || rect.height === 0) {
-                      console.warn('Container has no size, waiting...');
-                      // Warte bis Container Größe hat
-                      const checkSize = setInterval(() => {
-                        const newRect = container.getBoundingClientRect();
-                        if (newRect.width > 0 && newRect.height > 0) {
-                          clearInterval(checkSize);
-                          event.target.playVideo();
-                          setIsPlaying(true);
-                        }
-                      }, 100);
-                      
-                      // Timeout nach 3 Sekunden
-                      setTimeout(() => clearInterval(checkSize), 3000);
-                      return;
-                    }
-                  }
-                  
                   event.target.playVideo();
                   setIsPlaying(true);
                   
