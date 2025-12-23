@@ -93,6 +93,7 @@ const HeroVideoSection: React.FC = () => {
                     muted={false}
                     showControls={true}
                     colorGlow="#00C6FF"
+                    instanceId="mobile"
                   />
                 </Box>
               </AspectRatio>

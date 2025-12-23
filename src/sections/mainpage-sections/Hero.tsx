@@ -441,10 +441,42 @@ const HeroSection: React.FC = () => {
                 w="100%"
                 pt={{ base: 4, md: 6 }}
               >
+                <VStack
+                  spacing={{ base: 4, md: 0 }}
+                  justify="center"
+                  display={{ base: "flex", md: "none" }}
+                >
+                  {[
+                    { value: "500+", label: "Projekte", icon: FiVideo },
+                    { value: "10", label: "Jahre aktiv", icon: FiUsers },
+                    { value: "98%", label: "Zufriedenheit", icon: FiTrendingUp }
+                  ].map((stat, i) => (
+                    <VStack key={i} spacing={1.5} align="center">
+                      <Text
+                        fontSize={{ base: "2xl", md: "3xl" }}
+                        fontWeight="800"
+                        color="cyan.400"
+                        lineHeight="1"
+                      >
+                        {stat.value}
+                      </Text>
+                      <Text
+                        fontSize="xs"
+                        color="rgba(255,255,255,0.5)"
+                        textTransform="uppercase"
+                        letterSpacing="1.5px"
+                        fontWeight="500"
+                      >
+                        {stat.label}
+                      </Text>
+                    </VStack>
+                  ))}
+                </VStack>
                 <HStack
                   spacing={{ base: 6, md: 8 }}
                   justify="center"
                   flexWrap="wrap"
+                  display={{ base: "none", md: "flex" }}
                   divider={
                     <Box
                       h="40px"
@@ -746,6 +778,7 @@ const HeroSection: React.FC = () => {
                             muted={true}
                             showControls={true}
                             colorGlow="#00C6FF"
+                            instanceId="desktop"
                           />
                         </Box>
                       </AspectRatio>

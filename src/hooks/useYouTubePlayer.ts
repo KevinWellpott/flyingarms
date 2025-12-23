@@ -12,6 +12,7 @@ declare global {
 interface YouTubePlayerOptions {
   autoplay?: boolean;
   muted?: boolean;
+  instanceId?: string; // Eindeutige ID für diese Player-Instanz
 }
 
 interface UseYouTubePlayerReturn {
@@ -46,6 +47,14 @@ export function useYouTubePlayer(
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const initializePlayer = useCallback(() => {
+    // Reset states before initializing new player
+    setPlayerReady(false);
+    setIsLoading(true);
+    setError(null);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+    
     if (!window.YT || !window.YT.Player) {
       console.error('YouTube API not loaded');
       setIsLoading(false);
@@ -53,25 +62,72 @@ export function useYouTubePlayer(
       return;
     }
 
-    // Use unique ID that includes a random suffix to avoid conflicts between Desktop and Mobile instances
-    const containerId = `youtube-player-${videoId}`;
+    // Use unique ID that includes instanceId to avoid conflicts between Desktop and Mobile instances
+    const containerId = options.instanceId 
+      ? `youtube-player-${videoId}-${options.instanceId}` 
+      : `youtube-player-${videoId}`;
+    
+    console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Looking for container:`, containerId);
+    
     const container = document.getElementById(containerId);
     if (!container) {
-      console.error('YouTube container not found:', containerId);
+      console.error(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] YouTube container not found:`, containerId);
+      console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Available containers in DOM:`, 
+        Array.from(document.querySelectorAll('[id^="youtube-player-"]')).map(el => el.id)
+      );
       // Versuche es nochmal nach kurzer Verzögerung
       setTimeout(() => {
         const retryContainer = document.getElementById(containerId);
         if (retryContainer) {
+          console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container found on retry, initializing...`);
           initializePlayer();
         } else {
+          console.error(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container still not found after retry`);
           setIsLoading(false);
           setError('YouTube Container nicht gefunden');
         }
       }, 500);
       return;
     }
-
+    
+    console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container found, proceeding with initialization`);
+    
     const rect = container.getBoundingClientRect();
+    const computedStyle = window.getComputedStyle(container);
+    console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container dimensions:`, {
+      width: rect.width,
+      height: rect.height,
+      display: computedStyle.display,
+      visibility: computedStyle.visibility,
+      opacity: computedStyle.opacity
+    });
+
+    // Wenn Container ausgeblendet ist (display: none), warte bis er sichtbar ist
+    if (computedStyle.display === 'none' || rect.width === 0 || rect.height === 0) {
+      console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container is hidden or has zero size, waiting...`);
+      // Versuche es nach einer Verzögerung nochmal
+      const checkInterval = setInterval(() => {
+        const newRect = container.getBoundingClientRect();
+        const newStyle = window.getComputedStyle(container);
+        if (newStyle.display !== 'none' && newRect.width > 0 && newRect.height > 0) {
+          console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container is now visible, initializing...`);
+          clearInterval(checkInterval);
+          initializePlayer();
+        }
+      }, 200);
+      
+      // Timeout nach 5 Sekunden
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        if (computedStyle.display === 'none' || rect.width === 0 || rect.height === 0) {
+          console.warn(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Container still hidden after timeout, initializing anyway`);
+          // Initialisiere trotzdem - YouTube kann auch mit 0x0 umgehen
+        }
+      }, 5000);
+      
+      // Initialisiere trotzdem, falls Container später sichtbar wird
+      // YouTube Player kann auch mit ausgeblendeten Containern umgehen
+    }
 
     try {
       // Zerstöre vorherigen Player falls vorhanden
@@ -83,11 +139,12 @@ export function useYouTubePlayer(
         }
       }
 
-      console.log('Initializing YouTube Player with:', {
+      console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Initializing YouTube Player with:`, {
         videoId,
         autoplay: options.autoplay,
         muted: options.muted,
-        containerId
+        containerId,
+        instanceId: options.instanceId
       });
 
       // Stelle sicher, dass wir mindestens eine minimale Größe haben
@@ -275,29 +332,58 @@ export function useYouTubePlayer(
       setIsLoading(false);
       setError('Fehler beim Initialisieren des Players');
     }
-  }, [videoId, options.autoplay, options.muted]);
+  }, [videoId, options.autoplay, options.muted, options.instanceId]);
+
+  // Reset states when videoId or instanceId changes
+  useEffect(() => {
+    setPlayerReady(false);
+    setIsLoading(true);
+    setError(null);
+    setIsPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+  }, [videoId, options.instanceId]);
 
   // Load YouTube IFrame API
   useEffect(() => {
     // Prevent multiple initializations
     if (!videoId) return;
 
+    console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Setting up YouTube API, YT available:`, !!window.YT);
+
     if (window.YT && window.YT.Player) {
-      initializePlayer();
+      // API already loaded, initialize immediately
+      // Add small delay to ensure DOM is ready
+      setTimeout(() => {
+        console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] YT API ready, calling initializePlayer`);
+        initializePlayer();
+      }, 100);
       return;
     }
 
     // Check if script is already loading
     if (document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
       // Script is already loading, wait for it
-      if (!window.onYouTubeIframeAPIReady) {
-        window.onYouTubeIframeAPIReady = () => {
+      console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] YouTube script already loading, setting up callback`);
+      
+      // Store original callback if it exists
+      const originalCallback = window.onYouTubeIframeAPIReady;
+      
+      // Create new callback that calls both original and our initializePlayer
+      window.onYouTubeIframeAPIReady = () => {
+        console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] onYouTubeIframeAPIReady called`);
+        if (originalCallback) {
+          originalCallback();
+        }
+        // Add delay to ensure DOM is ready
+        setTimeout(() => {
           initializePlayer();
-        };
-      }
+        }, 100);
+      };
       return;
     }
 
+    console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] Loading YouTube iframe API script`);
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
@@ -305,21 +391,33 @@ export function useYouTubePlayer(
 
     const originalCallback = window.onYouTubeIframeAPIReady;
     window.onYouTubeIframeAPIReady = () => {
+      console.log(`[useYouTubePlayer ${videoId}${options.instanceId ? `-${options.instanceId}` : ''}] onYouTubeIframeAPIReady called (script just loaded)`);
       if (originalCallback) originalCallback();
-      initializePlayer();
+      // Add delay to ensure DOM is ready
+      setTimeout(() => {
+        initializePlayer();
+      }, 100);
     };
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
       if (playerRef.current) {
         try {
           playerRef.current.destroy();
+          playerRef.current = null;
         } catch (e) {
           // Ignore destroy errors
         }
       }
+      // Reset states on cleanup
+      setPlayerReady(false);
+      setIsLoading(true);
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setDuration(0);
     };
   }, [videoId, initializePlayer]);
 

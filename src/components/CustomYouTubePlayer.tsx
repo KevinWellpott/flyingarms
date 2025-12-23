@@ -14,6 +14,7 @@ interface CustomYouTubePlayerProps {
   muted?: boolean;
   showControls?: boolean;
   colorGlow?: string; // Brand Color für Glow-Effekte
+  instanceId?: string; // Eindeutige ID für diese Player-Instanz (verhindert Container-Konflikte)
 }
 
 export default function CustomYouTubePlayer({
@@ -23,6 +24,7 @@ export default function CustomYouTubePlayer({
   muted = false,
   showControls = true,
   colorGlow = '#76E4F7',
+  instanceId,
 }: CustomYouTubePlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showControlsBar, setShowControlsBar] = useState(!autoplay); // Beim Autoplay standardmäßig ausgeblendet
@@ -46,12 +48,14 @@ export default function CustomYouTubePlayer({
   } = useYouTubePlayer(videoId, {
     autoplay,
     muted,
+    instanceId,
   });
 
   // Debug: Log playerReady changes
   useEffect(() => {
-    console.log(`[CustomYouTubePlayer ${videoId}] playerReady changed to:`, playerReady, 'isLoading:', isLoading);
-  }, [playerReady, isLoading, videoId]);
+    console.log(`[CustomYouTubePlayer ${videoId}${instanceId ? `-${instanceId}` : ''}] playerReady:`, playerReady, 'isLoading:', isLoading, 'error:', error);
+    console.log(`[CustomYouTubePlayer ${videoId}${instanceId ? `-${instanceId}` : ''}] Should show loading overlay:`, !playerReady && isLoading && !error);
+  }, [playerReady, isLoading, error, videoId, instanceId]);
 
   // Auto-hide controls beim Autoplay
   useEffect(() => {
@@ -189,7 +193,7 @@ export default function CustomYouTubePlayer({
     >
       {/* YouTube IFrame Container */}
       <div 
-        id={`youtube-player-${videoId}`} 
+        id={instanceId ? `youtube-player-${videoId}-${instanceId}` : `youtube-player-${videoId}`} 
         className="absolute inset-0 w-full h-full z-10"
         style={{
           minWidth: '100%',
@@ -200,7 +204,7 @@ export default function CustomYouTubePlayer({
       />
 
       {/* Loading State - Hide when player is ready */}
-      {!playerReady && !error ? (
+      {!playerReady && isLoading && !error ? (
         <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-30" style={{ pointerEvents: 'none' }}>
           <div className="text-center">
             <motion.div
