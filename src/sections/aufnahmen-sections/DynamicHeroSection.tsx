@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Box, VStack, Container, HStack, Text, Button } from '@chakra-ui/react';
+import { Box, VStack, Container, HStack, Text, Button, AspectRatio } from '@chakra-ui/react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { HeroSection } from '../../types/hero';
 import { getVideoEmbedUrl } from '../../lib/supabase';
@@ -126,17 +126,17 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
       const videoId = extractYouTubeId(videoUrl);
       if (videoId) {
         return (
-          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+          <Box w="100%" h="100%">
             <CustomYouTubePlayer
               videoId={videoId}
-              autoplay={true}
-              muted={true}
-              showControls={false}
+              autoplay={false}
+              muted={false}
+              showControls={true}
               colorGlow="#00C6FF"
               className="w-full h-full"
               instanceId={instanceId}
             />
-          </div>
+          </Box>
         );
       }
     }
@@ -403,7 +403,6 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
             animate={isVisible ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
             w="100%"
-            h={{ base: '250px', sm: '350px', md: '400px' }}
           >
             <Box
               bg="rgba(0,0,0,0.5)"
@@ -414,103 +413,18 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
               boxShadow="0 20px 60px rgba(0,198,255,0.15), 0 0 100px rgba(0,198,255,0.1) inset"
               position="relative"
               w="100%"
-              h="100%"
               _hover={{
                 borderColor: "rgba(0,198,255,0.4)",
                 boxShadow: "0 25px 70px rgba(0,198,255,0.25), 0 0 100px rgba(0,198,255,0.15) inset"
               }}
               transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
             >
-              {/* Video Content */}
-              {renderVideoContent('mobile')}
-
-              {/* Overlay Badges */}
-              {data.hero_video_url && data.hero_video_type !== 'none' && (
-                <>
-                  <Box
-                    position="absolute"
-                    top={3}
-                    left={3}
-                    px={3}
-                    py={1.5}
-                    bg="rgba(0,0,0,0.8)"
-                    backdropFilter="blur(10px)"
-                    borderRadius="md"
-                    border="1px solid rgba(0,198,255,0.3)"
-                    boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-                  >
-                    <HStack spacing={2}>
-                      <Box 
-                        w="6px" 
-                        h="6px" 
-                        bg="red.500" 
-                        borderRadius="full"
-                        boxShadow="0 0 10px rgba(255,0,0,0.8)"
-                      />
-                      <Text 
-                        fontSize="xs" 
-                        color="red.400" 
-                        fontWeight="bold" 
-                        fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
-                      >
-                        LIVE
-                      </Text>
-                    </HStack>
-                  </Box>
-
-                  <Box
-                    position="absolute"
-                    top={3}
-                    right={3}
-                    px={3}
-                    py={1.5}
-                    bg="rgba(0,0,0,0.8)"
-                    backdropFilter="blur(10px)"
-                    borderRadius="md"
-                    border="1px solid rgba(0,198,255,0.3)"
-                    boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-                  >
-                    <Text 
-                      fontSize="xs" 
-                      color="cyan.400" 
-                      fontWeight="bold" 
-                      fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
-                    >
-                      6K
-                    </Text>
-                  </Box>
-
-                  <Box
-                    position="absolute"
-                    bottom={3}
-                    left={3}
-                    px={3}
-                    py={1.5}
-                    bg="rgba(0,0,0,0.8)"
-                    backdropFilter="blur(10px)"
-                    borderRadius="md"
-                    border="1px solid rgba(0,198,255,0.3)"
-                    boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-                  >
-                    <Text 
-                      fontSize="xs" 
-                      color="cyan.400" 
-                      fontWeight="bold"
-                      fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
-                    >
-                      📸 48MP
-                    </Text>
-                  </Box>
-                </>
-              )}
-
-              {/* Enhanced Gradient overlay */}
-              <Box
-                position="absolute"
-                inset={0}
-                bgGradient="linear(to-br, rgba(0,198,255,0.08), transparent, rgba(0,255,198,0.05))"
-                pointerEvents="none"
-              />
+              <AspectRatio ratio={16 / 9} w="100%">
+                <Box w="100%" h="100%" position="relative">
+                  {/* Video Content */}
+                  {renderVideoContent('mobile')}
+                </Box>
+              </AspectRatio>
             </Box>
           </MotionBox>
         </VStack>
@@ -523,7 +437,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
           w="100%"
         >
           {/* Hero Content - Desktop */}
-          <Box flex="1.2">
+          <Box flex="1">
             <VStack
               spacing={5}
               align="flex-start"
@@ -680,7 +594,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
           </Box>
 
           {/* Media Showcase - Desktop */}
-          <Box flex="1">
+          <Box flex="1.5">
             <MotionBox
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isVisible ? { opacity: 1, scale: 1 } : {}}
@@ -690,7 +604,6 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
                 y: mousePosition.y * -0.3
               }}
               w="100%"
-              h={{ base: '250px', sm: '350px', md: '500px' }}
             >
               <Box
                 bg="rgba(0,0,0,0.5)"
@@ -701,103 +614,18 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
                 boxShadow="0 20px 60px rgba(0,198,255,0.15), 0 0 100px rgba(0,198,255,0.1) inset"
                 position="relative"
                 w="100%"
-                h="100%"
                 _hover={{
                   borderColor: "rgba(0,198,255,0.4)",
                   boxShadow: "0 25px 70px rgba(0,198,255,0.25), 0 0 100px rgba(0,198,255,0.15) inset"
                 }}
                 transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
               >
-                {/* Video Content */}
-                {renderVideoContent('desktop')}
-
-                {/* Overlay Badges */}
-                {data.hero_video_url && data.hero_video_type !== 'none' && (
-                  <>
-                    <Box
-                      position="absolute"
-                      top={4}
-                      left={4}
-                      px={3}
-                      py={1.5}
-                      bg="rgba(0,0,0,0.8)"
-                      backdropFilter="blur(10px)"
-                      borderRadius="md"
-                      border="1px solid rgba(0,198,255,0.3)"
-                      boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-                    >
-                      <HStack spacing={2}>
-                        <Box 
-                          w="6px" 
-                          h="6px" 
-                          bg="red.500" 
-                          borderRadius="full"
-                          boxShadow="0 0 10px rgba(255,0,0,0.8)"
-                        />
-                        <Text 
-                          fontSize="xs" 
-                          color="red.400" 
-                          fontWeight="bold" 
-                          fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
-                        >
-                          LIVE
-                        </Text>
-                      </HStack>
-                    </Box>
-
-                    <Box
-                      position="absolute"
-                      top={4}
-                      right={4}
-                      px={3}
-                      py={1.5}
-                      bg="rgba(0,0,0,0.8)"
-                      backdropFilter="blur(10px)"
-                      borderRadius="md"
-                      border="1px solid rgba(0,198,255,0.3)"
-                      boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-                    >
-                      <Text 
-                        fontSize="xs" 
-                        color="cyan.400" 
-                        fontWeight="bold" 
-                        fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
-                      >
-                        6K
-                      </Text>
-                    </Box>
-
-                    <Box
-                      position="absolute"
-                      bottom={4}
-                      left={4}
-                      px={3}
-                      py={1.5}
-                      bg="rgba(0,0,0,0.8)"
-                      backdropFilter="blur(10px)"
-                      borderRadius="md"
-                      border="1px solid rgba(0,198,255,0.3)"
-                      boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-                    >
-                      <Text 
-                        fontSize="xs" 
-                        color="cyan.400" 
-                        fontWeight="bold"
-                        fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
-                      >
-                        📸 48MP
-                      </Text>
-                    </Box>
-                  </>
-                )}
-
-                {/* Enhanced Gradient overlay */}
-                <Box
-                  position="absolute"
-                  inset={0}
-                  bgGradient="linear(to-br, rgba(0,198,255,0.08), transparent, rgba(0,255,198,0.05))"
-                  pointerEvents="none"
-                />
+                <AspectRatio ratio={16 / 9} w="100%">
+                  <Box w="100%" h="100%" position="relative">
+                    {/* Video Content */}
+                    {renderVideoContent('desktop')}
+                  </Box>
+                </AspectRatio>
               </Box>
             </MotionBox>
           </Box>
