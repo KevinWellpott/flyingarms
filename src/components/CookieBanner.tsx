@@ -132,6 +132,7 @@ const CookieBanner: React.FC = () => {
             <Button
               size="sm"
               bg={`linear-gradient(135deg, ${primary}, ${secondary})`}
+              
               color="white"
               onClick={acceptAll}
               fontFamily="SF Mono, Monaco, Cascadia Code, monospace"
