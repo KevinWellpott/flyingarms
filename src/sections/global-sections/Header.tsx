@@ -58,7 +58,7 @@ export default function Header() {
                   fontFamily="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif"
                   textShadow="0 0 20px rgba(0,198,255,0.5)"
                 >
-                  Flying-Arms
+                  FlyingArms
                 </Text>
                 <Text
                   fontSize="xs"

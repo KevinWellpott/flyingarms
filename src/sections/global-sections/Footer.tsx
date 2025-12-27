@@ -56,7 +56,7 @@ export default function Footer() {
               </Text>
               <HStack spacing={4}>
                 <ChakraLink
-                  href="https://www.instagram.com/explore/locations/1452106708422342/flying-arms/?hl=de"
+                  href="https://www.instagram.com/flying_arms/?hl=de"
                   isExternal
                   p={4}
                   borderRadius="xl"

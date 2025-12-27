@@ -123,32 +123,31 @@ const ServiceCTA: React.FC<ServiceCTAProps> = ({ onContactClick }) => {
           </Text>
           
           <Button
-            onClick={onContactClick}
-            bgGradient="linear(to-r, cyan.400, cyan.600)"
-            color="white"
-            border="2px solid rgba(0,198,255,0.4)"
-            boxShadow="0 4px 24px rgba(0,198,255,0.3)"
-            w={{ base: "100%", md: "auto" }}
-            minW={{ md: "220px" }}
-            h="52px"
-            fontSize="md"
-            fontWeight="700"
-            display="flex"
-            alignItems="center"
-            gap={2}
-            _hover={{
-              bgGradient: "linear(to-r, cyan.300, cyan.500)",
-              transform: "translateY(-2px)",
-              boxShadow: "0 6px 32px rgba(0,198,255,0.4)"
-            }}
-            _active={{
-              transform: "translateY(0)"
-            }}
-          >
-            <Icon as={FiMail} w={5} h={5} />
-            Jetzt Anfragen
-          </Button>
-
+  onClick={() => window.location.href = '/kontakt'}
+  bgGradient="linear(to-r, cyan.400, cyan.600)"
+  color="white"
+  border="2px solid rgba(0,198,255,0.4)"
+  boxShadow="0 4px 24px rgba(0,198,255,0.3)"
+  w={{ base: "100%", md: "auto" }}
+  minW={{ md: "220px" }}
+  h="52px"
+  fontSize="md"
+  fontWeight="700"
+  display="flex"
+  alignItems="center"
+  gap={2}
+  _hover={{
+    bgGradient: "linear(to-r, cyan.300, cyan.500)",
+    transform: "translateY(-2px)",
+    boxShadow: "0 6px 32px rgba(0,198,255,0.4)"
+  }}
+  _active={{
+    transform: "translateY(0)"
+  }}
+>
+  <Icon as={FiMail} w={5} h={5} />
+  Jetzt Anfragen
+</Button>
           <HStack spacing={4} flexWrap="wrap" justify="center" pt={2}>
             <Box
               px={4}
