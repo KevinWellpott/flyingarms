@@ -412,24 +412,27 @@ const HeroSection: React.FC = () => {
                   </Button>
 
                   <Button
-                    variant="secondary"
-                    onClick={() => console.log('Portfolio')}
-                    bg="rgba(255,255,255,0.03)"
-                    color="cyan.300"
-                    border="2px solid rgba(0,198,255,0.25)"
-                    backdropFilter="blur(20px)"
-                    w="100%"
-                    h={{ base: "48px", md: "52px" }}
-                    fontSize={{ base: "sm", md: "md" }}
-                    fontWeight="600"
-                    _hover={{
-                      bg: "rgba(0,198,255,0.08)",
-                      borderColor: "rgba(0,198,255,0.4)",
-                      transform: "translateY(-2px)"
-                    }}
-                  >
-                    Portfolio ansehen
-                  </Button>
+  variant="secondary"
+  onClick={() => {
+    console.log('Button geklickt!')
+    window.location.href = '/referenzen'
+  }}
+  bg="rgba(255,255,255,0.03)"
+  color="cyan.300"
+  border="2px solid rgba(0,198,255,0.25)"
+  backdropFilter="blur(20px)"
+  w="100%"
+  h={{ base: "48px", md: "52px" }}
+  fontSize={{ base: "sm", md: "md" }}
+  fontWeight="600"
+  _hover={{
+    bg: "rgba(0,198,255,0.08)",
+    borderColor: "rgba(0,198,255,0.4)",
+    transform: "translateY(-2px)"
+  }}
+>
+  Portfolio ansehen
+</Button>
                 </VStack>
               </MotionBox>
 
@@ -641,58 +644,58 @@ const HeroSection: React.FC = () => {
                 pt={3}
               >
                 <HStack spacing={4}>
-                  <Link href="/kontakt"> 
-                  <Button
-                    variant="primary"
-                    onClick={() => console.log('Zum Termin')}
-                    bgGradient="linear(to-r, cyan.400, cyan.600)"
-                    color="white"
-                    border="2px solid rgba(0,198,255,0.4)"
-                    boxShadow="0 4px 24px rgba(0,198,255,0.3)"
-                    minW="200px"
-                    h="56px"
-                    fontSize="md"
-                    fontWeight="700"
-                    px={8}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={2}
-               
-                    _hover={{
-                      bgGradient: "linear(to-r, cyan.300, cyan.500)",
-                      transform: "translateY(-2px)",
-                      boxShadow: "0 6px 32px rgba(0,198,255,0.4)"
-                    }}
-                    _active={{
-                      transform: "translateY(0)"
-                    }}
-                  >
-                    <FiPlay size={18} />
-                    Projekt starten
-                  </Button>
+                  <Link href="/kontakt">
+                    <Button
+                      variant="primary"
+                      onClick={() => console.log('Zum Termin')}
+                      bgGradient="linear(to-r, cyan.400, cyan.600)"
+                      color="white"
+                      border="2px solid rgba(0,198,255,0.4)"
+                      boxShadow="0 4px 24px rgba(0,198,255,0.3)"
+                      minW="200px"
+                      h="56px"
+                      fontSize="md"
+                      fontWeight="700"
+                      px={8}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      gap={2}
+
+                      _hover={{
+                        bgGradient: "linear(to-r, cyan.300, cyan.500)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 6px 32px rgba(0,198,255,0.4)"
+                      }}
+                      _active={{
+                        transform: "translateY(0)"
+                      }}
+                    >
+                      <FiPlay size={18} />
+                      Projekt starten
+                    </Button>
                   </Link>
 
                   <Button
-                    variant="secondary"
-                    onClick={() => console.log('Portfolio')}
-                    bg="rgba(255,255,255,0.03)"
-                    color="cyan.300"
-                    border="2px solid rgba(0,198,255,0.25)"
-                    backdropFilter="blur(20px)"
-                    minW="180px"
-                    h="56px"
-                    fontSize="md"
-                    fontWeight="600"
-                    px={8}
-                    _hover={{
-                      bg: "rgba(0,198,255,0.08)",
-                      borderColor: "rgba(0,198,255,0.4)",
-                      transform: "translateY(-2px)"
-                    }}
-                  >
-                    Portfolio ansehen
-                  </Button>
+  variant="secondary"
+  onClick={() => window.location.href = '/referenzen'}
+  bg="rgba(255,255,255,0.03)"
+  color="cyan.300"
+  border="2px solid rgba(0,198,255,0.25)"
+  backdropFilter="blur(20px)"
+  minW="180px"
+  h="56px"
+  fontSize="md"
+  fontWeight="600"
+  px={8}
+  _hover={{
+    bg: "rgba(0,198,255,0.08)",
+    borderColor: "rgba(0,198,255,0.4)",
+    transform: "translateY(-2px)"
+  }}
+>
+  Portfolio ansehen
+</Button>
                 </HStack>
               </MotionBox>
 
@@ -804,7 +807,7 @@ const HeroSection: React.FC = () => {
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-          
+
           </MotionBox>
         </MotionBox>
       </Container>
