@@ -18,6 +18,19 @@ const nextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  async rewrites() {
+    return [
+      // Redirect /defaultsite zur Root-URL
+      {
+        source: '/defaultsite',
+        destination: '/',
+      },
+      {
+        source: '/defaultsite/:path*',
+        destination: '/:path*',
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig
