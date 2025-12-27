@@ -38,7 +38,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
   }, []);
 
   // Video Rendering Logic
-  const renderVideoContent = () => {
+  const renderVideoContent = (instanceId?: string) => {
     // ✅ HIER WERDEN DIE VARIABLEN DEFINIERT!
     const videoUrl = data.hero_video_url;
     const videoType = data.hero_video_type || 'none';
@@ -134,6 +134,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
               showControls={false}
               colorGlow="#00C6FF"
               className="w-full h-full"
+              instanceId={instanceId}
             />
           </div>
         );
@@ -184,7 +185,8 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
   return (
     <Box
       position="relative"
-      py={{ base: 8, md: 12, lg: 16 }}
+      pt={{ base: 16, md: 12, lg: 16 }}
+      pb={{ base: 8, md: 12, lg: 16 }}
       overflow="hidden"
     >
       {/* Animated Background with Parallax */}
@@ -420,7 +422,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
               transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
             >
               {/* Video Content */}
-              {renderVideoContent()}
+              {renderVideoContent('mobile')}
 
               {/* Overlay Badges */}
               {data.hero_video_url && data.hero_video_type !== 'none' && (
@@ -707,7 +709,7 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
                 transition="all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
               >
                 {/* Video Content */}
-                {renderVideoContent()}
+                {renderVideoContent('desktop')}
 
                 {/* Overlay Badges */}
                 {data.hero_video_url && data.hero_video_type !== 'none' && (
