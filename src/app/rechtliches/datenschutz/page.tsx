@@ -85,6 +85,7 @@ const Datenschutz = () => {
                     1. Datenschutz auf einen Blick
                   </Text>
                   <Text
+                  as="h1"
                     fontSize="sm" // Button/Body Text
                     color="whiteAlpha.700"
                     lineHeight="1.7"

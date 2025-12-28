@@ -178,7 +178,7 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
                         w="100%"
                         h="100%"
                         objectFit="cover"
-                        fallbackSrc="/placeholder-image.png"
+                      
                       />
                       <Box
                         position="absolute"

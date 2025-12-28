@@ -34,6 +34,7 @@ const Impressum = () => {
             pt={20}
           >
             <Text
+            as="h1"
               fontSize="xs" // Badge Text
               fontWeight="700"
               letterSpacing="4px"
