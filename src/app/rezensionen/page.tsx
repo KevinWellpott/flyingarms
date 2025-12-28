@@ -8,6 +8,9 @@ import { getAllReviews } from '../../lib/supabase-reviews';
 export const metadata: Metadata = {
   title: 'Kundenstimmen | Flying Arms',
   description: 'Echte Kundenbewertungen unserer Drohnenservices.',
+  alternates: {
+    canonical: 'https://flyingarms.de/rezensionen'
+  }
 };
 
 export default async function ReviewsPage() {

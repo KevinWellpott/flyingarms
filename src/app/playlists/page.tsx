@@ -1,8 +1,17 @@
+import { Metadata } from 'next'
 import { getCachedPlaylists } from '@/lib/cache';
 import PlaylistsGrid from '@/components/PlaylistsGrid';
 
 // Revalidate every 24 hours
 export const revalidate = 86400; 
+
+export const metadata: Metadata = {
+  title: 'Video-Playlists | Flying Arms',
+  description: 'Entdecken Sie unsere Projekte, sortiert in thematischen Playlists direkt von unserem YouTube-Kanal.',
+  alternates: {
+    canonical: 'https://flyingarms.de/playlist'
+  }
+};
 
 export default async function PlaylistsPage() {
   const playlists = await getCachedPlaylists();

@@ -14,6 +14,9 @@ export const revalidate = 0;
 export const metadata: Metadata = {
   title: 'Referenzen',
   description: 'Unsere erfolgreichen Projekte und Referenzen',
+  alternates: {
+    canonical: 'https://flyingarms.de/referenzen'
+  }
 };
 
 async function getAllReviewsForReferences(): Promise<Review[]> {
@@ -51,4 +54,3 @@ export default async function ReferencesPage() {
     </>
   );
 }
-
