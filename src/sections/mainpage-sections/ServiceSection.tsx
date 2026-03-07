@@ -26,6 +26,7 @@ const services = [
       "Musik",
       "Film",
       "Baubranche",
+      "Veranstaltungen",
       
     ],
     badge: "Beliebt"
@@ -55,12 +56,12 @@ const services = [
   {
     icon: FiHome,
     title: "Video",
-    description: "Perfekte Präsentation für Ihre Objekte",
+    description: "Profesionelles Videomaterial in höchster Qualität",
     features: [
-      "Innen & Außen",
-      "360° Rundgänge",
-      "Exposé-Material",
-      "Verkaufsfördernd"
+      "Events",
+      "Film",
+      "Musik",
+      "Exposés",
     ]
   },
   {
@@ -68,21 +69,21 @@ const services = [
     title: "Foto",
     description: "Unvergessliche Momente aus einzigartiger Perspektive",
     features: [
-      "Luftaufnahmen",
-      "Bodenaufnahmen",
-      "Schnitt & Bearbeitung",
-      "Highlight-Videos"
+      "Hochzeiten",
+      "Events",
+      "Portraits",
+      "Architektur",
     ]
   },
   {
     icon: FiSearch,
-    title: "Inspektion",
+    title: "Inspektion/Vermessung",
     description: "Technische Kontrollen aus der Luft",
     features: [
+      "3D Modelle",
       "Dachinspektion",
       "Fassadenprüfung",
       "Thermografie",
-      "Gutachten"
     ]
   }
 ];

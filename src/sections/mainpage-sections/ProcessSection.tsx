@@ -63,7 +63,7 @@ const processSteps: ProcessStep[] = [
     icon: FiVideo,
     duration: "4-8 Std",
     details: [
-      "Lieferung",
+      
       "Finales Material",
       "Rohmaterial ( Optional )",
      
@@ -91,7 +91,7 @@ const processSteps: ProcessStep[] = [
     details: [
       "Download-Link erhalten",
       "Alle vereinbarten Formate",
-      "Rohmaterial inklusive",
+      
       "Nutzungsrechte übertragen"
     ]
   }

@@ -19,8 +19,8 @@ interface TestimonialSliderProps {
 
 const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   clients = 50,
-  projects = 200,
-  satisfaction = 98,
+  projects = 500,
+  satisfaction = 100,
   animateStats = true
 }) => {
   const router = useRouter();

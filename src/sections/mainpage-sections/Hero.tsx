@@ -757,18 +757,7 @@ const HeroSection: React.FC = () => {
                 display={{ base: "none", lg: "block" }}
               >
                 <VStack spacing={3} align="flex-start" w="100%" position="relative" zIndex={25}>
-                  {/* Überschrift über dem Player */}
-                  <Text
-                    fontSize="sm"
-                    fontWeight="500"
-                    color="rgba(255,255,255,0.5)"
-                    letterSpacing="0.5px"
-                    textTransform="uppercase"
-                    position="relative"
-                    zIndex={25}
-                  >
-                    Unser neustes Projekt
-                  </Text>
+                
 
                   {/* YouTube Player */}
                   {youtubeVideoId && (
