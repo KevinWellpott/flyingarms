@@ -20,6 +20,8 @@ export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [isSyncingYouTube, setIsSyncingYouTube] = useState(false);
+  const [youtubeSyncMessage, setYoutubeSyncMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -76,6 +78,30 @@ export default function AdminDashboardPage() {
       alert('Fehler beim Speichern der Einstellungen');
     } finally {
       setIsSavingSettings(false);
+    }
+  };
+
+  const handleSyncYouTube = async () => {
+    setIsSyncingYouTube(true);
+    setYoutubeSyncMessage(null);
+    try {
+      const response = await fetch('/api/youtube/sync', { method: 'POST' });
+      const data = await response.json();
+      if (data.success) {
+        setYoutubeSyncMessage({
+          type: 'success',
+          text: data.message || `Sync abgeschlossen: ${data.playlistsCount ?? 0} Playlists, ${data.totalVideosCount ?? 0} Videos.`,
+        });
+      } else {
+        setYoutubeSyncMessage({ type: 'error', text: data.error || 'Synchronisation fehlgeschlagen.' });
+      }
+    } catch (err) {
+      setYoutubeSyncMessage({
+        type: 'error',
+        text: err instanceof Error ? err.message : 'Netzwerkfehler bei der Synchronisation.',
+      });
+    } finally {
+      setIsSyncingYouTube(false);
     }
   };
 
@@ -317,6 +343,43 @@ export default function AdminDashboardPage() {
               {siteSettings?.hero_youtube_url && (
                 <p className="text-xs text-green-400 mt-2">
                   ✓ Aktuell gesetzt: {siteSettings.hero_youtube_url}
+                </p>
+              )}
+            </div>
+
+            {/* YouTube Playlists & Videos synchronisieren */}
+            <div className="pt-6 border-t border-gray-700">
+              <label className="block text-sm font-semibold text-white mb-2">
+                <FiYoutube className="inline-block w-4 h-4 mr-2" />
+                YouTube-Playlists &amp; Videos
+              </label>
+              <p className="text-xs text-gray-400 mb-3">
+                Playlists und Videos von Ihrem YouTube-Kanal mit der Website-Datenbank abgleichen (wie das Sync-Skript).
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleSyncYouTube}
+                  disabled={isSyncingYouTube}
+                  className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2"
+                >
+                  {isSyncingYouTube ? (
+                    <>
+                      <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Synchronisiere…
+                    </>
+                  ) : (
+                    <>
+                      <FiYoutube className="w-5 h-5" />
+                      Jetzt synchronisieren
+                    </>
+                  )}
+                </button>
+              </div>
+              {youtubeSyncMessage && (
+                <p className={`text-sm mt-2 ${youtubeSyncMessage.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                  {youtubeSyncMessage.type === 'success' ? '✓ ' : '✗ '}
+                  {youtubeSyncMessage.text}
                 </p>
               )}
             </div>

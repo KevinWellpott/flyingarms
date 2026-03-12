@@ -111,3 +111,80 @@ export async function getCachedPlaylistVideos(playlistId: string): Promise<Video
 
     return (await supabase.from('youtube_playlist_videos').select('*').eq('playlist_id', playlistId).order('position', { ascending: true })).data || [];
 }
+
+/**
+ * Erzwingt eine vollständige Synchronisation: Playlists und alle Playlist-Videos
+ * von der YouTube-API in die Supabase-Tabellen. Wird z. B. vom Admin-Button ausgeführt.
+ */
+export async function syncYouTubeData(): Promise<{
+  success: boolean;
+  playlistsCount?: number;
+  totalVideosCount?: number;
+  error?: string;
+}> {
+  try {
+    const apiPlaylists = await getChannelPlaylists();
+    const playlistsToUpsert = apiPlaylists.map((p: YouTubePlaylist) => ({
+      id: p.id,
+      title: p.snippet.title,
+      description: p.snippet.description,
+      thumbnail_url: p.snippet.thumbnails.high?.url || p.snippet.thumbnails.default?.url,
+      video_count: p.contentDetails.itemCount,
+      last_updated: new Date().toISOString(),
+    }));
+
+    const { error: upsertPlaylistsError } = await supabase
+      .from('youtube_playlists')
+      .upsert(playlistsToUpsert, { onConflict: 'id' });
+
+    if (upsertPlaylistsError) {
+      console.error('Error upserting playlists during sync:', upsertPlaylistsError);
+      return { success: false, error: upsertPlaylistsError.message };
+    }
+
+    let totalVideos = 0;
+    for (const playlist of apiPlaylists) {
+      const apiVideos = await getPlaylistItems(playlist.id);
+      const videosToUpsert = apiVideos
+        .filter(
+          (item: YouTubePlaylistItem) =>
+            item.snippet?.resourceId?.videoId && item.snippet?.title != null
+        )
+        .map((item: YouTubePlaylistItem) => ({
+          playlist_id: playlist.id,
+          video_id: item.snippet.resourceId!.videoId,
+          title: item.snippet.title!,
+          description: item.snippet.description ?? null,
+          thumbnail_url: item.snippet.thumbnails?.high?.url || item.snippet.thumbnails?.default?.url ?? null,
+          published_at: item.snippet.publishedAt ?? null,
+          position: item.snippet.position ?? 0,
+        }));
+
+      await supabase.from('youtube_playlist_videos').delete().eq('playlist_id', playlist.id);
+      const { error: upsertVideosError } = await supabase
+        .from('youtube_playlist_videos')
+        .upsert(videosToUpsert, { onConflict: 'playlist_id,video_id', ignoreDuplicates: false });
+
+      if (upsertVideosError) {
+        console.error(`Error upserting videos for playlist ${playlist.id}:`, upsertVideosError);
+      } else {
+        totalVideos += videosToUpsert.length;
+      }
+
+      await supabase
+        .from('youtube_playlists')
+        .update({ last_updated: new Date().toISOString() })
+        .eq('id', playlist.id);
+    }
+
+    return {
+      success: true,
+      playlistsCount: apiPlaylists.length,
+      totalVideosCount: totalVideos,
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unbekannter Fehler bei der YouTube-Sync';
+    console.error('syncYouTubeData error:', err);
+    return { success: false, error: message };
+  }
+}
