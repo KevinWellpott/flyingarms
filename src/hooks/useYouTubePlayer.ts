@@ -168,6 +168,7 @@ export function useYouTubePlayer(
           fs: 0,
           cc_load_policy: 0,
           origin: typeof window !== 'undefined' ? window.location.origin : '',
+          hd: 1, // HD bevorzugen (720p+), wenn verfügbar
         },
         events: {
           onReady: (event: any) => {
@@ -196,6 +197,15 @@ export function useYouTubePlayer(
             setDuration(event.target.getDuration());
             setVolume(event.target.getVolume());
             setIsMuted(event.target.isMuted());
+
+            // Maximale Wiedergabequalität anfordern (highres = höchste verfügbare Auflösung)
+            try {
+              if (typeof event.target.setPlaybackQuality === 'function') {
+                event.target.setPlaybackQuality('highres');
+              }
+            } catch (e) {
+              // setPlaybackQuality wird auf einigen Geräten ignoriert
+            }
             
             // Explizit Video starten wenn autoplay aktiviert ist
             if (options.autoplay) {
@@ -294,6 +304,14 @@ export function useYouTubePlayer(
             } else if (state === window.YT.PlayerState.ENDED) {
               setIsPlaying(false);
             } else if (state === window.YT.PlayerState.BUFFERING) {
+              // Bei BUFFERING erneut höchste Qualität anfordern (YouTube wählt Stream oft in dieser Phase)
+              try {
+                if (typeof event.target.setPlaybackQuality === 'function') {
+                  event.target.setPlaybackQuality('highres');
+                }
+              } catch (e) {
+                // ignorieren
+              }
               // Wenn BUFFERING und autoplay aktiviert ist, warte kurz und prüfe nochmal
               if (options.autoplay && !isPlaying) {
                 setTimeout(() => {
