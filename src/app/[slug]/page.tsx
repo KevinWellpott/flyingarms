@@ -43,8 +43,21 @@ export const revalidate = 0;
 //   }
 // }
 
+// Slugs, die keine Seiten sind (z. B. Browser-Anfragen für Favicon etc.)
+const STATIC_ASSET_SLUGS = new Set([
+  'favicon.ico',
+  'robots.txt',
+  'sitemap.xml',
+  'apple-touch-icon.png',
+  'manifest.json',
+]);
+
 export default async function ServicePage({ params }: ServicePageProps) {
   try {
+    if (STATIC_ASSET_SLUGS.has(params.slug.toLowerCase())) {
+      notFound();
+    }
+
     console.log('🔄 Loading fresh data for slug:', params.slug);
     const pageData = await getPageBySlug(params.slug);
 

@@ -5,7 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 
-export const revalidate = 86400; // Revalidate every 24 hours
+// Immer frisch laden, damit bei Client-Navigation (Link-Klick) die Videos angezeigt werden.
+// Ohne force-dynamic wird die beim Build vorgefertigte (ggf. leere) Seite ausgeliefert.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 type Props = {
   params: { playlistId: string };

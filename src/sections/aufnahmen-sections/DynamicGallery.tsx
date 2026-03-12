@@ -36,12 +36,13 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
       const urls: Record<string, string> = {};
       
       await Promise.all(
-        data.gallery_images.map(async (image) => {
+        data.gallery_images.map(async (image, index) => {
           if (!image.image_url) return;
-          
+          const urlKey = image.id || `gallery-${index}`;
+
           // Prüfe ob es bereits eine externe URL ist
           if (image.image_url.startsWith('http://') || image.image_url.startsWith('https://')) {
-            urls[image.id] = image.image_url;
+            urls[urlKey] = image.image_url;
             return;
           }
 
@@ -64,7 +65,7 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
             if (response.ok) {
               const result = await response.json();
               if (result.success && result.url) {
-                urls[image.id] = result.url;
+                urls[urlKey] = result.url;
               }
             }
           } catch (error) {
@@ -161,8 +162,11 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
               pb={4}
             >
               <HStack spacing={4} w="max-content" px={2}>
-                {sortedImages.map((image, index) => (
-                  <Box key={image.id} minW="280px" h="200px">
+                {sortedImages.map((image, index) => {
+                const urlKey = image.id || `gallery-${index}`;
+                const src = imageUrls[urlKey] || (image.image_url?.startsWith('http') ? image.image_url : '') || '';
+                return (
+                  <Box key={image.id || index} minW="280px" h="200px">
                     <Box
                       bg="rgba(0,0,0,0.5)"
                       backdropFilter="blur(20px)"
@@ -173,7 +177,7 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
                       position="relative"
                     >
                       <Image
-                        src={imageUrls[image.id] || image.image_url || ''}
+                        src={src}
                         alt={image.title}
                         w="100%"
                         h="100%"
@@ -194,7 +198,8 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
                       </Box>
                     </Box>
                   </Box>
-                ))}
+                );
+              })}
               </HStack>
             </Box>
           </Box>
@@ -206,8 +211,11 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
             w="100%"
             display={{ base: "none", md: "grid" }}
           >
-            {sortedImages.map((image, index) => (
-              <Box key={image.id} h="250px">
+            {sortedImages.map((image, index) => {
+                const urlKey = image.id || `gallery-${index}`;
+                const src = imageUrls[urlKey] || (image.image_url?.startsWith('http') ? image.image_url : '') || '';
+                return (
+              <Box key={image.id || index} h="250px">
                 <Box
                   bg="rgba(0,0,0,0.5)"
                   backdropFilter="blur(20px)"
@@ -224,7 +232,7 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
                   transition="all 0.3s ease"
                 >
                   <Image
-                    src={image.image_url}
+                    src={src}
                     alt={image.title}
                     w="100%"
                     h="100%"
@@ -247,7 +255,8 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
                   </Box>
                 </Box>
               </Box>
-            ))}
+            );
+          })}
           </SimpleGrid>
         </VStack>
       </Container>
