@@ -155,7 +155,7 @@ export async function syncYouTubeData(): Promise<{
           video_id: item.snippet.resourceId!.videoId,
           title: item.snippet.title!,
           description: item.snippet.description ?? null,
-          thumbnail_url: item.snippet.thumbnails?.high?.url || item.snippet.thumbnails?.default?.url ?? null,
+          thumbnail_url: (item.snippet.thumbnails?.high?.url || item.snippet.thumbnails?.default?.url) ?? null,
           published_at: item.snippet.publishedAt ?? null,
           position: item.snippet.position ?? 0,
         }));
