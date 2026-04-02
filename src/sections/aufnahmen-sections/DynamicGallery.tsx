@@ -8,9 +8,7 @@ import {
   Text, 
   SimpleGrid, 
   VStack, 
-  HStack,
   Image,
-  Badge,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { PageSection, GalleryImage } from '../../types/page-section';
@@ -152,111 +150,85 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
             </Text>
           </MotionBox>
 
-          {/* Simple Mobile Slider */}
-          <Box 
-            display={{ base: "block", md: "none" }} 
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 3 }}
+            spacing={{ base: 4, md: 6 }}
             w="100%"
-          >
-            <Box
-              overflowX="auto"
-              pb={4}
-            >
-              <HStack spacing={4} w="max-content" px={2}>
-                {sortedImages.map((image, index) => {
-                const urlKey = image.id || `gallery-${index}`;
-                const src = imageUrls[urlKey] || (image.image_url?.startsWith('http') ? image.image_url : '') || '';
-                return (
-                  <Box key={image.id || index} minW="280px" h="200px">
-                    <Box
-                      bg="rgba(0,0,0,0.5)"
-                      backdropFilter="blur(20px)"
-                      borderRadius="xl"
-                      border="1px solid rgba(0,198,255,0.15)"
-                      overflow="hidden"
-                      h="100%"
-                      position="relative"
-                    >
-                      <Image
-                        src={src}
-                        alt={image.title}
-                        w="100%"
-                        h="100%"
-                        objectFit="cover"
-                      
-                      />
-                      <Box
-                        position="absolute"
-                        bottom={0}
-                        left={0}
-                        right={0}
-                        p={3}
-                        bgGradient="linear(to-t, rgba(0,0,0,0.9), transparent)"
-                      >
-                        <Text fontSize="sm" fontWeight="bold" color="white" noOfLines={1}>
-                          {image.title}
-                        </Text>
-                      </Box>
-                    </Box>
-                  </Box>
-                );
-              })}
-              </HStack>
-            </Box>
-          </Box>
-
-          {/* Simple Desktop Grid */}
-          <SimpleGrid 
-            columns={{ base: 1, md: 2, lg: 3 }} 
-            spacing={6}
-            w="100%"
-            display={{ base: "none", md: "grid" }}
+            maxW="100%"
+            minW={0}
           >
             {sortedImages.map((image, index) => {
-                const urlKey = image.id || `gallery-${index}`;
-                const src = imageUrls[urlKey] || (image.image_url?.startsWith('http') ? image.image_url : '') || '';
-                return (
-              <Box key={image.id || index} h="250px">
-                <Box
-                  bg="rgba(0,0,0,0.5)"
-                  backdropFilter="blur(20px)"
-                  borderRadius="xl"
-                  border="1px solid rgba(0,198,255,0.15)"
-                  overflow="hidden"
-                  h="100%"
-                  position="relative"
-                  cursor="pointer"
-                  _hover={{
-                    borderColor: "rgba(0,198,255,0.3)",
-                    transform: "translateY(-4px)"
-                  }}
-                  transition="all 0.3s ease"
-                >
-                  <Image
-                    src={src}
-                    alt={image.title}
-                    w="100%"
-                    h="100%"
-                    objectFit="cover"
-                  />
+              const urlKey = image.id || `gallery-${index}`;
+              const src =
+                imageUrls[urlKey] ||
+                (image.image_url?.startsWith('http') ? image.image_url : '') ||
+                '';
+              return (
+                <Box key={image.id || index} w="100%" minW={0} maxW="100%">
                   <Box
-                    position="absolute"
-                    bottom={0}
-                    left={0}
-                    right={0}
-                    p={4}
-                    bgGradient="linear(to-t, rgba(0,0,0,0.9), transparent)"
+                    bg="rgba(0,0,0,0.5)"
+                    backdropFilter="blur(20px)"
+                    borderRadius="xl"
+                    border="1px solid rgba(0,198,255,0.15)"
+                    overflow="hidden"
+                    position="relative"
+                    cursor="pointer"
+                    w="100%"
+                    maxW="100%"
+                    sx={{
+                      aspectRatio: { base: '16 / 9', md: 'auto' },
+                      minH: { md: '250px' },
+                      h: { md: '250px' },
+                    }}
+                    _hover={{
+                      borderColor: 'rgba(0,198,255,0.3)',
+                      transform: 'translateY(-4px)',
+                    }}
+                    transition="all 0.3s ease"
                   >
-                    <Text fontSize="md" fontWeight="bold" color="white" noOfLines={1}>
-                      {image.title}
-                    </Text>
-                    <Text fontSize="sm" color="whiteAlpha.700" noOfLines={1}>
-                      {image.description}
-                    </Text>
+                    <Image
+                      src={src}
+                      alt={image.title || ''}
+                      position="absolute"
+                      top={0}
+                      left={0}
+                      right={0}
+                      bottom={0}
+                      w="100%"
+                      h="100%"
+                      maxW="100%"
+                      objectFit="cover"
+                      objectPosition="center"
+                    />
+                    <Box
+                      position="absolute"
+                      bottom={0}
+                      left={0}
+                      right={0}
+                      zIndex={1}
+                      p={{ base: 3, md: 4 }}
+                      bgGradient="linear(to-t, rgba(0,0,0,0.9), transparent)"
+                    >
+                      <Text
+                        fontSize={{ base: 'sm', md: 'md' }}
+                        fontWeight="bold"
+                        color="white"
+                        noOfLines={2}
+                      >
+                        {image.title}
+                      </Text>
+                      <Text
+                        fontSize="sm"
+                        color="whiteAlpha.700"
+                        noOfLines={{ base: 2, md: 1 }}
+                      >
+                        {image.description}
+                      </Text>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            );
-          })}
+              );
+            })}
           </SimpleGrid>
         </VStack>
       </Container>

@@ -4,6 +4,13 @@ import { PlaylistData, VideoData, YouTubePlaylist, YouTubePlaylistItem } from '@
 
 const CACHE_DURATION_HOURS = 24;
 
+/** Auf der Website nicht anzeigen (z. B. interne Arbeits-Playlists). */
+const HIDDEN_PLAYLIST_TITLES = new Set(['FlyingArms Videoproduktion']);
+
+function filterVisiblePlaylists(playlists: PlaylistData[]): PlaylistData[] {
+  return playlists.filter((p) => p.title == null || !HIDDEN_PLAYLIST_TITLES.has(p.title));
+}
+
 function isCacheValid(lastUpdated: string | null): boolean {
   if (!lastUpdated) {
     return false;
@@ -25,7 +32,7 @@ export async function getCachedPlaylists(): Promise<PlaylistData[]> {
   }
 
   if (cachedPlaylists && cachedPlaylists.length > 0 && isCacheValid(cachedPlaylists[0].last_updated)) {
-    return cachedPlaylists;
+    return filterVisiblePlaylists(cachedPlaylists);
   }
 
   // 2. Fetch from API if cache is invalid or empty
@@ -49,7 +56,8 @@ export async function getCachedPlaylists(): Promise<PlaylistData[]> {
     console.error('Error upserting playlists to cache:', upsertError);
   }
 
-  return (await supabase.from('youtube_playlists').select('*')).data || [];
+  const rows = (await supabase.from('youtube_playlists').select('*')).data || [];
+  return filterVisiblePlaylists(rows);
 }
 
 export async function getCachedPlaylistVideos(playlistId: string): Promise<VideoData[]> {
