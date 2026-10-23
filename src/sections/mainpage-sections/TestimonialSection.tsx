@@ -115,30 +115,6 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
     }
   }, [autoPlay, displayTestimonials.length]);
 
-  // Load Review Widget Script
-  useEffect(() => {
-    const scriptId = 'reviewconnect-widget-script';
-    
-    // Check if script already exists
-    if (document.getElementById(scriptId)) {
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = 'https://app.reviewconnect.me/embed/fCN7J5lVg3k4ZdRazSbT3dJhMD6JMMlt/widget.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup: Remove script on unmount
-      const existingScript = document.getElementById(scriptId);
-      if (existingScript) {
-        document.body.removeChild(existingScript);
-      }
-    };
-  }, []);
-
   const currentTestimonial = displayTestimonials[currentIndex];
 
   const slideVariants = {
@@ -269,7 +245,6 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             mt={{ base: -2, md: -4 }}
-            mb={{ base: 4, md: 6 }}
           >
             <Button
               as="a"
@@ -300,25 +275,6 @@ const TestimonialSection: React.FC<TestimonialSectionProps> = ({
             </Button>
           </MotionBox>
 
-          {/* Review Widget */}
-          <MotionBox
-            w="100%"
-            maxW="800px"
-            mx="auto"
-            mb={{ base: 8, md: 12 }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Box
-              id="reviews-widget-862"
-              w="100%"
-              minH={{ base: "400px", md: "500px" }}
-            />
-          </MotionBox>
-
-         
         </VStack>
       </Container>
     </Box>
