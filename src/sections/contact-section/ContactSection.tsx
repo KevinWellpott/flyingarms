@@ -10,11 +10,27 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   Textarea,
   Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  HStack,
   useToast
 } from '@chakra-ui/react';
+import { FiChevronDown, FiCheck } from 'react-icons/fi';
+
+const SERVICES = [
+  { value: 'Luftvideo', description: 'Professionelle Drohnenvideos' },
+  { value: 'Luftbilder', description: 'Hochauflösende Fotos aus der Vogelperspektive' },
+  { value: 'Videoproduktion', description: 'Komplette Videoproduktionen für jeden Zweck' },
+  { value: 'Video', description: 'Professionelles Videomaterial' },
+  { value: 'Foto', description: 'Momente aus einzigartiger Perspektive' },
+  { value: 'Videoschnitt', description: 'Schnitt & Color Grading' },
+  { value: 'Inspektion/Vermessung', description: 'Technische Kontrollen aus der Luft' },
+  { value: 'Sonstiges', description: 'Individuelle Anfrage oder Beratung' },
+];
 
 const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -177,22 +193,68 @@ const ContactSection: React.FC = () => {
                 {/* Service */}
                 <FormControl isRequired>
                   <FormLabel color="white" fontSize="sm" fontWeight="600">Gewünschte Leistung *</FormLabel>
-                  <Select
-                    value={formData.service}
-                    onChange={(e) => setFormData(prev => ({ ...prev, service: e.target.value }))}
-                    placeholder="Wählen Sie eine Leistung"
-                    bg="rgba(0,0,0,0.3)"
-                    border="1px solid rgba(0,198,255,0.3)"
-                    color="white"
-                    _focus={{ borderColor: "cyan.400" }}
-                  >
-                    <option value="Foto" style={{ background: '#000', color: '#fff' }}>
-                     Foto
-                    </option>
-                    <option value="Video" style={{ background: '#000', color: '#fff' }}>
-                      Video
-                    </option>
-                  </Select>
+                  <Menu matchWidth gutter={6}>
+                    <MenuButton
+                      as={Button}
+                      type="button"
+                      w="100%"
+                      h="40px"
+                      px={4}
+                      textAlign="left"
+                      fontWeight="400"
+                      fontSize="md"
+                      bg="rgba(0,0,0,0.3)"
+                      border="1px solid rgba(0,198,255,0.3)"
+                      borderRadius="md"
+                      color={formData.service ? "white" : "whiteAlpha.500"}
+                      rightIcon={<Box as={FiChevronDown} color="cyan.300" />}
+                      _hover={{ borderColor: "rgba(0,198,255,0.5)" }}
+                      _active={{ bg: "rgba(0,0,0,0.3)", borderColor: "cyan.400" }}
+                      _expanded={{ borderColor: "cyan.400", boxShadow: "0 0 0 1px var(--chakra-colors-cyan-400)" }}
+                      _focusVisible={{ borderColor: "cyan.400", boxShadow: "0 0 0 1px var(--chakra-colors-cyan-400)" }}
+                    >
+                      {formData.service || 'Wählen Sie eine Leistung'}
+                    </MenuButton>
+                    <MenuList
+                      bg="rgba(8,12,16,0.96)"
+                      backdropFilter="blur(20px)"
+                      border="1px solid rgba(0,198,255,0.3)"
+                      borderRadius="xl"
+                      boxShadow="0 12px 40px rgba(0,0,0,0.6), 0 0 24px rgba(0,198,255,0.12)"
+                      py={2}
+                      maxH="320px"
+                      overflowY="auto"
+                      zIndex={20}
+                    >
+                      {SERVICES.map(({ value, description }) => {
+                        const isSelected = formData.service === value;
+                        return (
+                          <MenuItem
+                            key={value}
+                            onClick={() => setFormData(prev => ({ ...prev, service: value }))}
+                            bg="transparent"
+                            color="white"
+                            px={4}
+                            py={2.5}
+                            _hover={{ bg: "rgba(0,198,255,0.1)" }}
+                            _focus={{ bg: "rgba(0,198,255,0.1)" }}
+                          >
+                            <HStack w="100%" justify="space-between" spacing={3}>
+                              <Box>
+                                <Text fontSize="sm" fontWeight="600" color={isSelected ? "cyan.300" : "white"}>
+                                  {value}
+                                </Text>
+                                <Text fontSize="xs" color="whiteAlpha.500">
+                                  {description}
+                                </Text>
+                              </Box>
+                              {isSelected && <Box as={FiCheck} color="cyan.300" flexShrink={0} />}
+                            </HStack>
+                          </MenuItem>
+                        );
+                      })}
+                    </MenuList>
+                  </Menu>
                 </FormControl>
 
                 {/* Message */}
