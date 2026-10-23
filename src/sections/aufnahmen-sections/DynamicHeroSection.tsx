@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, VStack, Container, HStack, Text, Button, AspectRatio } from '@chakra-ui/react';
+import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { HeroSection } from '../../types/hero';
 import { getVideoEmbedUrl } from '../../lib/supabase';
@@ -362,6 +363,8 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
             >
               <VStack spacing={3} align="center">
                 <Button
+                  as={Link}
+                  href="/kontakt"
                   size="lg"
                   bg="linear-gradient(135deg, #0B99FF 0%, #00C6FF 100%)"
                   color="white"
@@ -557,6 +560,8 @@ const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ data }) => {
               >
                 <VStack spacing={3} align="flex-start">
                   <Button
+                    as={Link}
+                    href="/kontakt"
                     size="lg"
                     bg="linear-gradient(135deg, #0B99FF 0%, #00C6FF 100%)"
                     color="white"

@@ -50,6 +50,8 @@ const ContactSection: React.FC = () => {
         body: JSON.stringify(formData),
       });
 
+      const result = await response.json().catch(() => ({}));
+
       if (response.ok) {
         toast({
           title: 'Erfolgreich gesendet!',
@@ -60,12 +62,12 @@ const ContactSection: React.FC = () => {
         
         setFormData({ name: '', email: '', phone: '', service: '', message: '' });
       } else {
-        throw new Error('Fehler');
+        throw new Error(result.error || 'Bitte versuchen Sie es erneut.');
       }
     } catch (error) {
       toast({
         title: 'Fehler beim Senden',
-        description: 'Bitte versuchen Sie es erneut.',
+        description: error instanceof Error ? error.message : 'Bitte versuchen Sie es erneut.',
         status: 'error',
         duration: 5000,
       });
@@ -184,10 +186,10 @@ const ContactSection: React.FC = () => {
                     color="white"
                     _focus={{ borderColor: "cyan.400" }}
                   >
-                    <option value="Luftaufnahmen" style={{ background: '#000', color: '#fff' }}>
+                    <option value="Foto" style={{ background: '#000', color: '#fff' }}>
                      Foto
                     </option>
-                    <option value="Vermessungen" style={{ background: '#000', color: '#fff' }}>
+                    <option value="Video" style={{ background: '#000', color: '#fff' }}>
                       Video
                     </option>
                   </Select>

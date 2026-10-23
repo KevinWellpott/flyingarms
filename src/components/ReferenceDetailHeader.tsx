@@ -86,8 +86,9 @@ export default function ReferenceDetailHeader({ colorGlow = '#76E4F7' }: Referen
           </Link>
 
           {/* Rechts: CTA Button mit colorGlow */}
-          <button
-            className="px-4 md:px-6 h-9 md:h-10 rounded-lg font-black text-xs text-black font-sans transition-all duration-300 hover:transform hover:-translate-y-0.5"
+          <Link
+            href="/kontakt"
+            className="inline-flex items-center px-4 md:px-6 h-9 md:h-10 rounded-lg font-black text-xs text-black font-sans transition-all duration-300 hover:transform hover:-translate-y-0.5"
             style={{
               background: `linear-gradient(135deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1) 0%, rgba(${darkerRgb.r}, ${darkerRgb.g}, ${darkerRgb.b}, 1) 100%)`,
               boxShadow: `0 3px 18px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.4)`,
@@ -100,7 +101,7 @@ export default function ReferenceDetailHeader({ colorGlow = '#76E4F7' }: Referen
             }}
           >
             Jetzt Termin buchen
-          </button>
+          </Link>
         </div>
       </div>
     </header>

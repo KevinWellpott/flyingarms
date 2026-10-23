@@ -385,7 +385,7 @@ const HeroSection: React.FC = () => {
                 <VStack spacing={3} w="100%">
                   <Button
                     variant="primary"
-                    onClick={() => console.log('Zum Termin')}
+                    onClick={() => { window.location.href = '/kontakt' }}
                     bgGradient="linear(to-r, cyan.400, cyan.600)"
                     color="white"
                     border="2px solid rgba(0,198,255,0.4)"
